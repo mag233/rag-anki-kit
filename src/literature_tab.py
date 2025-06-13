@@ -69,7 +69,8 @@ def render_literature_tab(PROJECTS_DIR, lang):
             st.session_state['selected_model'] = model_choice
             print(f"[Model] Model changed from {previous_model} to {model_choice}, clearing cached queries")
         
-        print(f"[Model] Using model: {model_choice}, temperature: {temperature}")
+        # 只在模型确实改变时才打印，避免频繁的日志输出
+        # print(f"[Model] Using model: {model_choice}, temperature: {temperature}")
 
     # Step 2: 输入检索问题
     st.markdown(text["step2_title"])

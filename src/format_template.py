@@ -1,5 +1,7 @@
 # format_template.py
+# 统一的模板管理中心
 
+# ===== Anki 卡片生成模板 =====
 CARD_FORMAT_PROMPT = """
 你是一个专业的Anki学习卡片生成助手。请根据下述要求和内容，生成{num_cards}张{card_type}类型的学习卡片，难度为{difficulty}，细节程度为{detail_level}。
 
@@ -49,6 +51,50 @@ I am a {{c1::cat}}.,This explains my behavior.
 Do not include any additional text or symbols such as ```csv.
 """
 
+# ===== 文献综述模板 =====
+def get_literature_templates(lang):
+    """获取文献综述相关模板"""
+    if lang == "中文":
+        return {
+            "structured": """请用以下结构进行总结：
+1. 研究背景
+2. 主要发现
+3. 挑战
+4. 未来方向
+5. 结论
+6. 关键数据或案例
+7. 参考文献""",
+            "direct": """直接、简明地回答上述问题，仅使用上下文中的信息。如果无法明确回答，则说明"上下文信息不足"。""",
+            "basic_prompt": """你获得了以下论文片段：
+
+{context}
+
+这里是你要总结的问题，仅用上下文回答，引用文献请遵循学术风格 [Chicago] 并尽量包含DOI。
+#####{query}#####
+"""
+        }
+    else:
+        return {
+            "structured": """Please summarize using the following structure:
+1. Research Background
+2. Key Findings
+3. Challenges
+4. Future Directions
+5. Conclusions
+6. Key Data or Case Studies
+7. References""",
+            "direct": """Provide a direct, concise answer to the above question using only the information from the context. If you cannot provide a clear answer, state "Insufficient context information".""",
+            "basic_prompt": """You are given the following excerpts from research papers:
+
+{context}
+
+And here is the query you want to summarize, use only the information in the context.
+Generate reference according formal academic writing style [Chicago style], include DOI whenever available.
+#####{query}#####
+"""
+        }
+
+# ===== 查询优化模板 =====
 SUMMARIZE_PROMPT = """
 You are an academic assistant. 
 Given the following user input, rewrite it as a clear, structured, and specific question or query for calculate the distance in the database. 

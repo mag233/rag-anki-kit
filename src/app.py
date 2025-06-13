@@ -78,10 +78,11 @@ with col_logo:
     st.image(logo_path, width=400)
 with col_lang:
     lang = st.selectbox(
-        label="",  # 不显示 label，只显示下拉箭头
+        label="Language",  # Proper accessibility label
         options=["English", "中文"],
         key="lang_select",
-        help="切换中英文界面"
+        help="切换中英文界面",
+        label_visibility="hidden"  # Hide label visually but keep for accessibility
     )
 text = get_text(lang)
 

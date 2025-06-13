@@ -12,7 +12,7 @@ from nltk.tokenize import sent_tokenize
 nltk.download('punkt', quiet=True)
 
 from langchain.schema import Document
-from langchain.document_loaders import (
+from langchain_community.document_loaders import (
     PyMuPDFLoader, TextLoader, UnstructuredWordDocumentLoader,
     UnstructuredExcelLoader, UnstructuredHTMLLoader, UnstructuredMarkdownLoader
 )

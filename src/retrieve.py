@@ -1,7 +1,7 @@
 # retrieve.py
 
 import os
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma  # updated import
 
 # ——— OpenAI 配置（保持不变） ———
