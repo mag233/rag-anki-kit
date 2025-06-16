@@ -12,15 +12,27 @@ CARD_FORMAT_PROMPT = """
 
 请严格按照以下CSV表格格式输出（不需要表头）：
 
-- 若为"Q&A"类型，每行格式为：1 详细描述的问题,2 详细的答案，计算题要有过程和anki友好的公式模型, 3 补充的相关背景信息
-- 若为"Cloze"类型，每行格式为：填空句子（使用{{c1::...}}格式标记需要隐藏的内容）
+- 若为"Q&A"类型，每行格式为：问题,答案,补充信息
+
+CSV格式要求：
+- 如果文本内容包含逗号，必须用双引号包围整个文本
+- 正确示例："什么是机器学习, 它的应用有哪些?","机器学习是一种AI技术，包括监督学习、无监督学习等方法。","广泛应用于图像识别、自然语言处理等领域。"
+- 错误示例：什么是机器学习, 它的应用有哪些?,机器学习是一种AI技术，包括监督学习、无监督学习等方法。,广泛应用于图像识别、自然语言处理等领域。
+
+卡片质量要求：
+- 问题要具体、深入，避免泛泛而谈
+- 答案要详细、准确，包含具体的定义、机制、数据或例子
+- 补充信息要提供实用的背景知识、应用场景或相关概念
+- 确保每张卡片都有独特的学习价值
+- 根据难度调整问题复杂度：简单=基础概念，中等=应用理解，困难=深度分析
+- 根据细节程度调整内容：简洁=核心要点，中等=适度展开，详细=全面深入
 
 注意事项：
-- 不要输出除CSV内容以外的任何文字。
-- 问题和答案或填空句子之间用英文逗号分隔。
-- 根据提供的上下文内容，生成相关的学习卡片。不得使用上下文内容以外的内容。
-- 生成的卡片要具有规定的的难度和细节程度，适合不同水平的学习者。
-- 不需要标题行。
+- 不要输出除CSV内容以外的任何文字
+- 严格使用标准CSV格式，包含逗号的文本必须用双引号包围
+- 严格基于提供的上下文内容，不得编造信息
+- 每张卡片都要有实际学习价值，避免重复或过于简单的内容
+- 不需要标题行或```csv标记
 """
 
 CARD_FORMAT_PROMPT_EN = """
@@ -34,21 +46,26 @@ Relevant content:
 Strictly output in the following CSV format (no header):
 
 - For "Q&A" type: each line as Question,Answer,Extra Info
-- For "Cloze" type: each line as a cloze sentence (use {{c1::...}} to mark hidden content)
+
+CSV Format Requirements:
+- If text contains commas, enclose the entire text in double quotes
+- Correct example: "What is machine learning, and how does it work?","Machine learning is a type of AI that enables systems to learn from data, improve performance over time without explicit programming.","It is widely used in image recognition, natural language processing, and other fields."
+- Incorrect example: What is machine learning, and how does it work?,Machine learning is a type of AI that enables systems to learn from data, improve performance over time without explicit programming.,It is widely used in image recognition, natural language processing, and other fields.
+
+Quality Requirements:
+- Questions should be specific and in-depth, avoid generic inquiries
+- Answers should be detailed and accurate, including specific definitions, mechanisms, data, or examples
+- Extra info should provide useful background knowledge, application scenarios, or related concepts
+- Ensure each card has unique learning value
+- Adjust complexity based on difficulty: Easy=basic concepts, Medium=applied understanding, Hard=deep analysis
+- Adjust content based on detail level: Concise=core points, Medium=moderate expansion, Detailed=comprehensive depth
 
 Notes:
-- Do NOT output anything except the CSV content.
-- Use a comma to separate question and answer or cloze sentences.
-- Only use the provided context content; do not invent additional information.
-- The cards should be sufficiently detailed and challenging for learners at specified levels.
-- No title rows needed.
-
-Q&A Example:
-who am I?, I am a cat.,This explains my behavior.
-Cloze Example:
-I am a {{c1::cat}}.,This explains my behavior.
-
-Do not include any additional text or symbols such as ```csv.
+- Do NOT output anything except the CSV content
+- Use standard CSV format with proper quoting for text containing commas
+- Strictly base content on provided context; do not fabricate information
+- Each card must have real learning value; avoid repetitive or overly simple content
+- No title rows or ```csv markers needed
 """
 
 # ===== 文献综述模板 =====
@@ -97,7 +114,7 @@ Generate reference according formal academic writing style [Chicago style], incl
 # ===== 查询优化模板 =====
 SUMMARIZE_PROMPT = """
 You are an academic assistant. 
-Given the following user input, rewrite it as a clear, structured, and specific question or query for calculate the distance in the database. 
+Given the following user input, rewrite it as a clear, structured, and specific question or query for academic research literature retrieval. 
 Keep the user's original intent and important details. Add keywords and phrases to enhance clarity and focus for retrieval.
 Output only the improved query, nothing else.
 
@@ -108,11 +125,28 @@ Improved query:
 """
 
 ANKI_PROMPT = """
-Given the following user input, analyze the learning direction, focus, and main topic. Rewrite it as a clear, structured prompt suitable for generating learning material. 
-Emphasize the core concepts, insights and key points that should be learned. 
-Output only the improved prompt for embedding retrieval, nothing else.
+You are an academic learning assistant. Convert the following user input into a focused, concise query optimized for semantic document retrieval.
+
+Instructions:
+- Extract key concepts and technical terms
+- Focus on core learning objectives  
+- Make it concise and keyword-rich
+- Avoid lengthy explanations or structured lists
+- Output ONLY the final optimized query
+
+Examples:
+
+Input: "I want to learn about machine learning algorithms"
+Output: machine learning algorithms supervised unsupervised neural networks classification regression
+
+Input: "How does natural language processing work in AI systems"
+Output: natural language processing NLP AI systems text analysis language models tokenization
+
+Input: "Explain the basics of artificial intelligence and its applications"
+Output: artificial intelligence AI basics applications machine learning neural networks automation
 
 User input:
 {user_query}
 
+Optimized retrieval query:
 """

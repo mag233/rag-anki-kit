@@ -75,34 +75,84 @@ def render_literature_tab(PROJECTS_DIR, lang):
     # Step 2: 输入检索问题
     st.markdown(text["step2_title"])
     st.info(text["step2_info"])
-    optimize_prompt = st.checkbox(text["optimize_prompt"], value=True)
 
     # 输入框和优化按钮布局
-    query_col, btn_col = st.columns([9, 1])
+    query_col, btn_col = st.columns([7, 3])
     with query_col:
-        query = st.text_input(text["query_input"])
+        query = st.text_input(text["query_input"], key="literature_query_input")
     with btn_col:
-        optimize_btn = st.button("🔄 " + (text["optimized_prompt"].split(":")[0] if optimize_prompt else text["run_retrieval"].split(":")[0]))
+        st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)  # 添加一点垂直间距
+        optimize_btn = st.button(
+            "✨ " + text["optimized_prompt"].split(":")[0],
+            type="secondary",
+            use_container_width=True,
+            help=text.get("optimize_help", "Use AI to optimize your query for better retrieval"),
+            key="lit_optimize_btn"
+        )
 
-    std_query = ""
-    if optimize_prompt:
-        if query and optimize_btn:
+    # 初始化session state
+    if 'litrev_confirmed_query' not in st.session_state:
+        st.session_state['litrev_confirmed_query'] = ""
+    if 'litrev_optimized_query' not in st.session_state:
+        st.session_state['litrev_optimized_query'] = ""
+    if 'litrev_is_optimized' not in st.session_state:
+        st.session_state['litrev_is_optimized'] = False
+    if 'litrev_cached_model' not in st.session_state:
+        st.session_state['litrev_cached_model'] = ""
+
+    # 处理用户输入确认逻辑
+    if query and query != st.session_state.get('litrev_last_input', ""):
+        # 用户输入了新内容，重置状态
+        st.session_state['litrev_confirmed_query'] = query
+        st.session_state['litrev_optimized_query'] = ""
+        st.session_state['litrev_is_optimized'] = False
+        st.session_state['litrev_last_input'] = query
+        print(f"[Query] User confirmed new query: {query}")
+
+    # 处理优化按钮点击
+    if optimize_btn and query:
+        cached_model = st.session_state.get('litrev_cached_model', "")
+        
+        # 检查是否需要重新优化
+        if (st.session_state['litrev_optimized_query'] == "" or 
+            st.session_state['litrev_confirmed_query'] != query or 
+            cached_model != model_choice):
+            
             with st.spinner(text["optimizing"]):
                 print(f"[Prompt] Optimizing query using {model_choice} model...")
                 print(f"[Prompt] Original query: {query}")
-                std_query = standardize_query(query, model=model_choice)
-                print(f"[Prompt] Optimized query: {std_query}")
-                st.session_state['litrev_last_query'] = query
-                st.session_state['litrev_std_query'] = std_query
-                st.session_state['selected_model'] = model_choice
-        elif query:
-            std_query = st.session_state.get('litrev_std_query', "")
+                optimized = standardize_query(query, model=model_choice)
+                print(f"[Prompt] Optimized query: {optimized}")
+                
+                # 更新状态
+                st.session_state['litrev_confirmed_query'] = query
+                st.session_state['litrev_optimized_query'] = optimized
+                st.session_state['litrev_is_optimized'] = True
+                st.session_state['litrev_cached_model'] = model_choice
+        else:
+            # 使用缓存的优化结果
+            st.session_state['litrev_is_optimized'] = True
+
+    # 确定最终使用的查询
+    if st.session_state['litrev_is_optimized'] and st.session_state['litrev_optimized_query']:
+        std_query = st.session_state['litrev_optimized_query']
+        display_query = std_query
+        query_type = "optimized"
+    elif st.session_state['litrev_confirmed_query']:
+        std_query = st.session_state['litrev_confirmed_query']
+        display_query = std_query
+        query_type = "original"
     else:
-        std_query = query
-        
-    # 显示优化结果
-    if std_query and optimize_prompt:
-        st.info(("🤖 " + text["optimized_prompt"].split(":")[0] + f" ({model_choice}):\n\n{std_query}") if lang == "English" else f"🤖 {text['optimized_prompt'].split(':')[0]}（{model_choice}）:\n\n{std_query}")
+        std_query = ""
+        display_query = ""
+        query_type = ""
+
+    # 显示当前使用的查询
+    if display_query:
+        if query_type == "optimized":
+            st.info(f"✨ **{text['optimized_prompt'].split(':')[0]} ({model_choice}):**\n\n{display_query}")
+        else:
+            st.info(f"📝 **{text.get('current_query', 'Current Query')}:**\n\n{display_query}")
 
     # Step 3: 编辑摘要模板
     st.markdown(text["step3_title"])
@@ -137,7 +187,10 @@ def render_literature_tab(PROJECTS_DIR, lang):
     )
     num_chunks = st.slider(text["num_chunks"], min_value=5, max_value=50, value=15)
 
-    if std_query and st.button(text["run_retrieval"]):
+    # 确保retrieval按键始终显示，只要有查询内容
+    run_retrieval_btn = st.button(text["run_retrieval"], disabled=not std_query)
+    
+    if std_query and run_retrieval_btn:
         st.info(text["retrieving"])
         print(f"[INFO] search params: query={std_query}, top_k={num_chunks}, db={chroma_db_folder}, relevance_threshold={relevance_threshold}")
         db = initialize_chroma(chroma_db_folder)

@@ -146,6 +146,47 @@ def export_llm_cards_to_csv(
 def parse_csv_to_table(csv_content: str):
     """
     解析LLM生成的CSV文本为表格，便于预览。
+    处理包含逗号的文本字段，确保正确解析。
     """
-    reader = csv.reader(io.StringIO(csv_content))
-    return [row for row in reader if any(cell.strip() for cell in row)]
+    import csv
+    import io
+    
+    if not csv_content.strip():
+        return []
+    
+    try:
+        # 使用标准CSV解析器，它会正确处理引号包围的字段
+        reader = csv.reader(io.StringIO(csv_content.strip()), 
+                          delimiter=',', 
+                          quotechar='"',
+                          skipinitialspace=True)
+        
+        rows = []
+        for i, row in enumerate(reader):
+            # 过滤空行和只包含空白字符的行
+            if row and any(cell.strip() for cell in row):
+                # 清理每个单元格的前后空白
+                cleaned_row = [cell.strip() for cell in row]
+                rows.append(cleaned_row)
+                print(f"[CSV Parse] Row {i+1}: {len(cleaned_row)} columns - {[len(cell) for cell in cleaned_row]} chars each")
+        
+        print(f"[CSV Parse] Successfully parsed {len(rows)} rows")
+        return rows
+        
+    except Exception as e:
+        print(f"[CSV Parse Error] {e}")
+        print(f"[CSV Content] {csv_content[:200]}...")
+        # 如果CSV解析失败，尝试简单的分割方法作为后备
+        lines = csv_content.strip().split('\n')
+        fallback_rows = []
+        for line in lines:
+            if line.strip():
+                # 简单分割，但这可能不处理引号正确
+                parts = [part.strip() for part in line.split(',')]
+                if len(parts) >= 3:
+                    fallback_rows.append(parts[:3])  # 只取前3列
+                elif len(parts) >= 1:
+                    fallback_rows.append(parts)
+        
+        print(f"[CSV Fallback] Parsed {len(fallback_rows)} rows using simple split")
+        return fallback_rows
