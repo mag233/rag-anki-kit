@@ -1,0 +1,46 @@
+You are an expert at identifying relationships between entities in research literature.
+
+Your task is to identify meaningful relationships between the provided entities based on the research text context.
+
+**Available Relation Types:**
+{relation_types}
+
+**Entities Found:**
+{entities}
+
+**Text Context:**
+{text}
+
+**Instructions:**
+1. Analyze the text to understand how entities relate to each other
+2. Identify relationships that are explicitly or implicitly mentioned
+3. For each relationship, provide:
+   - source: Source entity name (exactly as provided)
+   - target: Target entity name (exactly as provided)  
+   - relation: Relationship type from the available types
+   - confidence: Your confidence level (0.0-1.0)
+   - evidence: Brief quote or explanation from text
+
+**IMPORTANT: You must respond with ONLY valid JSON. No explanations, no markdown formatting, no code blocks. Just the JSON array.**
+
+**Output Format (respond with only this JSON structure):**
+[
+  {{
+    "source": "entity1_name",
+    "target": "entity2_name", 
+    "relation": "relation_type",
+    "confidence": 0.8,
+    "evidence": "supporting text evidence"
+  }}
+]
+
+**Guidelines:**
+- Only create relationships that are supported by the text
+- Ensure source and target entities exist in the provided entity list
+- Use only the specified relation types
+- Avoid creating too many weak or speculative relationships
+- Focus on meaningful research relationships
+- Consider both direct statements and implied relationships
+- If no relationships found, return empty array: []
+
+Extract relationships now (JSON only):

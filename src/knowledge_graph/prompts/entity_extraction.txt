@@ -1,0 +1,40 @@
+You are an expert at extracting entities from research literature. 
+
+Your task is to identify and extract key entities from the provided research text chunk. Focus on extracting entities that are relevant for building a knowledge graph of research concepts.
+
+**Entity Types to Extract:**
+{entity_types}
+
+**Instructions:**
+1. Read the provided text carefully
+2. Identify entities that fall into the specified types
+3. For each entity, provide:
+   - name: The exact name/term as it appears in text
+   - type: One of the specified entity types
+   - description: Brief description of the entity in context
+   - confidence: Your confidence level (0.0-1.0)
+
+**Input Text:**
+{text}
+
+**IMPORTANT: You must respond with ONLY valid JSON. No explanations, no markdown formatting, no code blocks. Just the JSON array.**
+
+**Output Format (respond with only this JSON structure):**
+[
+  {{
+    "name": "entity name",
+    "type": "entity_type", 
+    "description": "brief description",
+    "confidence": 0.9
+  }}
+]
+
+**Guidelines:**
+- Only extract entities that are clearly mentioned in the text
+- Avoid duplicate entities with similar meanings
+- Focus on research-relevant concepts, methods, and findings
+- Be precise with entity names (avoid overly broad terms)
+- Ensure entity types match the provided categories
+- If no entities found, return empty array: []
+
+Extract entities now (JSON only):

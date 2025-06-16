@@ -1,0 +1,1772 @@
+[
+  {
+    "source": "Artificial intelligence chatbots",
+    "target": "163 academic publishers",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "This study audited the publicly available policies of 163 academic publishers in the STM association regarding chatbot usage by authors.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Artificial intelligence chatbots",
+    "target": "34.4% policy availability rate",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "Key findings include a 34.4% policy availability rate, with most mandating disclosure of chatbot use and prohibiting chatbot authorship.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Machine learning models",
+    "target": "Histopathology",
+    "relation": "investigates_topic",
+    "confidence": 0.8,
+    "evidence": "This paper examines the challenges and potential solutions when employing machine learning models in histopathology.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Machine learning models",
+    "target": "Breast cancer",
+    "relation": "investigates_topic",
+    "confidence": 0.8,
+    "evidence": "This systematic review evaluates the performance of externally validated machine learning models using histopathology images for breast cancer diagnosis.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Deep learning",
+    "target": "Breast cancer",
+    "relation": "treats",
+    "confidence": 0.7,
+    "evidence": "Deep learning models have shown promise for advancing diagnostic accuracy and healthcare systems.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "AI tools",
+    "target": "Artificial Intelligence Chatbots",
+    "relation": "relates_to",
+    "confidence": 0.7,
+    "evidence": "Karger Publishers required AI tools to be cited as primary sources.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Explainable AI (XAI)",
+    "target": "digital health",
+    "relation": "investigates_topic",
+    "confidence": 0.8,
+    "evidence": "This systematic review synthesizes findings from 27 studies on explainable artificial intelligence (XAI) in digital health and precision medicine.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Explainable AI (XAI)",
+    "target": "precision medicine",
+    "relation": "investigates_topic",
+    "confidence": 0.8,
+    "evidence": "This systematic review synthesizes findings from 27 studies on explainable artificial intelligence (XAI) in digital health and precision medicine.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "mHealth interventions",
+    "target": "methodological challenges",
+    "relation": "investigates_topic",
+    "confidence": 0.9,
+    "evidence": "This study identifies methodological challenges in RCTs of mHealth interventions.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "LightGBM",
+    "target": "clinical literature surveillance systems",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "This research explores using LightGBM, a gradient-boosting machine learning model, to classify clinical articles based on methodological rigor and clinical relevance.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT",
+    "target": "scientific articles",
+    "relation": "uses_method",
+    "confidence": 0.8,
+    "evidence": "This study investigates the use of BERT-based models, specifically SciBERT, for classifying scientific articles across multiple criteria.",
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT",
+    "target": "text classification",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "Using the contextual language model BERT for multi-criteria classification of scientific articles",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "SciBERT",
+    "target": "text classification",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "We used SciBERT, a variant of BERT pre-trained on scientific articles",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "MEDLINE",
+    "target": "systematic reviews",
+    "relation": "studies_population",
+    "confidence": 0.85,
+    "evidence": "MEDLINE and EMBASE are large repositories of scientific articles that are often screened for systematic reviews",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Clinical Hedges",
+    "target": "MEDLINE",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "we conducted experiments using a manually annotated dataset of ~49 K MEDLINE abstracts, known as Clinical Hedges",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "cascade ensemble",
+    "target": "precision",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "The cascade ensemble had significantly higher precision (0.663 vs. 0.388 vs. 0.478 vs. 0.320)",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "individual task learner (ITL)",
+    "target": "recall",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "ITL had significantly higher recall than the other classifiers (0.965 vs. 0.872 vs. 0.917 vs. 0.944)",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "PubMed",
+    "target": "systematic reviews",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "PubMed also offers specialized search using Clinical Query filters – which are rules based on combinations of text strings",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Machine learning (research_topic)",
+    "target": "BERT (Bidirectional Encoder Representations from Transformers) (methodology)",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "recently developed contextual neural language models, BERT (Bidirectional Encoder Representations from Transformers)",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT (Bidirectional Encoder Representations from Transformers) (methodology)",
+    "target": "Clinical Hedges dataset (population)",
+    "relation": "studies_population",
+    "confidence": 0.85,
+    "evidence": "we explored in this study, using the Clinical Hedges dataset",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Clinical Hedges dataset (population)",
+    "target": "scientifically sound articles (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "the criteria when combined identify scientifically sound articles of a selected type",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT (Bidirectional Encoder Representations from Transformers) (methodology)",
+    "target": "text classification (concept)",
+    "relation": "investigates_topic",
+    "confidence": 0.9,
+    "evidence": "we mapped the task to text classification rather than to IR",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT (Bidirectional Encoder Representations from Transformers) (methodology)",
+    "target": "precision (finding)",
+    "relation": "affects",
+    "confidence": 0.75,
+    "evidence": "the systematic reviews process is focused on precision at very high recall",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT (Bidirectional Encoder Representations from Transformers) (methodology)",
+    "target": "recall (finding)",
+    "relation": "affects",
+    "confidence": 0.75,
+    "evidence": "the systematic reviews process is focused on precision at very high recall",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT (Bidirectional Encoder Representations from Transformers) (methodology)",
+    "target": "F measure (finding)",
+    "relation": "affects",
+    "confidence": 0.75,
+    "evidence": "the highest achievable F measure characterizes models’ performance more broadly",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "treatment (treatment)",
+    "target": "human healthcare (disease)",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "whether it is concerning human healthcare or not",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Cascade Learner",
+    "target": "Clinical Hedges dataset",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "the goal of our experiments is to study how different ensembles and ITL perform on the task of classifying scientific articles based on the four filtering criteria using the Clinical Hedges dataset",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Boolean ensemble learner",
+    "target": "Clinical Hedges dataset",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "the final output label is False if any of the models classifies it as False",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Feed-forward network ensemble learner",
+    "target": "Clinical Hedges dataset",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "We trained four SciBERT models, one for each of the 4-tasks, as in Ensemble-Boolean",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "10-fold cross validation",
+    "target": "Clinical Hedges dataset",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "we used 10-fold cross validation",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "gold standard labels",
+    "target": "Clinical Hedges dataset",
+    "relation": "relates_to",
+    "confidence": 0.9,
+    "evidence": "we used the gold standard labels from the dataset for both training and testing the models",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "precision",
+    "target": "Clinical Hedges dataset",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "The test results were averaged across all the folds to calculate the model precision, recall, and F measure",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "recall",
+    "target": "Clinical Hedges dataset",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "The test results were averaged across all the folds to calculate the model precision, recall, and F measure",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "F measure",
+    "target": "Clinical Hedges dataset",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "The test results were averaged across all the folds to calculate the model precision, recall, and F measure",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Clinical Hedges dataset",
+    "target": "Del Fiol et al",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "Del Fiol et al used a subset that met the following constraint: Format = Original/Review/Blank, HHC = True/False, Purpose = Any, Rigor = True/False",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Clinical Hedges dataset",
+    "target": "Marshall et al",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "Marshall et al used all the samples (full dataset) from the dataset for testing",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "PubMed search queries",
+    "target": "positive samples",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "Both used articles returned by PubMed using the Clinical Queries filter tuned for precision ('Narrow' filter) in a particular time period were used as positive samples",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "ensemble of criterion-specific models",
+    "target": "Feed Forward Network",
+    "relation": "uses_method",
+    "confidence": 0.85,
+    "evidence": "the CLS logits are concatenated and input to a Feed Forward Network",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "P, R, and F measure",
+    "target": "ensemble of criterion-specific models",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "we present results only for the positive class, which is the class of interest",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Narrow filter",
+    "target": "positive samples",
+    "relation": "affects",
+    "confidence": 0.75,
+    "evidence": "PubMed using the Clinical Queries filter tuned for precision ('Narrow' filter) in a particular time period were used as positive samples",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "sampling ratio",
+    "target": "negative samples",
+    "relation": "affects",
+    "confidence": 0.9,
+    "evidence": "as negative samples are reduced from the baseline, recall improves at the cost of precision",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "sampling ratio",
+    "target": "positive samples",
+    "relation": "affects",
+    "confidence": 0.9,
+    "evidence": "when positives were roughly 10 times oversampled",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Cascade Learner",
+    "target": "precision",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "Cascade Learner had significantly higher precision (0.663 vs. 0.388 vs. 0.478 vs. 0.320)",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Cascade Learner",
+    "target": "recall",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "Cascade Learner had significantly higher F measure (0.753 vs. 0.553 vs. 0.628 vs. 0.477)",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Cascade Learner",
+    "target": "F measure",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "Cascade Learner had significantly higher F measure (0.753 vs. 0.553 vs. 0.628 vs. 0.477)",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "ITL",
+    "target": "recall",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "ITL had significantly higher recall than the other classifiers (0.965 vs. 0.872 vs. 0.917 vs. 0.944)",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "10-fold cross validation",
+    "target": "precision",
+    "relation": "uses_method",
+    "confidence": 0.8,
+    "evidence": "Ten-fold cross validation provided a convenient way to calculate confidence intervals for the metrics",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "10-fold cross validation",
+    "target": "recall",
+    "relation": "uses_method",
+    "confidence": 0.8,
+    "evidence": "Ten-fold cross validation provided a convenient way to calculate confidence intervals for the metrics",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "10-fold cross validation",
+    "target": "F measure",
+    "relation": "uses_method",
+    "confidence": 0.8,
+    "evidence": "Ten-fold cross validation provided a convenient way to calculate confidence intervals for the metrics",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "publication type tags",
+    "target": "Cascade Learner",
+    "relation": "relates_to",
+    "confidence": 0.7,
+    "evidence": "we used the publication tags as a part of the input text",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "computational resources",
+    "target": "Cascade Learner",
+    "relation": "affects",
+    "confidence": 0.9,
+    "evidence": "as the number of samples increased, computing resources needed for training and testing the ensembles increased substantially",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "ITL (methodology)",
+    "target": "F measure (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "ITL achieved its best F measure balancing the recall and precision.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "ITL (methodology)",
+    "target": "recall (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "The highest recall (0.986) was achieved with highly skewed number of positive samples.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "ITL (methodology)",
+    "target": "precision (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "This may not be helpful where high recall is needed (such as systematic reviews) but for other downstream applications.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Cascade Learner (methodology)",
+    "target": "F measure (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "Cascade Learner achieved the highest precision and the highest F measure compared to ITL and other the ensembles.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Cascade Learner (methodology)",
+    "target": "recall (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "Cascade Learner achieved the highest precision and the highest F measure compared to ITL and other the ensembles, although it lost recall compared to all of them.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Clinical Hedges dataset (population)",
+    "target": "ITL (methodology)",
+    "relation": "studies_population",
+    "confidence": 0.85,
+    "evidence": "Del Fiol et al tested on a subset of Clinical Hedges dataset.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "McMaster’s clinical query (CQ) filters (treatment)",
+    "target": "recall (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "Performance of two kinds of filters (balanced and broad), at recall 0.970 and 0.984 respectively, were discussed.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "SVM (support vector machines) (methodology)",
+    "target": "recall (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "The Marshall et al study reported best precision results at 0.985 recall using SVM.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "neural network (CNN) (methodology)",
+    "target": "recall (outcome)",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "Del Fiol et al [9] reported only one set results for a neural network (CNN) model, which achieved 0.969 recall.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "ITL (methodology)",
+    "target": "systematic reviews (research_topic)",
+    "relation": "investigates_topic",
+    "confidence": 0.9,
+    "evidence": "ITL is most suitable for high recall applications such as systematic reviews.",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Clinical Hedges dataset",
+    "target": "neural network models",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "We made an extensive study of how to apply the latest neural network models when the task of filtering articles involves a combination of criteria, using the Clinical Hedges dataset",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "neural network models",
+    "target": "high recall",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "the single integrated model however consistently achieved higher recall",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "neural network models",
+    "target": "high precision",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "the cascading ensemble achieved the highest precision",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "SciBERT",
+    "target": "cascading ensemble",
+    "relation": "treats",
+    "confidence": 0.85,
+    "evidence": "SciBERT was an effective core model for use in these architectures",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "optimizing algorithms",
+    "target": "high recall",
+    "relation": "affects",
+    "confidence": 0.75,
+    "evidence": "a better approach might be to develop optimization algorithms designed for high recall rather than for accuracy",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "sample size and ratio",
+    "target": "neural network models",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "we observed that the training sample size and ratio had a significant impact of the performance",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "systematic reviews",
+    "target": "high recall",
+    "relation": "relates_to",
+    "confidence": 0.9,
+    "evidence": "For systematic reviews this is an important characteristic where researchers are willing to review twice as many articles as they would ultimately include but do not want to miss even a few includable articles",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Best Match",
+    "target": "MEDLINE clinical queries",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "Best Match: new relevance search for PubMed",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "MEDLINE clinical queries",
+    "target": "scientifically rigorous clinical research evidence",
+    "relation": "investigates_topic",
+    "confidence": 0.8,
+    "evidence": "Towards automatic recognition of scientifically rigorous clinical research evidence",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Randomized Controlled Trials",
+    "target": "scientifically rigorous clinical research evidence",
+    "relation": "studies_population",
+    "confidence": 0.7,
+    "evidence": "Machine learning for identifying Randomized Controlled Trials",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BERT",
+    "target": "information retrieval systems",
+    "relation": "uses_method",
+    "confidence": 0.8,
+    "evidence": "Applying BERT to document retrieval",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "BioBERT",
+    "target": "contextual embeddings",
+    "relation": "treats",
+    "confidence": 0.9,
+    "evidence": "BioBERT: a pre-trained biomedical language representation model",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Deep Learning Method",
+    "target": "scientifically rigorous clinical research evidence",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "A Deep Learning Method to Automatically Identify Reports of Scientifically Rigorous Clinical Research",
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital health literacy",
+    "target": "Older adults",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "Age had a negative effect on digital health literacy, particularly among older adults.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital health literacy",
+    "target": "Educational level",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "Educational level... appeared to have a positive influence on digital health literacy.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital health literacy",
+    "target": "Higher income",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "Higher income... appeared to have a positive influence on digital health literacy.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital health literacy",
+    "target": "Social support",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "Social support... appeared to have a positive influence on digital health literacy.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital health literacy",
+    "target": "Socioeconomic status",
+    "relation": "relates_to",
+    "confidence": 0.7,
+    "evidence": "This review highlighted the importance of addressing the digital health literacy needs of underprivileged populations, including immigrants and individuals with low socioeconomic status.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital health literacy",
+    "target": "Immigrants",
+    "relation": "relates_to",
+    "confidence": 0.7,
+    "evidence": "This review highlighted the importance of addressing the digital health literacy needs of underprivileged populations, including immigrants.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Systematic Review",
+    "target": "Digital health literacy",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "this study sought to examine the sociodemographic determinants of digital health literacy by conducting a systematic review.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Meta-analysis",
+    "target": "Digital health literacy",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "Meta-analyses for age and sex were conducted... on digital health literacy.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "digital health literacy",
+    "target": "sociodemographic determinants",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "this study aimed to analyze the sociodemographic determinants of digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "digital health literacy",
+    "target": "socioeconomic status",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "differences in digital health literacy levels... are ultimately related to socioeconomic status",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "digital divide",
+    "target": "socioeconomic status",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "digital divide... is influenced by factors such as socioeconomic status",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "systematic review and meta-analysis",
+    "target": "digital health literacy",
+    "relation": "investigates_topic",
+    "confidence": 0.9,
+    "evidence": "systematic review and meta-analysis of the available studies on the topic",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Cohen’s kappa",
+    "target": "systematic review and meta-analysis",
+    "relation": "reports_outcome",
+    "confidence": 0.7,
+    "evidence": "Cohen’s kappa of 0.623... corresponding to substantial agreement",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "PRISMA guidelines",
+    "target": "systematic review and meta-analysis",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "this systematic review and meta-analysis followed the PRISMA guidelines",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Joanna Briggs Institute Checklist for Cross-sectional studies",
+    "target": "systematic review and meta-analysis",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "the quality of the included studies was assessed using the Joanna Briggs Institute Checklist for Cross-sectional studies",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "RStudio software",
+    "target": "systematic review and meta-analysis",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "All statistical analyses were conducted using RStudio software",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHealth Literacy Scale (eHEALS)",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "Seven studies were conducted among high school or college students",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHealth Literacy Scale (eHEALS)",
+    "target": "older adults",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "Older adults were the target population in six studies",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital Health Literacy Instrument",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "Zakar’s study... which used the Digital Health Literacy Instrument",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital Health Literacy Instrument",
+    "target": "older adults",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "Zakar’s study... which used the Digital Health Literacy Instrument",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHealth Literacy Scale (eHEALS)",
+    "target": "digital health literacy levels",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "The weighted average eHEALS score among the studies was 30.4 ± 2.4",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Digital Health Literacy Instrument",
+    "target": "digital health literacy levels",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "Zakar’s study... which used the Digital Health Literacy Instrument",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "cross-sectional design",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "All studies had a cross-sectional design",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "cross-sectional design",
+    "target": "older adults",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "All studies had a cross-sectional design",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "cross-sectional design",
+    "target": "healthcare workers",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "All studies had a cross-sectional design",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "high school or college students",
+    "target": "digital health literacy levels",
+    "relation": "reports_outcome",
+    "confidence": 0.7,
+    "evidence": "observed that healthcare workers... presented higher levels of digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "older adults",
+    "target": "digital health literacy levels",
+    "relation": "reports_outcome",
+    "confidence": 0.7,
+    "evidence": "observed that healthcare workers... presented higher levels of digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "healthcare workers",
+    "target": "digital health literacy levels",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "healthcare workers... presented higher levels of digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Asian countries",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "almost half of the studies... were conducted in Asian countries",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "North America",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "twelve studies were conducted in North America",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Europe",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "six in Europe",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Africa",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "three in Africa",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Australia",
+    "target": "high school or college students",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "one in Australia",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHEALS",
+    "target": "Adults",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "eHEALS mean (SD) 2021 Abdulai, A Ghana Online survey 269 28.4 59.7 Adults",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHEALS",
+    "target": "Older adults (55 + yo)",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "eHEALS mean (SD) 2020 Arcury, T North Carolina (US) On-site 200 63.5 42 Older adults (55 + yo)",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHEALS",
+    "target": "Healthcare workers (21–60 yo)",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "eHEALS mean (SD) 2020 Do, B Vietnam Online survey 5209 34.0 32.9 Healthcare workers (21–60 yo)",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHEALS",
+    "target": "Breast cancer survivors",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "eHEALS mean (SD) 2022 Moon, Z England and Wales On-site and online 1860 60.5 0 Breast cancer survivors",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHEALS",
+    "target": "Nursing students",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "eHEALS mean (SD) 2020 Kim, S Korea On-site 205 21.7 14.1 Nursing students",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHEALS",
+    "target": "University students",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "eHEALS mean (SD) 2021 Zakar, R Pakistan Online survey 1747 22.5 47.3 University students",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Chronic kidney disease",
+    "target": "Chronic patients",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "Chronic kidney disease adults Late 2016 mid 2018",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "COPD",
+    "target": "Patients",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "COPD patients",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Chronic patients",
+    "target": "Low income disabled and home-bound adults",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "Chronic patients Feb – May 2019",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "General population (14–93 yo)",
+    "target": "Patients",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "General population (14–93 yo) Oct 2020",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Chinese and punjabi seniors",
+    "target": "Older adults (55 + yo)",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "Chinese and punjabi seniors 2013–2014",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "nursing students",
+    "target": "eHEALS",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "nursing students from Tran’s study presented high scores on eHEALS on average",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "medical students",
+    "target": "eHEALS",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "other groups of nursing and medical students belonged to the studies with the lowest average eHEALS scores",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "young adults",
+    "target": "eHEALS",
+    "relation": "studies_population",
+    "confidence": 0.7,
+    "evidence": "no significant differences were noted among young adults and older adults",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "older adults",
+    "target": "eHEALS",
+    "relation": "studies_population",
+    "confidence": 0.7,
+    "evidence": "no significant differences were noted among young adults and older adults",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Arabic speakers",
+    "target": "eHEALS",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "statistically significant differences were observed among Arabic and Swedish speakers",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Swedish speakers",
+    "target": "eHEALS",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "statistically significant differences were observed among Arabic and Swedish speakers",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "age",
+    "target": "eHEALS",
+    "relation": "affects",
+    "confidence": 0.9,
+    "evidence": "reported a negative association between age and eHEALS scores",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "digital health literacy",
+    "target": "age",
+    "relation": "causes",
+    "confidence": 0.9,
+    "evidence": "People aged over 75 years are up to four times more likely to have lower levels of digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "education",
+    "target": "eHEALS",
+    "relation": "affects",
+    "confidence": 0.9,
+    "evidence": "every study with statistically significant results presented a positive influence of educational level on eHEALS scores",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "college degree or higher",
+    "target": "digital health literacy",
+    "relation": "treats",
+    "confidence": 0.8,
+    "evidence": "those with a college degree or higher being particularly predisposed to present higher digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "age",
+    "target": "statistically significant differences",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "a statistically significant negative effect of age on eHEALS scores was observed",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "income",
+    "target": "eHEALS",
+    "relation": "reports_outcome",
+    "confidence": 0.9,
+    "evidence": "higher income associated with higher eHEALS levels",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "socioeconomic status",
+    "target": "digital health literacy",
+    "relation": "affects",
+    "confidence": 0.85,
+    "evidence": "low socioeconomic status is associated with suboptimal use of health resources and health status",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "age",
+    "target": "digital health literacy",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "negative relationship between age and DHL levels",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "education",
+    "target": "digital health literacy",
+    "relation": "affects",
+    "confidence": 0.85,
+    "evidence": "individuals with higher levels of education tended to have higher digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "social support",
+    "target": "digital health literacy",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "lack of social support were associated with lower eHEALS",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "employment status",
+    "target": "digital health literacy",
+    "relation": "affects",
+    "confidence": 0.75,
+    "evidence": "significant difference in digital health literacy scores between employed and unemployed individuals",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "race",
+    "target": "digital health literacy",
+    "relation": "relates_to",
+    "confidence": 0.7,
+    "evidence": "Ethnicity appeared to have no effect on digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "languages spoken",
+    "target": "digital health literacy",
+    "relation": "relates_to",
+    "confidence": 0.7,
+    "evidence": "being an Arabic native speaker in Sweden was associated with a higher probability of presenting low digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "socioeconomic status",
+    "target": "digital health literacy",
+    "relation": "affects",
+    "confidence": 0.9,
+    "evidence": "access to the Internet and digital health tools may also be severely hindered by individuals’ economic status",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "social support",
+    "target": "digital health literacy",
+    "relation": "affects",
+    "confidence": 0.85,
+    "evidence": "individuals with more social support tend to have higher health literacy than those with less social support",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "immigrants",
+    "target": "digital health literacy",
+    "relation": "studies_population",
+    "confidence": 0.8,
+    "evidence": "being a native speaker may constitute an advantage for higher digital health literacy levels when compared to their immigrant counterparts",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "digital health interventions",
+    "target": "immigrants",
+    "relation": "treats",
+    "confidence": 0.75,
+    "evidence": "it is also important to target DHL interventions for these populations",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "health misinformation",
+    "target": "cognitive bias",
+    "relation": "causes",
+    "confidence": 0.8,
+    "evidence": "people with low digital health literacy may also be more susceptible to cognitive bias, overestimating their knowledge base",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHEALS",
+    "target": "digital health literacy",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "The eHEALS is the most widely used scale to measure digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "sociodemographic factors",
+    "target": "digital health literacy",
+    "relation": "investigates_topic",
+    "confidence": 0.85,
+    "evidence": "this review provides valuable insights into the influence of socioeconomic and demographic factors on digital health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHealth literacy",
+    "target": "digital health literacy",
+    "relation": "relates_to",
+    "confidence": 0.9,
+    "evidence": "Socioeconomic determinants for digital health literacy: a systematic review.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "COVID-19",
+    "target": "digital health literacy",
+    "relation": "investigates_topic",
+    "confidence": 0.8,
+    "evidence": "COVID-19 information-related digital literacy among online health consumers in a low-income country.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "eHealth literacy",
+    "target": "satisfaction with shared decision-making",
+    "relation": "affects",
+    "confidence": 0.85,
+    "evidence": "the association between patients’ ehealth literacy and satisfaction with shared decision-making.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "chronic disease self-management",
+    "target": "eHealth barriers and facilitators",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "Exploring eHealth barriers and facilitators for chronic disease self-management.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "mobile health (mHealth)",
+    "target": "chronic disease self-management",
+    "relation": "treats",
+    "confidence": 0.75,
+    "evidence": "Assessment of availability, acceptability, and use in CKD.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "systematic review",
+    "target": "digital health literacy",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "Socioeconomic determinants for digital health literacy: a systematic review.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "cross-sectional study",
+    "target": "eHealth literacy",
+    "relation": "studies_population",
+    "confidence": 0.85,
+    "evidence": "Factors influencing eHealth literacy among Korean nursing students: A cross-sectional study.",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "health information on social media",
+    "target": "mouse-tracking study",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "Making decisions about health information on social media: A mouse-tracking study",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Dunning-Kruger effect",
+    "target": "health literacy",
+    "relation": "relates_to",
+    "confidence": 0.85,
+    "evidence": "Overconfidence in managing health concerns: The Dunning-Kruger effect and health literacy",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Quick assessment of literacy in primary care",
+    "target": "health literacy",
+    "relation": "reports_outcome",
+    "confidence": 0.8,
+    "evidence": "Quick assessment of literacy in primary care: the newest vital sign",
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "systematic review",
+    "target": "physical activity",
+    "relation": "investigates_topic",
+    "confidence": 0.9,
+    "evidence": "the main goal of this systematic review is to summarize and identify the current literature that addresses factors associated with adolescents’ physical activity",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "systematic review",
+    "target": "adolescents",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "the main goal of this systematic review is to summarize and identify the current literature that addresses factors associated with adolescents’ physical activity",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "determinants of physical activity",
+    "target": "adolescents",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "we aimed to review the determinants and influencing factors of PA in adolescents",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "self-efficacy",
+    "target": "physical activity",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "This systematic review found some evidence of associations between physical activity and... self-efficacy",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "parental support",
+    "target": "physical activity",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "This systematic review found some evidence of associations between physical activity and... parental support",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "peer support",
+    "target": "physical activity",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "This systematic review found some evidence of associations between physical activity and... peer support",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "socioeconomic status",
+    "target": "physical activity",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "This systematic review found some evidence of associations between physical activity and... socioeconomic status",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "parent modeling",
+    "target": "physical activity",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "This systematic review found some evidence of associations between physical activity and... parent modeling",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "depressive symptoms",
+    "target": "physical activity",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "This systematic review found some evidence of associations between physical activity and... depressive symptoms",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "environmental determinants",
+    "target": "physical activity",
+    "relation": "affects",
+    "confidence": 0.8,
+    "evidence": "This systematic review found some evidence of associations between physical activity and... environmental determinants",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "adolescents",
+    "target": "physical activity",
+    "relation": "studies_population",
+    "confidence": 0.9,
+    "evidence": "subjects were in the 5th–12th grade",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "systematic review",
+    "target": "physical activity",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "A systematic review of the literature was undertaken",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Pender’s Health Promotion Model",
+    "target": "adolescents",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "Six of the studies explained adolescents’ PA using the HPM",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Self-Efficacy and Self-Schema Theory",
+    "target": "adolescents",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "One study was guided by the Self-Efficacy and Self-Schema Theory",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Ecological Model",
+    "target": "adolescents",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "Humbert et al. (2006) used an Ecological Model to identify factors that influence participation in PA among youth",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Social Ecological Model",
+    "target": "LEAP (Lifestyle Education for Activity Program)",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "Pate et al. (2005) designed LEAP on the basis of the Social Ecological Model",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Social-Cognitive Theory",
+    "target": "adolescents",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "Three studies used a conceptual framework based on the Social-Cognitive Theory",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Social-Learning Theory",
+    "target": "adolescents",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "DiLorenzo et al. used Social-Learning Theory to predict determinants of exercise among children",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Health Promotion and Transtheoretical Model",
+    "target": "adolescents",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "The Health Promotion and Transtheoretical Model was used in Frenn et al.’s study",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "Theory of Planned Behavior",
+    "target": "adolescents",
+    "relation": "relates_to",
+    "confidence": 0.8,
+    "evidence": "One study used the Theory of Planned Behavior to identify environmental and individual factors and their association with adolescents’ PA",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "cross-sectional studies",
+    "target": "physical activity",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "Most of the studies included in this review were cross-sectional studies",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "longitudinal studies",
+    "target": "physical activity",
+    "relation": "uses_method",
+    "confidence": 0.9,
+    "evidence": "Six studies were longitudinal",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "source": "LEAP (Lifestyle Education for Activity Program)",
+    "target": "physical activity",
+    "relation": "treats",
+    "confidence": 0.9,
+    "evidence": "Pate et al. (2005) designed LEAP to enhance PA self-efficacy and enjoyment",
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  }
+]

@@ -5,7 +5,7 @@ import streamlit as st
 from preprocess import process_documents
 from embed import create_or_update_embeddings
 from langchain_community.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from lang_utils import get_text  # 新增
 
 def render_rag_tab(PROJECTS_DIR, lang):

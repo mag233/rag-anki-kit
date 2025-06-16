@@ -1,0 +1,2018 @@
+[
+  {
+    "name": "Artificial intelligence chatbots",
+    "type": "research_topic",
+    "description": "The influence of AI chatbots like ChatGPT on academic research and publishing.",
+    "confidence": 0.95,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Cross-sectional audit",
+    "type": "methodology",
+    "description": "A study design used to audit policies of academic publishers regarding chatbot usage.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "163 academic publishers",
+    "type": "population",
+    "description": "The population of academic publishers audited in the study.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "34.4% policy availability rate",
+    "type": "finding",
+    "description": "The percentage of publishers that had policies regarding chatbot use.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Machine learning models",
+    "type": "concept",
+    "description": "Models used to support learning health systems from histopathology.",
+    "confidence": 0.95,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Histopathology",
+    "type": "disease",
+    "description": "The study of diseases through the examination of tissue samples.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Breast cancer",
+    "type": "disease",
+    "description": "The specific type of cancer evaluated in the systematic review of machine learning models.",
+    "confidence": 0.95,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Deep learning",
+    "type": "treatment",
+    "description": "A method used to refine the identification of high-quality clinical research articles.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "AI tools",
+    "type": "treatment",
+    "description": "Tools that require citation as primary sources in some publishing policies.",
+    "confidence": 0.85,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Explainable AI (XAI)",
+    "type": "concept",
+    "description": "Methods applied to enhance digital health and precision medicine.",
+    "confidence": 0.95,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Systematic review",
+    "type": "methodology",
+    "description": "A review method used to evaluate machine learning techniques in retrieving clinical evidence.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "LightGBM",
+    "type": "methodology",
+    "description": "A machine learning algorithm used to improve clinical literature surveillance systems.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "mHealth interventions",
+    "type": "research_topic",
+    "description": "Mobile health interventions evaluated for methodological challenges in randomized controlled trials.",
+    "confidence": 0.95,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Consensus-based recommendations",
+    "type": "finding",
+    "description": "Recommendations developed to address methodological challenges in mHealth RCTs.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Artificial Intelligence Chatbots",
+    "type": "concept",
+    "description": "AI systems that assist in the scientific research process.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "BERT",
+    "type": "methodology",
+    "description": "A pretrained language model used for multi-criteria classification of scientific articles.",
+    "confidence": 0.9,
+    "source_chunk": "LitRev_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "BERT",
+    "type": "concept",
+    "description": "A contextual language model used for multi-criteria classification of scientific articles.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "SciBERT",
+    "type": "concept",
+    "description": "A variant of BERT pre-trained on scientific articles, used in the study for screening.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "text classification",
+    "type": "methodology",
+    "description": "The approach framed for the problem of finding specific scientific articles.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "cascade ensemble",
+    "type": "methodology",
+    "description": "A novel ensemble architecture proposed for screening articles, analogous to step-wise screening.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "individual task learner (ITL)",
+    "type": "methodology",
+    "description": "A single integrated model compared against the cascade ensemble in the study.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "MEDLINE",
+    "type": "population",
+    "description": "A large repository of scientific articles screened for systematic reviews.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "systematic reviews",
+    "type": "research_topic",
+    "description": "A type of review that critically depends on screening articles from bibliographic repositories.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "precision",
+    "type": "outcome",
+    "description": "A performance metric indicating the accuracy of the cascade ensemble compared to ITL.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "recall",
+    "type": "outcome",
+    "description": "A performance metric indicating the ability of ITL to identify relevant articles.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Clinical Hedges",
+    "type": "dataset",
+    "description": "A manually annotated dataset of MEDLINE abstracts used for experiments.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "PubMed",
+    "type": "concept",
+    "description": "A bibliographic search engine used for finding scientific articles.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Machine learning",
+    "type": "research_topic",
+    "description": "A method applied to improve precision in biomedical information extraction tasks.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "BERT (Bidirectional Encoder Representations from Transformers)",
+    "type": "methodology",
+    "description": "A neural language model that has established state-of-the-art results for various tasks.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Clinical Hedges dataset",
+    "type": "population",
+    "description": "A dataset consisting of 49,028 unique articles retrieved from MEDLINE in 2000.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "scientifically sound articles",
+    "type": "outcome",
+    "description": "Articles that meet specific criteria for scientific rigor and relevance.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "text classification",
+    "type": "concept",
+    "description": "The task of categorizing articles based on various criteria.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "human healthcare",
+    "type": "disease",
+    "description": "The focus area of articles concerning health-related studies.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "treatment",
+    "type": "treatment",
+    "description": "One of the intended purposes of the articles in the dataset.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "precision",
+    "type": "finding",
+    "description": "A performance metric used to evaluate the effectiveness of models in retrieving relevant articles.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "recall",
+    "type": "finding",
+    "description": "A performance metric indicating the ability of a model to identify relevant articles.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "F measure",
+    "type": "finding",
+    "description": "A metric used to balance precision and recall in model performance evaluation.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Cascade Learner",
+    "type": "methodology",
+    "description": "An architecture that trains multiple SciBERT models in a cascading manner based on specific criteria.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Boolean ensemble learner",
+    "type": "methodology",
+    "description": "A technique that combines outputs of multiple models using Boolean logic to classify articles.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Feed-forward network ensemble learner",
+    "type": "methodology",
+    "description": "An ensemble approach that uses a feed-forward network to combine predictions from individual models.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Clinical Hedges dataset",
+    "type": "population",
+    "description": "A dataset used for training and testing models, containing scientific articles.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "10-fold cross validation",
+    "type": "methodology",
+    "description": "A conventional method used to evaluate model performance by splitting data into 10 folds.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "gold standard labels",
+    "type": "concept",
+    "description": "The reference labels used for training and testing the models in the study.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "precision",
+    "type": "outcome",
+    "description": "A metric used to evaluate the performance of the models based on true positive predictions.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "recall",
+    "type": "outcome",
+    "description": "A metric that measures the ability of the model to identify all relevant instances.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "F measure",
+    "type": "outcome",
+    "description": "A metric that combines precision and recall to provide a single performance measure.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Clinical Hedges dataset",
+    "type": "population",
+    "description": "A dataset used for testing and training in the studies referenced.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Del Fiol et al",
+    "type": "research_topic",
+    "description": "A study that used a specific subset of the dataset with defined constraints.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Marshall et al",
+    "type": "research_topic",
+    "description": "A study that utilized the full dataset for testing.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "positive samples",
+    "type": "outcome",
+    "description": "Samples defined as having specific criteria for inclusion in the study.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "PubMed search queries",
+    "type": "methodology",
+    "description": "Search queries used to extract larger training datasets.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Narrow filter",
+    "type": "concept",
+    "description": "A filter used in PubMed Clinical Queries tuned for precision.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "ensemble of criterion-specific models",
+    "type": "methodology",
+    "description": "A technique used to combine predictions from different models.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Feed Forward Network",
+    "type": "methodology",
+    "description": "A type of neural network used in the experiments.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "P, R, and F measure",
+    "type": "finding",
+    "description": "Performance metrics used to evaluate the models.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Cascade Learner",
+    "type": "methodology",
+    "description": "A model architecture used for training with balanced positive and negative sample ratios.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "ITL",
+    "type": "methodology",
+    "description": "A model architecture compared against the Cascade Learner in terms of performance metrics.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Ensemble-Boolean",
+    "type": "methodology",
+    "description": "One of the ensemble architectures evaluated for performance metrics.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Ensemble-FFN",
+    "type": "methodology",
+    "description": "Another ensemble architecture assessed in the study.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "sampling ratio",
+    "type": "concept",
+    "description": "The ratio of positive to negative samples used in training, impacting model performance.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "precision",
+    "type": "outcome",
+    "description": "A performance metric used to evaluate the models, indicating the accuracy of positive predictions.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "recall",
+    "type": "outcome",
+    "description": "A performance metric indicating the ability of the model to identify all relevant instances.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "F measure",
+    "type": "outcome",
+    "description": "A performance metric that combines precision and recall into a single score.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "10-fold cross validation",
+    "type": "methodology",
+    "description": "A statistical method used to assess the performance of the models by dividing the dataset into ten parts.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "publication type tags",
+    "type": "concept",
+    "description": "Tags assigned to MEDLINE articles that categorize the type of publication.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "negative samples",
+    "type": "population",
+    "description": "Samples that do not belong to the positive class, used in the training process.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "positive samples",
+    "type": "population",
+    "description": "Samples that belong to the positive class, used in the training process.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "computational resources",
+    "type": "concept",
+    "description": "The hardware and software resources required for training and testing the models.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "ITL",
+    "type": "methodology",
+    "description": "A model used for classification that achieved high recall in the study.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Cascade Learner",
+    "type": "methodology",
+    "description": "An ensemble model that achieved the highest precision and F measure compared to ITL.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "recall",
+    "type": "outcome",
+    "description": "A measure of the model's ability to identify relevant samples, with values reported as high as 0.986.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "precision",
+    "type": "outcome",
+    "description": "A measure of the model's accuracy in identifying relevant samples, with values reported in the study.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "F measure",
+    "type": "outcome",
+    "description": "A combined measure of precision and recall, with various values reported for different configurations.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "systematic reviews",
+    "type": "research_topic",
+    "description": "An application area where high recall is particularly important.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Clinical Hedges dataset",
+    "type": "population",
+    "description": "A dataset used for testing the ITL model in the study.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "neural network (CNN)",
+    "type": "methodology",
+    "description": "A model referenced in the study that achieved specific recall and precision metrics.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "SVM (support vector machines)",
+    "type": "methodology",
+    "description": "A model used in a voting ensemble that reported precision results at high recall.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "PT tag",
+    "type": "concept",
+    "description": "A feature that was included in the input for some model configurations.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "McMaster’s clinical query (CQ) filters",
+    "type": "treatment",
+    "description": "Customized search filters discussed in the context of performance comparison.",
+    "confidence": 0.8,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Clinical Hedges dataset",
+    "type": "population",
+    "description": "A highly imbalanced dataset used for filtering articles, consisting of abstracts and titles extracted from MEDLINE.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "neural network models",
+    "type": "methodology",
+    "description": "Advanced computational models used for filtering articles based on various criteria.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "cascading ensemble",
+    "type": "methodology",
+    "description": "A novel form of ensemble model that achieved the highest precision and F-measure in the study.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "SciBERT",
+    "type": "treatment",
+    "description": "An effective core model used in the architectures for text classification tasks.",
+    "confidence": 0.95,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "high recall",
+    "type": "finding",
+    "description": "A characteristic of the single integrated model that consistently achieved higher recall, suggesting its suitability for applications requiring sensitivity.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "high precision",
+    "type": "finding",
+    "description": "A characteristic of the cascading ensemble that achieved the highest precision in the study.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "optimizing algorithms",
+    "type": "concept",
+    "description": "Algorithms that could be developed to emphasize high recall rather than accuracy.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "sample size and ratio",
+    "type": "concept",
+    "description": "Factors that significantly impacted model performance, especially in highly imbalanced datasets.",
+    "confidence": 0.85,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "systematic reviews",
+    "type": "research_topic",
+    "description": "A type of research where the goal is to review articles without missing includable ones.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Best Match",
+    "type": "methodology",
+    "description": "A new relevance search method for PubMed.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "MEDLINE clinical queries",
+    "type": "methodology",
+    "description": "A method for searching high-quality studies in MEDLINE.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "scientifically rigorous clinical research evidence",
+    "type": "concept",
+    "description": "Evidence that meets high scientific standards in clinical research.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Randomized Controlled Trials",
+    "type": "research_topic",
+    "description": "A type of scientific experiment that aims to reduce bias when testing a new treatment.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "BERT",
+    "type": "methodology",
+    "description": "A pre-training method for deep bidirectional transformers for language understanding.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "BioBERT",
+    "type": "treatment",
+    "description": "A pre-trained biomedical language representation model for biomedical text mining.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "contextual embeddings",
+    "type": "concept",
+    "description": "A method for enhancing clinical concept extraction.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "information retrieval systems",
+    "type": "methodology",
+    "description": "Systems adapted to the biomedical domain for retrieving information.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Deep Learning Method",
+    "type": "methodology",
+    "description": "A method to automatically identify reports of scientifically rigorous clinical research.",
+    "confidence": 0.9,
+    "source_chunk": "1-s2.0-S1532046420302069-main_para7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Digital health literacy",
+    "type": "research_topic",
+    "description": "The ability to access, understand, and use digital health tools effectively.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Systematic Review",
+    "type": "methodology",
+    "description": "A comprehensive evaluation of existing literature on sociodemographic determinants of digital health literacy.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Meta-analysis",
+    "type": "methodology",
+    "description": "Statistical analysis that combines the results of multiple scientific studies.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Older adults",
+    "type": "population",
+    "description": "A demographic group particularly affected by negative impacts on digital health literacy.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Educational level",
+    "type": "sociodemographic factor",
+    "description": "A factor that positively influences digital health literacy.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Higher income",
+    "type": "sociodemographic factor",
+    "description": "A factor that positively influences digital health literacy.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Social support",
+    "type": "sociodemographic factor",
+    "description": "A factor that positively influences digital health literacy.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Socioeconomic status",
+    "type": "concept",
+    "description": "A factor that affects digital health literacy, particularly among underprivileged populations.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Immigrants",
+    "type": "population",
+    "description": "A group identified as underprivileged in terms of digital health literacy needs.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Digital tools",
+    "type": "concept",
+    "description": "Technologies such as health-related apps and wearable devices that require digital health literacy.",
+    "confidence": 1.0,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital health literacy",
+    "type": "research_topic",
+    "description": "The ability to find, understand, and use health information from digital sources.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "sociodemographic determinants",
+    "type": "concept",
+    "description": "Factors such as sex, age, income, geographic region, and social status that influence digital health literacy.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "systematic review and meta-analysis",
+    "type": "methodology",
+    "description": "A research method aimed at analyzing the sociodemographic determinants of digital health literacy.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital divide",
+    "type": "concept",
+    "description": "The gap between individuals who have access to digital tools and those who do not, influencing digital health literacy.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "socioeconomic status",
+    "type": "population",
+    "description": "A key factor influencing access to digital tools and Internet skills.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "PRISMA guidelines",
+    "type": "methodology",
+    "description": "Guidelines followed for conducting systematic reviews and meta-analyses.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Joanna Briggs Institute Checklist for Cross-sectional studies",
+    "type": "methodology",
+    "description": "A tool used for quality assessment of included studies.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Cohen’s kappa",
+    "type": "finding",
+    "description": "A statistical measure of inter-rater agreement used in the study.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "RStudio software",
+    "type": "methodology",
+    "description": "Software used for conducting statistical analyses in the study.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "eHealth Literacy Scale (eHEALS)",
+    "type": "methodology",
+    "description": "A scale used to measure eHealth literacy in studies.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Digital Health Literacy Instrument",
+    "type": "methodology",
+    "description": "An alternative instrument used in Zakar's study to measure digital health literacy.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "cross-sectional design",
+    "type": "methodology",
+    "description": "The study design used by all included studies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "high school or college students",
+    "type": "population",
+    "description": "Target population for seven of the studies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "older adults",
+    "type": "population",
+    "description": "Target population for six studies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "healthcare workers",
+    "type": "population",
+    "description": "Target population for one study.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital health literacy levels",
+    "type": "finding",
+    "description": "Observed levels of digital health literacy among different populations.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Asian countries",
+    "type": "population",
+    "description": "Region where almost half of the studies were conducted.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "North America",
+    "type": "population",
+    "description": "Region where twelve studies were conducted.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Europe",
+    "type": "population",
+    "description": "Region where six studies were conducted.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Africa",
+    "type": "population",
+    "description": "Region where three studies were conducted.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Australia",
+    "type": "population",
+    "description": "Region where one study was conducted.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk2",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "eHEALS",
+    "type": "concept",
+    "description": "A scale used to measure eHealth literacy among different populations.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Adults",
+    "type": "population",
+    "description": "General population group included in various studies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Older adults (55 + yo)",
+    "type": "population",
+    "description": "Population group specifically focused on older adults aged 55 and above.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Chronic kidney disease",
+    "type": "disease",
+    "description": "A long-term condition affecting kidney function, mentioned in the context of a study population.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "COPD",
+    "type": "disease",
+    "description": "Chronic Obstructive Pulmonary Disease, a condition studied among patients.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Healthcare workers (21–60 yo)",
+    "type": "population",
+    "description": "Population group consisting of healthcare professionals aged 21 to 60.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Breast cancer survivors",
+    "type": "population",
+    "description": "Individuals who have survived breast cancer, included in a study.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Nursing students",
+    "type": "population",
+    "description": "Students enrolled in nursing programs, part of the study population.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "University students",
+    "type": "population",
+    "description": "Students enrolled in universities, included in the research.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Online survey",
+    "type": "methodology",
+    "description": "Research method involving surveys conducted over the internet.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "On-site",
+    "type": "methodology",
+    "description": "Research method involving direct interaction at a physical location.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "CATI",
+    "type": "methodology",
+    "description": "Computer-Assisted Telephone Interviewing, a method used in some studies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Telephone",
+    "type": "methodology",
+    "description": "Method of data collection using telephone interviews.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Mixed",
+    "type": "methodology",
+    "description": "Research method that combines different approaches, such as online and on-site.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Chronic patients",
+    "type": "population",
+    "description": "Individuals with chronic health conditions, included in the study.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "People with bipolar",
+    "type": "population",
+    "description": "Individuals diagnosed with bipolar disorder, part of the study population.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Low income disabled and home-bound adults",
+    "type": "population",
+    "description": "A specific population group characterized by low income and disabilities.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "General population (14–93 yo)",
+    "type": "population",
+    "description": "A broad demographic group ranging from ages 14 to 93.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Patients",
+    "type": "population",
+    "description": "Individuals receiving medical care, included in various studies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Chinese and punjabi seniors",
+    "type": "population",
+    "description": "Seniors from Chinese and Punjabi backgrounds, part of the study.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk3",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "eHEALS",
+    "type": "concept",
+    "description": "A measure of digital health literacy used in the studies.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "nursing students",
+    "type": "population",
+    "description": "A group of students studying nursing, referenced in the context of digital health literacy scores.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "medical students",
+    "type": "population",
+    "description": "A group of students studying medicine, mentioned in relation to eHEALS scores.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "young adults",
+    "type": "population",
+    "description": "A demographic group compared in studies regarding digital health literacy.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "older adults",
+    "type": "population",
+    "description": "A demographic group analyzed for differences in digital health literacy scores.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Arabic speakers",
+    "type": "population",
+    "description": "A group compared in studies regarding digital health literacy.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Swedish speakers",
+    "type": "population",
+    "description": "A group compared in studies regarding digital health literacy.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "age",
+    "type": "concept",
+    "description": "A demographic variable analyzed for its influence on eHEALS scores.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital health literacy",
+    "type": "outcome",
+    "description": "The level of understanding and ability to use digital health resources.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "education",
+    "type": "concept",
+    "description": "A demographic variable analyzed for its influence on eHEALS scores.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "negative association",
+    "type": "finding",
+    "description": "A statistically significant relationship found between age and eHEALS scores.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "college degree or higher",
+    "type": "treatment",
+    "description": "An educational level associated with higher digital health literacy.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "statistically significant differences",
+    "type": "finding",
+    "description": "Observed differences in eHEALS scores among various demographic groups.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk4",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital health literacy",
+    "type": "research_topic",
+    "description": "The ability to access, understand, and use health information from digital sources.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "eHEALS",
+    "type": "concept",
+    "description": "A scale used to measure digital health literacy levels.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "socioeconomic status",
+    "type": "concept",
+    "description": "A social standing or class of an individual or group, often measured by income, education, and occupation.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "income",
+    "type": "population",
+    "description": "A measure of the financial resources available to individuals or groups, influencing their health literacy.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "employment status",
+    "type": "population",
+    "description": "The condition of having a job or being unemployed, which can affect digital health literacy scores.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "age",
+    "type": "population",
+    "description": "A demographic factor analyzed for its impact on digital health literacy levels.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "education",
+    "type": "population",
+    "description": "The level of schooling or training an individual has received, which influences digital health literacy.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "social support",
+    "type": "concept",
+    "description": "The perception and reality of being cared for and supported, which can impact digital health literacy.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "marital status",
+    "type": "population",
+    "description": "The legal relationship status of an individual, analyzed for its influence on digital health literacy.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "race",
+    "type": "population",
+    "description": "A demographic characteristic that was evaluated for its effect on digital health literacy.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "languages spoken",
+    "type": "population",
+    "description": "The languages that individuals communicate in, which can influence their digital health literacy scores.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "higher income",
+    "type": "finding",
+    "description": "Associated with higher levels of digital health literacy as indicated by several studies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "lower digital health literacy",
+    "type": "finding",
+    "description": "Observed in individuals belonging to lower socioeconomic status or specific demographic groups.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "negative relationship between age and DHL levels",
+    "type": "finding",
+    "description": "Indicates that older individuals may have lower digital health literacy, though results vary.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk5",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital health literacy",
+    "type": "research_topic",
+    "description": "The ability to acquire adequate health information from digital sources and the influence of various factors on this ability.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "socioeconomic status",
+    "type": "concept",
+    "description": "A key factor influencing digital health literacy, highlighting the disparities in access to digital health tools.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "social support",
+    "type": "concept",
+    "description": "Influences digital health literacy, with individuals having more social support showing higher health literacy.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "eHEALS",
+    "type": "methodology",
+    "description": "The most widely used scale to measure digital health literacy, known for its validity and consistency.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "immigrants",
+    "type": "population",
+    "description": "A group identified as being at higher risk of social exclusion, affecting their access to healthcare services.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital health interventions",
+    "type": "treatment",
+    "description": "Strategies aimed at improving digital health literacy, particularly among underprivileged populations.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "cognitive bias",
+    "type": "finding",
+    "description": "Individuals with low digital health literacy may overestimate their knowledge base due to cognitive biases.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "health misinformation",
+    "type": "finding",
+    "description": "A prominent problem exacerbated by low digital health literacy and the influence of social media.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "sociodemographic factors",
+    "type": "concept",
+    "description": "Factors that may influence digital health literacy, highlighting the need for targeted interventions.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk6",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "eHealth literacy",
+    "type": "research_topic",
+    "description": "The ability to seek, understand, and use health information from electronic sources.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "digital health literacy",
+    "type": "research_topic",
+    "description": "The skills required to effectively use digital health resources and technologies.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "COVID-19",
+    "type": "disease",
+    "description": "A viral infection caused by the coronavirus SARS-CoV-2, leading to a global pandemic.",
+    "confidence": 0.95,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "systematic review",
+    "type": "methodology",
+    "description": "A research method that summarizes the results of available studies on a particular topic.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "cross-sectional study",
+    "type": "methodology",
+    "description": "A type of observational study that analyzes data from a population at a specific point in time.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "health literacy",
+    "type": "concept",
+    "description": "The degree to which individuals can obtain, process, and understand basic health information.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "chronic disease self-management",
+    "type": "concept",
+    "description": "The ability of individuals to manage their chronic conditions through informed decision-making.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "mobile health (mHealth)",
+    "type": "treatment",
+    "description": "Health services and information delivered via mobile devices.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "satisfaction with shared decision-making",
+    "type": "outcome",
+    "description": "The level of contentment patients feel regarding their involvement in health decisions.",
+    "confidence": 0.8,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "eHealth barriers and facilitators",
+    "type": "finding",
+    "description": "Factors that either hinder or promote the effective use of eHealth technologies.",
+    "confidence": 0.85,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk7",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "health information on social media",
+    "type": "research_topic",
+    "description": "The focus of the study regarding how health information is processed on social media platforms.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "mouse-tracking study",
+    "type": "methodology",
+    "description": "A research method used to analyze decision-making processes by tracking mouse movements.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Dunning-Kruger effect",
+    "type": "concept",
+    "description": "A cognitive bias where individuals with low ability overestimate their competence.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "health literacy",
+    "type": "concept",
+    "description": "The ability to obtain, process, and understand basic health information.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Quick assessment of literacy in primary care",
+    "type": "finding",
+    "description": "A method developed to quickly assess literacy levels in a primary care setting.",
+    "confidence": 0.9,
+    "source_chunk": "Sociodemographic determinants of digital health literacy- A systematic review and meta-analysis _chunk8",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "physical activity",
+    "type": "research_topic",
+    "description": "The main focus of the systematic review, addressing factors associated with adolescents' physical activity.",
+    "confidence": 1.0,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "systematic review",
+    "type": "methodology",
+    "description": "A comprehensive literature review conducted to summarize and identify factors related to physical activity in adolescents.",
+    "confidence": 1.0,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "adolescents",
+    "type": "population",
+    "description": "The demographic group being studied, specifically those in the 5th through 12th grade.",
+    "confidence": 1.0,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "determinants of physical activity",
+    "type": "outcome",
+    "description": "The factors identified that influence physical activity levels in adolescents.",
+    "confidence": 1.0,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "self-efficacy",
+    "type": "concept",
+    "description": "A variable associated with physical activity, referring to an individual's belief in their ability to succeed.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "depressive symptoms",
+    "type": "concept",
+    "description": "A variable associated with physical activity, indicating mental health issues that may affect activity levels.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "parental support",
+    "type": "concept",
+    "description": "A variable indicating the role of parents in influencing adolescents' physical activity.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "peer support",
+    "type": "concept",
+    "description": "A variable indicating the influence of peers on adolescents' physical activity levels.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "socioeconomic status",
+    "type": "concept",
+    "description": "A variable associated with physical activity, reflecting the economic and social position of adolescents.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "parent modeling",
+    "type": "concept",
+    "description": "A variable indicating how parental behavior influences adolescents' physical activity.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "environmental determinants",
+    "type": "concept",
+    "description": "Factors in the environment that may affect adolescents' physical activity levels.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk0",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "physical activity",
+    "type": "research_topic",
+    "description": "The main focus of the studies reviewed, measured as a dependent variable.",
+    "confidence": 0.95,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "adolescents",
+    "type": "population",
+    "description": "The age group of subjects included in the studies, specifically those in 5th to 12th grade.",
+    "confidence": 0.95,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "systematic review",
+    "type": "methodology",
+    "description": "The approach taken to review relevant studies published between 1998 and 2008.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Pender’s Health Promotion Model",
+    "type": "concept",
+    "description": "A theoretical framework used in several studies to explain physical activity behaviors.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Self-Efficacy and Self-Schema Theory",
+    "type": "concept",
+    "description": "A theoretical framework indicating that self-efficacy influences behavior, used in one study.",
+    "confidence": 0.85,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Ecological Model",
+    "type": "concept",
+    "description": "A theoretical framework used to identify factors influencing participation in physical activity.",
+    "confidence": 0.85,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Social Ecological Model",
+    "type": "concept",
+    "description": "A theoretical framework used in studies to understand the social factors affecting physical activity.",
+    "confidence": 0.85,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Social-Cognitive Theory",
+    "type": "concept",
+    "description": "A theoretical framework that includes personal, behavioral, and socioenvironmental variables.",
+    "confidence": 0.85,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Social-Learning Theory",
+    "type": "concept",
+    "description": "A theoretical framework used to predict determinants of exercise among children.",
+    "confidence": 0.85,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Health Promotion and Transtheoretical Model",
+    "type": "concept",
+    "description": "A theoretical framework used in one of the studies to guide research on physical activity.",
+    "confidence": 0.85,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "Theory of Planned Behavior",
+    "type": "concept",
+    "description": "A theoretical framework used to identify environmental and individual factors associated with physical activity.",
+    "confidence": 0.85,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "cross-sectional studies",
+    "type": "methodology",
+    "description": "The predominant study design used in the reviewed literature.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "longitudinal studies",
+    "type": "methodology",
+    "description": "A type of study design used in some of the reviewed literature to track changes over time.",
+    "confidence": 0.9,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  },
+  {
+    "name": "LEAP (Lifestyle Education for Activity Program)",
+    "type": "treatment",
+    "description": "A program designed to enhance physical activity self-efficacy and enjoyment.",
+    "confidence": 0.8,
+    "source_chunk": "_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunk1",
+    "source_paper": "Unknown",
+    "doi": ""
+  }
+]

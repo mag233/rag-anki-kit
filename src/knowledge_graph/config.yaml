@@ -1,0 +1,52 @@
+# Knowledge Graph Configuration
+
+# Entity types to extract from research papers
+ENTITY_TYPES:
+  - research_topic
+  - methodology
+  - population
+  - outcome
+  - concept
+  - disease
+  - treatment
+  - finding
+
+# Relation types for knowledge graph
+RELATION_TYPES:
+  - uses_method
+  - studies_population  
+  - investigates_topic
+  - reports_outcome
+  - relates_to
+  - causes
+  - treats
+  - affects
+
+# Graph visualization settings
+VISUALIZATION:
+  node_colors:
+    research_topic: "#FF6B6B"
+    methodology: "#4ECDC4" 
+    population: "#45B7D1"
+    outcome: "#96CEB4"
+    concept: "#FFEAA7"
+    disease: "#DDA0DD"
+    treatment: "#98D8C8"
+    finding: "#F7DC6F"
+  
+  edge_colors:
+    uses_method: "#2C3E50"
+    studies_population: "#8E44AD"
+    investigates_topic: "#E74C3C"
+    reports_outcome: "#27AE60"
+    relates_to: "#95A5A6"
+    causes: "#E67E22"
+    treats: "#3498DB"
+    affects: "#F39C12"
+
+# GPT extraction settings
+EXTRACTION:
+  model: "gpt-4o-mini"
+  temperature: 0.1
+  max_tokens: 1500
+  chunk_size: 2000

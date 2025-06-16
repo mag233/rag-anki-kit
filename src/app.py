@@ -118,16 +118,19 @@ if "tab_funcs" not in st.session_state:
     from rag_tab import render_rag_tab
     from literature_tab import render_literature_tab
     from anki_tab import render_anki_tab
+    from litmap_tab import render_litmap_tab
     st.session_state.tab_funcs = [
         render_rag_tab,
         render_literature_tab,
-        render_anki_tab
+        render_anki_tab,
+        render_litmap_tab
     ]
 
 tab_labels = [
     text["tab_titles"]["RAG"],
     text["tab_titles"]["Literature"],
-    text["tab_titles"]["Anki"]
+    text["tab_titles"]["Anki"],
+    text["tab_titles"]["LitMap"]
 ]
 
 tabs = st.tabs(tab_labels)
