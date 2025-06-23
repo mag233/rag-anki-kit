@@ -26,7 +26,7 @@ def render_rag_tab(PROJECTS_DIR, lang):
             os.makedirs(os.path.join(p, "processed", "chunks"), exist_ok=True)
             os.makedirs(os.path.join(p, "vectorstore", "chroma_db"), exist_ok=True)
             st.success(text["success"].format(name=nm))
-            st.experimental_rerun()
+            st.rerun()
 
     # 确保有已选项目
     if selected and selected != text["new_project"]:
@@ -48,21 +48,36 @@ def render_rag_tab(PROJECTS_DIR, lang):
             type=["pdf","md","markdown","text","txt","docx","xlsx","html"], accept_multiple_files=True
         )
         new_files = []
-        if ups:
+        # 只在本次上传动作（即ups变化时且有新文件写入时）查重和提示，不在刷新或其它动作时重复提示
+        last_uploaded_files = st.session_state.get('last_uploaded_files', [])
+        current_upload_names = [f.name for f in ups] if ups else []
+        # 只有当上传文件列表发生变化且有新文件写入时才处理上传逻辑
+        if ups and current_upload_names != last_uploaded_files:
             exist = set(os.listdir(raw_dir))
+            uploaded_names = set()
+            actually_uploaded = False
             for f in ups:
-                if f.name in exist:
+                if f.name in exist and f.name not in last_uploaded_files:
+                    # 只对本次新上传且已存在的文件提示
                     st.warning(text["already_exists"].format(name=f.name))
-                else:
+                elif f.name not in exist and f.name not in uploaded_names:
                     with open(os.path.join(raw_dir, f.name), "wb") as fw:
                         fw.write(f.getbuffer())
                     new_files.append(f.name)
+                    uploaded_names.add(f.name)
+                    actually_uploaded = True
+            st.session_state['last_uploaded_files'] = current_upload_names
             if new_files:
                 st.success(text["upload_success"].format(files=", ".join(new_files)))
+            elif not actually_uploaded:
+                # 没有新文件写入且没有新冲突，不提示任何内容
+                pass
             else:
                 st.info(text["no_new_file"])
-        else:
+        elif not ups:
+            st.session_state['last_uploaded_files'] = []
             st.caption(text["please_upload"])
+        # 如果有文件但不是新上传，什么都不提示
 
         # —— 各类数据展示（仪表板） —— 
         st.divider()
@@ -70,12 +85,16 @@ def render_rag_tab(PROJECTS_DIR, lang):
         embed_model = os.getenv("EMBED_MODEL", "text-embedding-3-large")
         st.info(text["embed_model"].format(model=embed_model))
 
+        # 刷新按钮
+        if st.button("🔄 " + text.get("refresh_stats", "Refresh Status"), key="refresh_stats_btn"):
+            st.rerun()
+
         # chunks 数量
         chunk_count = sum(
             len(json.load(open(os.path.join(chunks_dir, fn), "r", encoding="utf-8")))
             for fn in os.listdir(chunks_dir) if fn.endswith("_chunks.json")
         )
-        st.info(text["chunk_count"].format(n=chunk_count))
+        st.metric(text.get("chunk_count_metric", "Chunk Count"), chunk_count)
 
         # embeddings 数量
         try:
@@ -87,37 +106,33 @@ def render_rag_tab(PROJECTS_DIR, lang):
             embed_count = len([i for i in db._collection.get()["ids"] if i and len(i) > 0])  # 过滤空ID
         except:
             embed_count = 0
-        # 语言化“现有”前缀
-        if "现有" in text.get("embed_count", "") or "Current" in text.get("embed_count", ""):
-            st.info(text["embed_count"].format(n=embed_count))
-        else:
-            prefix = "现有" if lang == "中文" else "Current "
-            st.info(prefix + text["embed_count"].format(n=embed_count))
+        st.metric(text.get("embed_count_metric", "Embedding Count"), embed_count)
 
+        # 进度条
         prog = (embed_count / chunk_count) if chunk_count else 0.0
         st.progress(prog, text=text["progress_label"])
 
-        # manifest 表格
-        st.markdown(text["manifest_title"])
-        if os.path.exists(manifest_fp):
-            mf = json.load(open(manifest_fp, "r", encoding="utf-8"))
-            rows = []
-            for fn, m in mf.items():
-                stem = os.path.splitext(fn)[0]
-                rows.append({
-                    text["manifest_col_file"]: fn,
-                    text["manifest_col_nchunks"]: m.get("n_chunks", "-"),
-                    text["manifest_col_chunkmethod"]: m.get("chunk_method", "-"),
-                    text["manifest_col_last"]: m.get("last_processed", "-")
-                })
-            st.dataframe(
-                rows,
-                hide_index=True,
-                use_container_width=True,
-                height=350
-            )
-        else:
-            st.info(text["no_manifest"])
+        # manifest 表格（已移除，避免与健康检查重复）
+        # st.markdown(text["manifest_title"])
+        # if os.path.exists(manifest_fp):
+        #     mf = json.load(open(manifest_fp, "r", encoding="utf-8"))
+        #     rows = []
+        #     for fn, m in mf.items():
+        #         stem = os.path.splitext(fn)[0]
+        #         rows.append({
+        #             text["manifest_col_file"]: fn,
+        #             text["manifest_col_nchunks"]: m.get("n_chunks", "-"),
+        #             text["manifest_col_chunkmethod"]: m.get("chunk_method", "-"),
+        #             text["manifest_col_last"]: m.get("last_processed", "-")
+        #         })
+        #     st.dataframe(
+        #         rows,
+        #         hide_index=True,
+        #         use_container_width=True,
+        #         height=350
+        #     )
+        # else:
+        #     st.info(text["no_manifest"])
 
         # —— 步骤2：预处理文件（分块） —— 
         st.divider()
@@ -193,43 +208,98 @@ def render_rag_tab(PROJECTS_DIR, lang):
         st.markdown(text["step3_title"])
         mode = st.radio(text["embed_mode"], text["embed_modes"], index=0)
         stems = {os.path.splitext(f)[0] for f in new_files}
+        embed_status_placeholder = st.empty()
+        embed_progress_placeholder = st.empty()
         if st.button(text["start_embed"]):
             duplicate_ids = []
             try:
-                only = stems if mode.endswith(text["only_new_chunks"]) else None
+                # 选项逻辑修正：
+                only = None
+                if mode == text["embed_modes"][1]:  # Only new chunks
+                    try:
+                        db = Chroma(
+                            persist_directory=db_dir,
+                            embedding_function=OpenAIEmbeddings(model=embed_model),
+                            collection_name="literature_chunks"
+                        )
+                        existing_ids = set(db._collection.get()["ids"])
+                    except Exception as e:
+                        embed_status_placeholder.error(f"[Chroma Error] {e}")
+                        embed_progress_placeholder.empty()
+                        return
+                    import glob
+                    import json as _json
+                    import os as _os
+                    only = set()
+                    for fn in glob.glob(_os.path.join(chunks_dir, "*_chunks.json")):
+                        with open(fn, "r", encoding="utf-8") as f:
+                            arr = _json.load(f)
+                        if any(c.get("chunk_id", "") not in existing_ids for c in arr if c.get("chunk_id", "")):
+                            only.add(os.path.splitext(os.path.basename(fn))[0])
+                    if not only:
+                        embed_status_placeholder.info(text.get("no_new_chunks_to_embed", "No new chunks to embed."))
+                        embed_progress_placeholder.empty()
+                        return
+                # UI: 显示处理中
+                with embed_status_placeholder.container():
+                    st.info(text.get("embedding_in_progress", "Embedding in progress..."))
                 try:
-                    # 过滤掉空ID的chunk文件
                     import glob
                     import json as _json
                     import os as _os
                     filtered = []
-                    for fn in glob.glob(_os.path.join(chunks_dir, "*_chunks.json")):
-                        with open(fn, "r", encoding="utf-8") as f:
-                            arr = _json.load(f)
-                        arr = [c for c in arr if c.get("chunk_id", "").strip()]
-                        if len(arr) == 0:
-                            continue
-                        with open(fn, "w", encoding="utf-8") as f:
-                            _json.dump(arr, f, ensure_ascii=False, indent=2)
-                        filtered.append(fn)
-                    create_or_update_embeddings(chunks_dir, db_dir, only_files=only)
-                    st.success(text["embed_success"])
+                    # 只处理需要的文件
+                    chunk_files = list(glob.glob(_os.path.join(chunks_dir, "*_chunks.json")))
+                    if only is not None:
+                        # 修正：确保不会出现双 _chunks 后缀
+                        chunk_files = [
+                            os.path.join(chunks_dir, (fn[:-7] if fn.endswith('_chunks') else fn) + "_chunks.json")
+                            for fn in only
+                        ]
+                    total_files = len(chunk_files)
+                    if total_files == 0:
+                        embed_progress_placeholder.empty()
+                        embed_status_placeholder.info(text.get("no_new_chunks_to_embed", "No new chunks to embed."))
+                        return
+                    for idx, fn in enumerate(chunk_files):
+                        try:
+                            with open(fn, "r", encoding="utf-8") as f:
+                                arr = _json.load(f)
+                            arr = [c for c in arr if c.get("chunk_id", "").strip()]
+                            if len(arr) == 0:
+                                continue
+                            with open(fn, "w", encoding="utf-8") as f:
+                                _json.dump(arr, f, ensure_ascii=False, indent=2)
+                            filtered.append(fn)
+                            embed_progress_placeholder.progress((idx+1)/total_files, text=f"{idx+1}/{total_files} {os.path.basename(fn)}")
+                        except Exception as file_e:
+                            embed_status_placeholder.error(f"[File Error] {fn}: {file_e}")
+                    try:
+                        create_or_update_embeddings(chunks_dir, db_dir, only_files=only)
+                        embed_progress_placeholder.empty()
+                        embed_status_placeholder.success(text["embed_success"])
+                    except Exception as embed_e:
+                        embed_progress_placeholder.empty()
+                        embed_status_placeholder.error(f"[Embedding Error] {embed_e}")
                 except ValueError as ve:
+                    embed_progress_placeholder.empty()
                     msg = str(ve)
                     if "Expected IDs to be unique" in msg:
                         import re
                         dup_match = re.findall(r"found duplicates of: ([^ ]+)", msg)
                         duplicate_ids.extend(dup_match)
-                        st.warning(text["duplicate_ids"].format(ids=", ".join(duplicate_ids)))
-                        st.info(text["partial_embed"])
+                        embed_status_placeholder.warning(text["duplicate_ids"].format(ids=", ".join(duplicate_ids)))
+                        embed_status_placeholder.info(text["partial_embed"])
                     elif "Empty ID" in msg or "ID must have at least one character" in msg:
-                        st.error("有分块ID为空，请检查原始文档或分块逻辑。")
+                        embed_status_placeholder.error("有分块ID为空，请检查原始文档或分块逻辑。")
                     else:
-                        st.error(text["embed_fail"].format(err=ve))
+                        embed_status_placeholder.error(text["embed_fail"].format(err=ve))
                 except Exception as e:
-                    st.error(text["embed_fail"].format(err=e))
+                    embed_progress_placeholder.empty()
+                    embed_status_placeholder.error(text["embed_fail"].format(err=e))
             except Exception as e:
-                st.error(text["embed_fail"].format(err=e))
+                embed_progress_placeholder.empty()
+                embed_status_placeholder.error(text["embed_fail"].format(err=e))
 
         # —— Manifest 健康检查 —— 
         st.divider()
@@ -237,7 +307,40 @@ def render_rag_tab(PROJECTS_DIR, lang):
         if os.path.exists(manifest_fp):
             mf = json.load(open(manifest_fp, "r", encoding="utf-8"))
             missing = [k for k, v in mf.items() if v.get("n_chunks", 0) == 0]
+            # 只显示manifest独有的详细健康信息，增加embedding状态
+            details = []
+            # 获取所有embedding的chunk名集合
+            try:
+                db = Chroma(
+                    persist_directory=db_dir,
+                    embedding_function=OpenAIEmbeddings(model=embed_model),
+                    collection_name="literature_chunks"
+                )
+                embed_ids = set(db._collection.get()["ids"])
+            except:
+                embed_ids = set()
+            for k, v in mf.items():
+                n_chunks = v.get("n_chunks", 0)
+                # 判断embedding覆盖率
+                if n_chunks and isinstance(n_chunks, int) and n_chunks > 0:
+                    # 期望embedding的id前缀为stem
+                    stem = os.path.splitext(k)[0]
+                    embed_count = len([eid for eid in embed_ids if eid.startswith(stem)])
+                    embed_status = f"{embed_count}/{n_chunks} ({embed_count/n_chunks:.0%})" if n_chunks else "-"
+                else:
+                    embed_status = "-"
+                details.append({
+                    text["manifest_col_file"]: k,
+                    text["manifest_col_chunkmethod"]: v.get("chunk_method", "-"),
+                    text["manifest_col_last"]: v.get("last_processed", "-"),
+                    "Error": v.get("error", "-"),
+                    "Has Chunks": n_chunks > 0,
+                    "Embedding Status": embed_status
+                })
+            st.dataframe(details, hide_index=True, use_container_width=True)
             if missing:
                 st.warning(text["missing_chunks"].format(files=", ".join(missing)))
             else:
                 st.success(text["all_chunked"])
+        else:
+            st.info(text["no_manifest"])

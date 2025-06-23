@@ -28,6 +28,42 @@ def cached_load_all_chunks(chunks_folder):
     return load_all_chunks(chunks_folder)
 
 
+# --- Custom Type Persistence Helpers ---
+import json
+import re
+
+def get_custom_types_path(litmap_folder, type_):
+    return os.path.join(litmap_folder, f"custom_{type_}_types.json")
+
+def load_custom_types(litmap_folder, type_):
+    path = get_custom_types_path(litmap_folder, type_)
+    if os.path.exists(path):
+        try:
+            with open(path, 'r') as f:
+                return json.load(f)
+        except Exception:
+            return []
+    return []
+
+def save_custom_types(litmap_folder, type_, types):
+    path = get_custom_types_path(litmap_folder, type_)
+    try:
+        with open(path, 'w') as f:
+            json.dump(types, f)
+    except Exception:
+        pass
+
+def validate_custom_type(label, all_types):
+    label = label.strip()
+    if not label:
+        return False, "Label cannot be empty."
+    if not re.match(r'^[A-Za-z0-9_]+$', label):
+        return False, "Only alphanumeric characters and underscores are allowed."
+    if label.lower() in (t.lower() for t in all_types):
+        return False, "Type already exists."
+    return True, ""
+
+
 def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     """Render the LitMap knowledge graph tab."""
     text = get_text(lang)["litmap_tab"]
@@ -109,34 +145,83 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     with st.expander("❓ " + text["step3_help_title"], expanded=False):
         st.markdown(text["step3_help_content"])
     
-    # Load configuration for available types
-    try:
-        extractor = EntityRelationExtractor()
-        available_entity_types = extractor.config['ENTITY_TYPES']
-        available_relation_types = extractor.config['RELATION_TYPES']
-        
-        col_entities, col_relations = st.columns(2)
-        
-        with col_entities:
-            selected_entity_types = st.multiselect(
-                text["entity_types"],
-                options=available_entity_types,
-                default=available_entity_types,
-                help=text["entity_types_help"]
-            )
-        
-        with col_relations:
-            selected_relation_types = st.multiselect(
-                text["relation_types"],
-                options=available_relation_types,
-                default=available_relation_types,
-                help=text["relation_types_help"]
-            )
-    
-    except Exception as e:
-        st.error(f"Configuration loading error: {e}")
-        return
-    
+    # --- Default types (extended) ---
+    default_entity_types = [
+        "research_topic", "methodology", "population", "concept", "disease", "treatment", "finding", "outcome",
+        "intervention", "gene", "protein", "symptom", "drug", "biomarker", "organism", "location"
+    ]
+    default_relation_types = [
+        "uses_method", "studies_population", "investigates_topic", "reports_outcome", "relates_to", "causes", "treats", "affects",
+        "associated_with", "inhibits", "activates", "expressed_in", "encodes", "measured_by", "co-occurs_with", "part_of"
+    ]
+
+    # --- Load custom types (persisted per project) ---
+    if 'custom_entity_types' not in st.session_state:
+        st.session_state['custom_entity_types'] = load_custom_types(litmap_folder, 'entity')
+    if 'custom_relation_types' not in st.session_state:
+        st.session_state['custom_relation_types'] = load_custom_types(litmap_folder, 'relation')
+
+    # --- Add custom type UI ---
+    col_entities, col_relations = st.columns(2)
+
+    with col_entities:
+        all_entity_types = default_entity_types + st.session_state['custom_entity_types']
+        selected_entity_types = st.multiselect(
+            text["entity_types"],
+            options=all_entity_types,
+            default=all_entity_types,
+            help=text["entity_types_help"]
+        )
+        # Add custom entity type
+        custom_entity_input = st.text_input("+ Add Custom Entity Type", key="custom_entity_input")
+        if st.button("Add Entity Type", key="add_entity_type_btn"):
+            valid, msg = validate_custom_type(custom_entity_input, all_entity_types)
+            if valid:
+                st.session_state['custom_entity_types'].append(custom_entity_input)
+                save_custom_types(litmap_folder, 'entity', st.session_state['custom_entity_types'])
+                st.experimental_rerun()
+            else:
+                st.warning(msg)
+        # Show custom types with delete option
+        for ctype in st.session_state['custom_entity_types']:
+            col1, col2 = st.columns([3,1])
+            with col1:
+                st.markdown(f"<span style='color:#d62728'>[Custom]</span> {ctype}", unsafe_allow_html=True)
+            with col2:
+                if st.button("x", key=f"del_entity_{ctype}"):
+                    st.session_state['custom_entity_types'].remove(ctype)
+                    save_custom_types(litmap_folder, 'entity', st.session_state['custom_entity_types'])
+                    st.experimental_rerun()
+
+    with col_relations:
+        all_relation_types = default_relation_types + st.session_state['custom_relation_types']
+        selected_relation_types = st.multiselect(
+            text["relation_types"],
+            options=all_relation_types,
+            default=all_relation_types,
+            help=text["relation_types_help"]
+        )
+        # Add custom relation type
+        custom_relation_input = st.text_input("+ Add Custom Relation Type", key="custom_relation_input")
+        if st.button("Add Relation Type", key="add_relation_type_btn"):
+            valid, msg = validate_custom_type(custom_relation_input, all_relation_types)
+            if valid:
+                st.session_state['custom_relation_types'].append(custom_relation_input)
+                save_custom_types(litmap_folder, 'relation', st.session_state['custom_relation_types'])
+                st.experimental_rerun()
+            else:
+                st.warning(msg)
+        # Show custom types with delete option
+        for ctype in st.session_state['custom_relation_types']:
+            col1, col2 = st.columns([3,1])
+            with col1:
+                st.markdown(f"<span style='color:#d62728'>[Custom]</span> {ctype}", unsafe_allow_html=True)
+            with col2:
+                if st.button("x", key=f"del_relation_{ctype}"):
+                    st.session_state['custom_relation_types'].remove(ctype)
+                    save_custom_types(litmap_folder, 'relation', st.session_state['custom_relation_types'])
+                    st.experimental_rerun()
+
     # Step 4: 知识图谱生成
     st.markdown("### " + text["step4_title"])
     st.info(text["step4_info"])
@@ -384,7 +469,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 st.metric(text["avg_relation_confidence"], f"{avg_relation_confidence:.3f}")
         
         # Summary tables
-        summary_dfs = create_summary_dataframes(filtered_entities, filtered_relations)
+        summary_dfs = create_summary_dataframes(filtered_entities, filtered_relations) if filtered_relations and all('relation' in r for r in filtered_relations) else {'entities': pd.DataFrame(filtered_entities), 'relations': pd.DataFrame(filtered_relations)}
         
         col_table1, col_table2 = st.columns(2)
         
