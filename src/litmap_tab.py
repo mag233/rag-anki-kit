@@ -188,17 +188,30 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             help=text["generate_help"]
         )
     
-    # Process chunks and generate/load knowledge graph
-    entities, relations = [], []
-    
+    # --- 使用 session_state 管理实体和关系数据 ---
+    if 'litmap_entities' not in st.session_state:
+        st.session_state['litmap_entities'] = []
+    if 'litmap_relations' not in st.session_state:
+        st.session_state['litmap_relations'] = []
+    if 'litmap_loaded_project' not in st.session_state:
+        st.session_state['litmap_loaded_project'] = None
+
+    # 只有在切换项目时清空 session_state
+    if st.session_state['litmap_loaded_project'] != selected_project:
+        st.session_state['litmap_entities'] = []
+        st.session_state['litmap_relations'] = []
+        st.session_state['litmap_loaded_project'] = selected_project
+
+    # 只在点击按钮时更新 session_state
     if load_existing:
         try:
             entities, relations = load_extraction_results(entities_file, relations_file)
+            st.session_state['litmap_entities'] = entities
+            st.session_state['litmap_relations'] = relations
             st.success(text["loaded_existing_results"])
         except Exception as e:
             st.error(f"Error loading existing results: {e}")
             return
-    
     elif regenerate:
         try:
             # 初始化进度跟踪
@@ -278,6 +291,8 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             
             # 保存结果
             save_extraction_results(entities, relations, litmap_folder, selected_project)
+            st.session_state['litmap_entities'] = entities
+            st.session_state['litmap_relations'] = relations
             
             # 获取最终统计
             final_stats = extractor.get_stats()
@@ -335,6 +350,10 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             st.error(f"❌ 提取过程发生错误: {e}")
             return
     
+    # 只要 session_state 里有数据，直接用
+    entities = st.session_state['litmap_entities']
+    relations = st.session_state['litmap_relations']
+
     # Display results if we have them
     if entities or relations:
         
@@ -374,7 +393,12 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             if not summary_dfs['entities'].empty:
                 st.dataframe(summary_dfs['entities'], use_container_width=True)
             else:
-                st.info(text["no_entities"])
+                # 检查是否所有实体的'type'字段都为'unknown'或缺失
+                type_list = [e.get('type', 'unknown') for e in filtered_entities]
+                if type_list and all(t == 'unknown' or not t for t in type_list):
+                    st.warning('所有实体的type字段均为unknown或缺失，统计图无法分类。请检查实体抽取和type字段赋值逻辑。')
+                else:
+                    st.info(text["no_entities"])
         
         with col_table2:
             st.markdown("#### " + text["relation_summary"])
