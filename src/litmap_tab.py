@@ -159,9 +159,9 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             col_exist1, col_exist2 = st.columns(2)
             
             with col_exist1:
-                st.metric("已提取实体数", len(existing_entities))
+                st.metric(text["extracted_entities_count"], len(existing_entities))  # <-- use text key
             with col_exist2:
-                st.metric("已提取关系数", len(existing_relations))
+                st.metric(text["extracted_relations_count"], len(existing_relations))  # <-- use text key
         except:
             pass
         
@@ -169,21 +169,21 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         
         with col_load:
             load_existing = st.button(
-                "📁 " + text["load_existing"],
+                text["load_existing"],  # <-- use text key
                 type="primary",
                 help=text["load_existing_help"]
             )
         
         with col_regenerate:
             regenerate = st.button(
-                "🔄 " + text["regenerate"],
+                text["regenerate"],  # <-- use text key
                 type="secondary",
                 help=text["regenerate_help"]
             )
     else:
         load_existing = False
         regenerate = st.button(
-            "🚀 " + text["generate_knowledge_graph"],
+            text["generate_knowledge_graph"],  # <-- use text key
             type="primary",
             help=text["generate_help"]
         )
@@ -210,7 +210,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             st.session_state['litmap_relations'] = relations
             st.success(text["loaded_existing_results"])
         except Exception as e:
-            st.error(f"Error loading existing results: {e}")
+            st.error(f"{text.get('error_loading_results', 'Error loading existing results')}: {e}")
             return
     elif regenerate:
         try:
@@ -241,7 +241,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             # 显示预估信息
             estimated_cost = len(process_chunks) * 0.002  # rough estimate
             with status_placeholder.container():
-                st.info(f"📊 预估处理: {len(process_chunks)} 个分块, 大约需要 {len(process_chunks)*2} 分钟, 预估费用 ${estimated_cost:.3f}")
+                st.info(f"📊 {text.get('estimated_processing', 'Estimated processing')}: {len(process_chunks)} {text.get('chunks', 'chunks')}, {text.get('estimated_time', 'estimated time')} {len(process_chunks)*2} {text.get('minutes', 'minutes')}, {text.get('estimated_cost', 'estimated cost')} ${estimated_cost:.3f}")
             
             # 定义进度回调函数
             def update_progress(progress_info):

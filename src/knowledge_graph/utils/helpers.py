@@ -23,14 +23,18 @@ def save_extraction_results(entities: List[Dict], relations: List[Dict],
     """
     import os
     
+    # Ensure output directory exists
     os.makedirs(output_dir, exist_ok=True)
     
+    # Construct file paths for entities and relations
     entities_file = os.path.join(output_dir, f"{project_name}_entities.json")
     relations_file = os.path.join(output_dir, f"{project_name}_relations.json")
     
+    # Save entities to JSON
     with open(entities_file, 'w', encoding='utf-8') as f:
         json.dump(entities, f, ensure_ascii=False, indent=2)
     
+    # Save relations to JSON
     with open(relations_file, 'w', encoding='utf-8') as f:
         json.dump(relations, f, ensure_ascii=False, indent=2)
     
@@ -42,7 +46,7 @@ def save_extraction_results(entities: List[Dict], relations: List[Dict],
 
 def load_extraction_results(entities_file: str, relations_file: str) -> tuple:
     """
-    Load previously saved extraction results.
+    Load previously saved extraction results from JSON files.
     
     Args:
         entities_file: Path to entities JSON file
@@ -52,12 +56,14 @@ def load_extraction_results(entities_file: str, relations_file: str) -> tuple:
         Tuple of (entities, relations)
     """
     try:
+        # Load entities from file, or return empty list if not found
         with open(entities_file, 'r', encoding='utf-8') as f:
             entities = json.load(f)
     except FileNotFoundError:
         entities = []
     
     try:
+        # Load relations from file, or return empty list if not found
         with open(relations_file, 'r', encoding='utf-8') as f:
             relations = json.load(f)
     except FileNotFoundError:
@@ -68,7 +74,7 @@ def load_extraction_results(entities_file: str, relations_file: str) -> tuple:
 
 def create_summary_dataframes(entities: List[Dict], relations: List[Dict]) -> Dict[str, pd.DataFrame]:
     """
-    Create summary DataFrames for display.
+    Create summary DataFrames for display in UI or analysis.
     
     Args:
         entities: List of extracted entities
@@ -77,7 +83,7 @@ def create_summary_dataframes(entities: List[Dict], relations: List[Dict]) -> Di
     Returns:
         Dictionary containing summary DataFrames
     """
-    # Entities summary
+    # Entities summary: group by type, count names, average confidence
     entities_df = pd.DataFrame(entities)
     if not entities_df.empty:
         entities_summary = entities_df.groupby('type').agg({
@@ -88,7 +94,7 @@ def create_summary_dataframes(entities: List[Dict], relations: List[Dict]) -> Di
     else:
         entities_summary = pd.DataFrame()
     
-    # Relations summary
+    # Relations summary: group by relation type, count sources, average confidence
     relations_df = pd.DataFrame(relations)
     if not relations_df.empty:
         relations_summary = relations_df.groupby('relation').agg({
@@ -100,10 +106,10 @@ def create_summary_dataframes(entities: List[Dict], relations: List[Dict]) -> Di
         relations_summary = pd.DataFrame()
     
     return {
-        'entities': entities_summary,
-        'relations': relations_summary,
-        'entities_detail': entities_df,
-        'relations_detail': relations_df
+        'entities': entities_summary,           # Summary by entity type
+        'relations': relations_summary,         # Summary by relation type
+        'entities_detail': entities_df,         # Full entity details
+        'relations_detail': relations_df        # Full relation details
     }
 
 
@@ -120,6 +126,7 @@ def filter_by_confidence(entities: List[Dict], relations: List[Dict],
     Returns:
         Tuple of filtered (entities, relations)
     """
+    # Only keep entities and relations with confidence >= min_confidence
     filtered_entities = [e for e in entities if e.get('confidence', 0) >= min_confidence]
     filtered_relations = [r for r in relations if r.get('confidence', 0) >= min_confidence]
     
@@ -128,7 +135,7 @@ def filter_by_confidence(entities: List[Dict], relations: List[Dict],
 
 def get_most_connected_entities(relations: List[Dict], top_n: int = 10) -> List[Dict]:
     """
-    Get entities with the most connections.
+    Get entities with the most connections (degree centrality).
     
     Args:
         relations: List of relations
@@ -139,6 +146,7 @@ def get_most_connected_entities(relations: List[Dict], top_n: int = 10) -> List[
     """
     from collections import defaultdict
     
+    # Count how many times each entity appears as source or target
     entity_counts = defaultdict(int)
     
     for relation in relations:
