@@ -10,6 +10,8 @@ import streamlit as st
 import pandas as pd
 from typing import Dict, Any, List
 import tempfile
+import json
+import datetime
 
 # Import LitMap modules
 from knowledge_graph import EntityRelationExtractor, KnowledgeGraphBuilder, KnowledgeGraphVisualizer
@@ -26,42 +28,6 @@ from lang_utils import get_text
 def cached_load_all_chunks(chunks_folder):
     """Cached version of load_all_chunks for better performance."""
     return load_all_chunks(chunks_folder)
-
-
-# --- Custom Type Persistence Helpers ---
-import json
-import re
-
-def get_custom_types_path(litmap_folder, type_):
-    return os.path.join(litmap_folder, f"custom_{type_}_types.json")
-
-def load_custom_types(litmap_folder, type_):
-    path = get_custom_types_path(litmap_folder, type_)
-    if os.path.exists(path):
-        try:
-            with open(path, 'r') as f:
-                return json.load(f)
-        except Exception:
-            return []
-    return []
-
-def save_custom_types(litmap_folder, type_, types):
-    path = get_custom_types_path(litmap_folder, type_)
-    try:
-        with open(path, 'w') as f:
-            json.dump(types, f)
-    except Exception:
-        pass
-
-def validate_custom_type(label, all_types):
-    label = label.strip()
-    if not label:
-        return False, "Label cannot be empty."
-    if not re.match(r'^[A-Za-z0-9_]+$', label):
-        return False, "Only alphanumeric characters and underscores are allowed."
-    if label.lower() in (t.lower() for t in all_types):
-        return False, "Type already exists."
-    return True, ""
 
 
 def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
@@ -106,38 +72,102 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     # Step 2: 配置设置
     st.markdown("### " + text["step2_title"])
     st.info(text["step2_info"])
-    
+
+    # --- Knowledge Graph Chunk Processing State Management ---
+    status_file = os.path.join(litmap_folder, "kg_chunk_status.json")
+    # Patch: Always aggregate all chunk_ids from all *_chunks.json files
+    import glob
+    chunk_files = glob.glob(os.path.join(chunks_folder, "*_chunks.json"))
+    all_chunks = []
+    chunk_ids = []
+    for fn in chunk_files:
+        with open(fn, "r", encoding="utf-8") as f:
+            arr = json.load(f)
+            all_chunks.extend(arr)
+            chunk_ids.extend([c.get("chunk_id") for c in arr if c.get("chunk_id")])
+    now = datetime.datetime.now().isoformat()
+
+    # Load or initialize chunk status metadata
+    if os.path.exists(status_file):
+        with open(status_file, "r", encoding="utf-8") as f:
+            chunk_status = json.load(f)
+    else:
+        chunk_status = {}
+
+    # Sync metadata with current chunks
+    # Add new chunks as pending, remove missing
+    for cid in chunk_ids:
+        if cid not in chunk_status:
+            chunk_status[cid] = {"status": "pending", "last_processed_at": None, "confidence_score": None}
+    for cid in list(chunk_status.keys()):
+        if cid not in chunk_ids:
+            del chunk_status[cid]
+    # Always use the true total and processed count
+    total_chunks = len(chunk_ids)
+    n_processed = len([cid for cid in chunk_ids if chunk_status.get(cid, {}).get("status") == "processed"])
+    n_pending = total_chunks - n_processed
+
+    # --- UI: Progress Bar and Controls ---
+    st.markdown(f"**{text.get('progress_label', 'Progress')}: {n_processed} / {total_chunks} ({(n_processed/total_chunks*100 if total_chunks else 0):.1f}%)**")
+    st.progress(n_processed/total_chunks if total_chunks else 0.0)
+
+    col_reset, col_dryrun = st.columns(2)
+    with col_reset:
+        reprocess_all = st.button(text.get("reprocess_all", "Reprocess All"), key="kg_reprocess_all")
+    with col_dryrun:
+        dry_run = st.checkbox(text.get("dry_run", "Dry Run (Preview Only)"), value=False, key="kg_dry_run")
+
+    # Reset all chunk statuses if requested
+    if reprocess_all:
+        for cid in chunk_status:
+            chunk_status[cid]["status"] = "pending"
+            chunk_status[cid]["last_processed_at"] = None
+            chunk_status[cid]["confidence_score"] = None
+        with open(status_file, "w", encoding="utf-8") as f:
+            json.dump(chunk_status, f, ensure_ascii=False, indent=2)
+        st.success(text.get("reset_success", "All chunk statuses reset."))
+        st.rerun()
+
     with st.expander("❓ " + text["step2_help_title"], expanded=False):
         st.markdown(text["step2_help_content"])
     
     col1, col2 = st.columns(2)
-    
     with col1:
         max_chunks = st.slider(
             text["max_chunks"],
             min_value=5, max_value=100, value=20,
             help=text["max_chunks_help"]
         )
-        
         confidence_threshold = st.slider(
             text["confidence_threshold"],
             min_value=0.0, max_value=1.0, value=0.6, step=0.1,
             help=text["confidence_help"]
         )
-    
     with col2:
         enable_deduplication = st.checkbox(
             text["enable_deduplication"],
             value=True,
             help=text["deduplication_help"]
         )
-        
         physics_enabled = st.checkbox(
             text["physics_enabled"],
             value=True,
             help=text["physics_help"]
         )
-    
+
+    # --- Determine which chunks to process ---
+    unprocessed_cids = [cid for cid in chunk_ids if chunk_status[cid]["status"] != "processed"]
+    next_cids = unprocessed_cids[:max_chunks]
+    next_chunks = [c for c in all_chunks if c.get("chunk_id") in next_cids]
+
+    # Dry run preview
+    if dry_run:
+        st.info(f"Dry Run: Would process {len(next_chunks)} chunks: " + ", ".join([c.get('chunk_id','')[:8] for c in next_chunks]))
+
+    # Save chunk status metadata (after any changes)
+    with open(status_file, "w", encoding="utf-8") as f:
+        json.dump(chunk_status, f, ensure_ascii=False, indent=2)
+
     # Step 3: 实体和关系类型选择
     st.markdown("### " + text["step3_title"])
     st.info(text["step3_info"])
@@ -145,83 +175,34 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     with st.expander("❓ " + text["step3_help_title"], expanded=False):
         st.markdown(text["step3_help_content"])
     
-    # --- Default types (extended) ---
-    default_entity_types = [
-        "research_topic", "methodology", "population", "concept", "disease", "treatment", "finding", "outcome",
-        "intervention", "gene", "protein", "symptom", "drug", "biomarker", "organism", "location"
-    ]
-    default_relation_types = [
-        "uses_method", "studies_population", "investigates_topic", "reports_outcome", "relates_to", "causes", "treats", "affects",
-        "associated_with", "inhibits", "activates", "expressed_in", "encodes", "measured_by", "co-occurs_with", "part_of"
-    ]
-
-    # --- Load custom types (persisted per project) ---
-    if 'custom_entity_types' not in st.session_state:
-        st.session_state['custom_entity_types'] = load_custom_types(litmap_folder, 'entity')
-    if 'custom_relation_types' not in st.session_state:
-        st.session_state['custom_relation_types'] = load_custom_types(litmap_folder, 'relation')
-
-    # --- Add custom type UI ---
-    col_entities, col_relations = st.columns(2)
-
-    with col_entities:
-        all_entity_types = default_entity_types + st.session_state['custom_entity_types']
-        selected_entity_types = st.multiselect(
-            text["entity_types"],
-            options=all_entity_types,
-            default=all_entity_types,
-            help=text["entity_types_help"]
-        )
-        # Add custom entity type
-        custom_entity_input = st.text_input("+ Add Custom Entity Type", key="custom_entity_input")
-        if st.button("Add Entity Type", key="add_entity_type_btn"):
-            valid, msg = validate_custom_type(custom_entity_input, all_entity_types)
-            if valid:
-                st.session_state['custom_entity_types'].append(custom_entity_input)
-                save_custom_types(litmap_folder, 'entity', st.session_state['custom_entity_types'])
-                st.experimental_rerun()
-            else:
-                st.warning(msg)
-        # Show custom types with delete option
-        for ctype in st.session_state['custom_entity_types']:
-            col1, col2 = st.columns([3,1])
-            with col1:
-                st.markdown(f"<span style='color:#d62728'>[Custom]</span> {ctype}", unsafe_allow_html=True)
-            with col2:
-                if st.button("x", key=f"del_entity_{ctype}"):
-                    st.session_state['custom_entity_types'].remove(ctype)
-                    save_custom_types(litmap_folder, 'entity', st.session_state['custom_entity_types'])
-                    st.experimental_rerun()
-
-    with col_relations:
-        all_relation_types = default_relation_types + st.session_state['custom_relation_types']
-        selected_relation_types = st.multiselect(
-            text["relation_types"],
-            options=all_relation_types,
-            default=all_relation_types,
-            help=text["relation_types_help"]
-        )
-        # Add custom relation type
-        custom_relation_input = st.text_input("+ Add Custom Relation Type", key="custom_relation_input")
-        if st.button("Add Relation Type", key="add_relation_type_btn"):
-            valid, msg = validate_custom_type(custom_relation_input, all_relation_types)
-            if valid:
-                st.session_state['custom_relation_types'].append(custom_relation_input)
-                save_custom_types(litmap_folder, 'relation', st.session_state['custom_relation_types'])
-                st.experimental_rerun()
-            else:
-                st.warning(msg)
-        # Show custom types with delete option
-        for ctype in st.session_state['custom_relation_types']:
-            col1, col2 = st.columns([3,1])
-            with col1:
-                st.markdown(f"<span style='color:#d62728'>[Custom]</span> {ctype}", unsafe_allow_html=True)
-            with col2:
-                if st.button("x", key=f"del_relation_{ctype}"):
-                    st.session_state['custom_relation_types'].remove(ctype)
-                    save_custom_types(litmap_folder, 'relation', st.session_state['custom_relation_types'])
-                    st.experimental_rerun()
-
+    # Load configuration for available types
+    try:
+        extractor = EntityRelationExtractor()
+        available_entity_types = extractor.config['ENTITY_TYPES']
+        available_relation_types = extractor.config['RELATION_TYPES']
+        
+        col_entities, col_relations = st.columns(2)
+        
+        with col_entities:
+            selected_entity_types = st.multiselect(
+                text["entity_types"],
+                options=available_entity_types,
+                default=available_entity_types,
+                help=text["entity_types_help"]
+            )
+        
+        with col_relations:
+            selected_relation_types = st.multiselect(
+                text["relation_types"],
+                options=available_relation_types,
+                default=available_relation_types,
+                help=text["relation_types_help"]
+            )
+    
+    except Exception as e:
+        st.error(f"Configuration loading error: {e}")
+        return
+    
     # Step 4: 知识图谱生成
     st.markdown("### " + text["step4_title"])
     st.info(text["step4_info"])
@@ -306,11 +287,10 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             with status_placeholder.container():
                 st.info("🔄 " + text.get("initializing_extraction", "Initializing extraction..."))
             
-            # 加载chunks
-            all_chunks = cached_load_all_chunks(chunks_folder)
-            
-            if not all_chunks:
-                st.warning(text["no_chunks_found"])
+            # --- Use only next unprocessed chunks ---
+            process_chunks = next_chunks
+            if not process_chunks:
+                st.warning(text.get("no_unprocessed_chunks", "No unprocessed chunks to process."))
                 return
             
             # 限制chunks数量
@@ -373,6 +353,14 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 max_chunks=max_chunks,
                 progress_callback=update_progress
             )
+            # --- Mark processed chunks in metadata ---
+            for c in process_chunks:
+                cid = c.get("chunk_id")
+                if cid:
+                    chunk_status[cid]["status"] = "processed"
+                    chunk_status[cid]["last_processed_at"] = datetime.datetime.now().isoformat()
+            with open(status_file, "w", encoding="utf-8") as f:
+                json.dump(chunk_status, f, ensure_ascii=False, indent=2)
             
             # 保存结果
             save_extraction_results(entities, relations, litmap_folder, selected_project)
@@ -469,7 +457,27 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 st.metric(text["avg_relation_confidence"], f"{avg_relation_confidence:.3f}")
         
         # Summary tables
-        summary_dfs = create_summary_dataframes(filtered_entities, filtered_relations) if filtered_relations and all('relation' in r for r in filtered_relations) else {'entities': pd.DataFrame(filtered_entities), 'relations': pd.DataFrame(filtered_relations)}
+        summary_dfs = None
+        # Patch: Ensure all relations have 'relation', 'source', 'target' key
+        missing_relation_key = False
+        missing_source_key = False
+        missing_target_key = False
+        patched_relations = []
+        for r in filtered_relations:
+            r = dict(r)  # copy
+            if 'relation' not in r:
+                missing_relation_key = True
+                r['relation'] = 'unknown'
+            if 'source' not in r:
+                missing_source_key = True
+                r['source'] = 'unknown'
+            if 'target' not in r:
+                missing_target_key = True
+                r['target'] = 'unknown'
+            patched_relations.append(r)
+        if missing_relation_key or missing_source_key or missing_target_key:
+            st.warning("Some relations are missing required fields ('relation', 'source', 'target'). They have been filled as 'unknown'. Please check your extraction logic.")
+        summary_dfs = create_summary_dataframes(filtered_entities, patched_relations)
         
         col_table1, col_table2 = st.columns(2)
         
