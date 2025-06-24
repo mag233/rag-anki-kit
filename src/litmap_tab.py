@@ -171,37 +171,121 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     # Step 3: 实体和关系类型选择
     st.markdown("### " + text["step3_title"])
     st.info(text["step3_info"])
-    
     with st.expander("❓ " + text["step3_help_title"], expanded=False):
         st.markdown(text["step3_help_content"])
-    
-    # Load configuration for available types
+
+    # 提前初始化 extractor
     try:
         extractor = EntityRelationExtractor()
-        available_entity_types = extractor.config['ENTITY_TYPES']
-        available_relation_types = extractor.config['RELATION_TYPES']
-        
-        col_entities, col_relations = st.columns(2)
-        
-        with col_entities:
-            selected_entity_types = st.multiselect(
-                text["entity_types"],
-                options=available_entity_types,
-                default=available_entity_types,
-                help=text["entity_types_help"]
-            )
-        
-        with col_relations:
-            selected_relation_types = st.multiselect(
-                text["relation_types"],
-                options=available_relation_types,
-                default=available_relation_types,
-                help=text["relation_types_help"]
-            )
-    
     except Exception as e:
         st.error(f"Configuration loading error: {e}")
         return
+
+    # 自定义类型持久化文件
+    custom_types_file = os.path.join(litmap_folder, "custom_types.json")
+    if os.path.exists(custom_types_file):
+        with open(custom_types_file, "r", encoding="utf-8") as f:
+            custom_types = json.load(f)
+        custom_entity_types = custom_types.get("customEntityTypes", [])
+        custom_relation_types = custom_types.get("customRelationTypes", [])
+    else:
+        custom_entity_types = []
+        custom_relation_types = []
+
+    # 默认类型扩展（如有必要，可补充更多生物医学常用类型）
+    default_entity_types = extractor.config['ENTITY_TYPES'] + [
+        'gene', 'protein', 'chemical', 'symptom', 'biomarker'
+    ]
+    default_entity_types = list(dict.fromkeys(default_entity_types))  # 去重
+    default_relation_types = extractor.config['RELATION_TYPES'] + [
+        'interacts_with', 'associated_with', 'expresses', 'inhibits', 'induces', 'encodes'
+    ]
+    default_relation_types = list(dict.fromkeys(default_relation_types))
+
+    # 合并自定义类型
+    all_entity_types = default_entity_types + [t for t in custom_entity_types if t not in default_entity_types]
+    all_relation_types = default_relation_types + [t for t in custom_relation_types if t not in default_relation_types]
+
+    # --- UI: 实体类型选择与自定义 ---
+    col_entities, col_relations = st.columns(2)
+    with col_entities:
+        selected_entity_types = st.multiselect(
+            text["entity_types"],
+            options=all_entity_types,
+            default=all_entity_types,
+            help=text["entity_types_help"]
+        )
+        new_entity_type = st.text_input("+ " + text.get("add_entity_type", "Add custom entity type"), "", key="add_entity_type")
+        if st.button(text.get("add_entity_type_btn", "Add Entity Type"), key="add_entity_type_btn"):
+            new_type = new_entity_type.strip()
+            if not new_type or not new_type.isalnum():
+                st.warning(text.get("invalid_entity_type", "Invalid entity type name (must be non-empty, alphanumeric)."))
+            elif new_type in all_entity_types:
+                st.warning(text.get("duplicate_entity_type", "Entity type already exists."))
+            else:
+                custom_entity_types.append(new_type)
+                with open(custom_types_file, "w", encoding="utf-8") as f:
+                    json.dump({
+                        "customEntityTypes": custom_entity_types,
+                        "customRelationTypes": custom_relation_types
+                    }, f, ensure_ascii=False, indent=2)
+                st.success(text.get("entity_type_added", "Custom entity type added."))
+                st.rerun()
+        # 删除自定义类型
+        if custom_entity_types:
+            st.markdown(text.get("custom_entity_types", "Custom entity types:") + " " + ", ".join([
+                f"{t} [🗑️]" for t in custom_entity_types
+            ]))
+            for t in custom_entity_types:
+                if st.button(f"Delete {t}", key=f"del_entity_{t}"):
+                    custom_entity_types.remove(t)
+                    with open(custom_types_file, "w", encoding="utf-8") as f:
+                        json.dump({
+                            "customEntityTypes": custom_entity_types,
+                            "customRelationTypes": custom_relation_types
+                        }, f, ensure_ascii=False, indent=2)
+                    st.success(text.get("entity_type_deleted", "Custom entity type deleted."))
+                    st.rerun()
+
+    # --- UI: 关系类型选择与自定义 ---
+    with col_relations:
+        selected_relation_types = st.multiselect(
+            text["relation_types"],
+            options=all_relation_types,
+            default=all_relation_types,
+            help=text["relation_types_help"]
+        )
+        new_relation_type = st.text_input("+ " + text.get("add_relation_type", "Add custom relation type"), "", key="add_relation_type")
+        if st.button(text.get("add_relation_type_btn", "Add Relation Type"), key="add_relation_type_btn"):
+            new_type = new_relation_type.strip()
+            if not new_type or not new_type.isalnum():
+                st.warning(text.get("invalid_relation_type", "Invalid relation type name (must be non-empty, alphanumeric)."))
+            elif new_type in all_relation_types:
+                st.warning(text.get("duplicate_relation_type", "Relation type already exists."))
+            else:
+                custom_relation_types.append(new_type)
+                with open(custom_types_file, "w", encoding="utf-8") as f:
+                    json.dump({
+                        "customEntityTypes": custom_entity_types,
+                        "customRelationTypes": custom_relation_types
+                    }, f, ensure_ascii=False, indent=2)
+                st.success(text.get("relation_type_added", "Custom relation type added."))
+                st.rerun()
+        # 删除自定义类型
+        if custom_relation_types:
+            st.markdown(text.get("custom_relation_types", "Custom relation types:") + " " + ", ".join([
+                f"{t} [🗑️]" for t in custom_relation_types
+            ]))
+            for t in custom_relation_types:
+                if st.button(f"Delete {t}", key=f"del_relation_{t}"):
+                    custom_relation_types.remove(t)
+                    with open(custom_types_file, "w", encoding="utf-8") as f:
+                        json.dump({
+                            "customEntityTypes": custom_entity_types,
+                            "customRelationTypes": custom_relation_types
+                        }, f, ensure_ascii=False, indent=2)
+                    st.success(text.get("relation_type_deleted", "Custom relation type deleted."))
+                    st.rerun()
     
     # Step 4: 知识图谱生成
     st.markdown("### " + text["step4_title"])
@@ -573,8 +657,47 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 
                 elif viz_type == text["static_plotly"]:
                     # Plotly static network  
+                    layout_options = [
+                        (text.get("layout_kamada_kawai", "Kamada-Kawai"), "kamada_kawai"),
+                        (text.get("layout_spring", "Spring (Fruchterman-Reingold)"), "spring"),
+                        (text.get("layout_circular", "Circular"), "circular"),
+                        (text.get("layout_shell", "Shell"), "shell"),
+                        (text.get("layout_random", "Random"), "random"),
+                        (text.get("layout_hierarchical", "Hierarchical"), "hierarchical"),
+                        (text.get("layout_community", "Community"), "community")
+                    ]
+                    layout_labels = [x[0] for x in layout_options]
+                    layout_values = [x[1] for x in layout_options]
+                    selected_layout_label = st.selectbox(
+                        text.get("layout_select_label", "选择网络布局算法"),
+                        options=layout_labels,
+                        index=0,
+                        help=text.get("layout_select_help", "不同布局算法可减少节点重叠，推荐Kamada-Kawai、Hierarchical或Community")
+                    )
+                    selected_layout = layout_values[layout_labels.index(selected_layout_label)]
+                    node_font_size = st.slider(
+                        text.get("node_font_size_label", "节点标签字号"),
+                        min_value=8, max_value=32, value=14, step=1,
+                        help=text.get("node_font_size_help", "调整节点标签字号以提升可读性")
+                    )
+                    node_spacing = st.slider(
+                        text.get("node_spacing_label", "节点间距"),
+                        min_value=50, max_value=500, value=200, step=10,
+                        help=text.get("node_spacing_help", "增大间距可减少重叠")
+                    )
+                    show_labels = st.checkbox(
+                        text.get("show_labels_label", "显示节点标签"),
+                        value=True,
+                        help=text.get("show_labels_help", "关闭可减少遮挡")
+                    )
                     with st.spinner(text["creating_visualization"]):
-                        fig = visualizer.create_plotly_network(graph, layout='spring')
+                        fig = visualizer.create_plotly_network(
+                            graph,
+                            layout=selected_layout,
+                            node_font_size=node_font_size,
+                            node_spacing=node_spacing,
+                            show_labels=show_labels
+                        )
                         st.plotly_chart(fig, use_container_width=True)
                 
                 else:  # Statistics dashboard

@@ -98,13 +98,19 @@ class KnowledgeGraphVisualizer:
         return net
     
     def create_plotly_network(self, graph: nx.MultiDiGraph,
-                            layout: str = 'spring') -> go.Figure:
+                            layout: str = 'spring', 
+                            node_font_size: int = 14, 
+                            node_spacing: int = 200, 
+                            show_labels: bool = True) -> go.Figure:
         """
         Create Plotly network visualization.
         
         Args:
             graph: NetworkX graph to visualize
             layout: Layout algorithm ('spring', 'circular', 'kamada_kawai')
+            node_font_size: Font size for node labels
+            node_spacing: Spacing between nodes (affects layout scale/repulsion)
+            show_labels: Whether to show node labels
             
         Returns:
             Plotly Figure object
@@ -180,7 +186,8 @@ class KnowledgeGraphVisualizer:
                     textposition='middle center',
                     hovertext=trace_data['hovertext'],
                     hoverinfo='text',
-                    name=node_type
+                    name=node_type,
+                    textfont=dict(size=node_font_size)  # Apply node font size
                 ))
         
         # Update layout
@@ -215,10 +222,11 @@ class KnowledgeGraphVisualizer:
         """
         figures = {}
         
-        # Node type distribution
+        # Node type distribution (fix: use node_type, fallback to type, then unknown)
         type_counts = defaultdict(int)
         for node, data in graph.nodes(data=True):
-            type_counts[data.get('type', 'unknown')] += 1
+            entity_type = data.get('node_type') or data.get('type') or 'unknown'
+            type_counts[entity_type] += 1
         
         if type_counts:
             fig_types = px.pie(
