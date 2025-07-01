@@ -45,16 +45,23 @@ class KnowledgeGraphVisualizer:
             Pyvis Network object
         """
         net = Network(height=height, width=width, directed=True)
-        
-        if physics:
-            net.set_options("""
-            var options = {
-              "physics": {
-                "enabled": true,
-                "stabilization": {"iterations": 100}
-              }
-            }
-            """)
+        # --- 强制 vis.js 使用自定义 tooltip 而不是浏览器原生 title ---
+        net.set_options("""
+        var options = {
+          "interaction": {
+            "hover": true,
+            "tooltipDelay": 200
+          },
+          "nodes": {
+            "shape": "dot",
+            "font": { "multi": true }
+          },
+          "physics": {
+            "enabled": %s,
+            "stabilization": {"iterations": 100}
+          }
+        }
+        """ % ("true" if physics else "false"))
         
         # Node colors from config
         node_colors = self.config['VISUALIZATION']['node_colors']
@@ -64,16 +71,23 @@ class KnowledgeGraphVisualizer:
         for node, data in graph.nodes(data=True):
             node_type = data.get('node_type', 'concept')
             color = node_colors.get(node_type, '#95A5A6')
-            
-            # Size based on degree centrality
             degree = graph.degree(node)
             size = max(10, min(50, 10 + degree * 3))
-            
-            # Hover info
-            title = f"Type: {node_type}<br>Connections: {degree}"
+            # 只保留一份内容，且只用 <br>，不再拼接 \n 版本，避免重复
+            def safe_trunc(val, maxlen=120):
+                if not val:
+                    return ''
+                val = str(val)
+                return val if len(val) <= maxlen else val[:maxlen] + '...'
+            title = f"{safe_trunc(node, 60)}<br>Type: {safe_trunc(node_type)}<br>Connections: {degree}"
+            if 'confidence' in data:
+                title += f"<br>Confidence: {data['confidence']:.2f}"
+            if data.get('description'):
+                title += f"<br>Description: {safe_trunc(data['description'], 200)}"
             if data.get('source_papers'):
-                title += f"<br>Papers: {data['source_papers']}"
-            
+                title += f"<br>Source Papers: {safe_trunc(data['source_papers'], 200)}"
+            if data.get('doi'):
+                title += f"<br>DOI: {safe_trunc(data['doi'], 100)}"
             net.add_node(
                 node,
                 label=node,

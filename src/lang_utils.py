@@ -240,189 +240,84 @@ Generate reference according formal academic writing style [Chicago style], incl
             "error_generating": "生成卡片出错: {err}" if lang == "中文" else "Error generating cards: {err}",
             "export_csv": "导出为CSV" if lang == "中文" else "Export to CSV",
             "csv_saved": "CSV文件已保存至: {path}" if lang == "中文" else "CSV file saved to: {path}",
-            "download_cards": "下载卡片" if lang == "中文" else "Download Cards",
+            "download_cards": "下载卡片" if lang == "中文" else "Download Cards"
         },
         "litmap_tab": {
-            "header": "LitMap 知识图谱生成" if lang == "中文" else "LitMap Knowledge Graph Generation",
-            "description": "从研究文献中自动提取实体和关系，构建交互式知识图谱，帮助理解研究领域的概念网络。" if lang == "中文" else "Automatically extract entities and relationships from research literature to build interactive knowledge graphs, helping understand concept networks in research fields.",
-            
-            # Step titles
-            "step1_title": "第一步：项目选择" if lang == "中文" else "Step 1: Project Selection",
-            "step1_info": "选择已预处理文档的项目，用于知识图谱生成。" if lang == "中文" else "Select a project with preprocessed documents for knowledge graph generation.",
-            "step2_title": "第二步：配置设置" if lang == "中文" else "Step 2: Configuration Settings", 
-            "step2_info": "调整知识图谱生成参数，包括处理数量和置信度阈值。" if lang == "中文" else "Adjust knowledge graph generation parameters including processing limits and confidence thresholds.",
-            "step2_help_title": "配置参数说明" if lang == "中文" else "Configuration Parameters Help",
-            "step2_help_content": """
-**最大处理分块数：** 限制处理的文档分块数量。推荐从20-50开始测试，较多的分块会增加成本但提供更全面的知识图谱。
-
-**置信度阈值：** 过滤AI提取结果的最低置信度。较高的阈值(0.7+)会产生更准确但可能更少的结果。
-
-**启用实体去重：** 自动合并相似的实体(如"machine learning"和"ML")，减少冗余。
-
-**启用物理模拟：** 在交互式网络图中启用物理引擎，使节点自动布局和动画效果。
-            """ if lang == "中文" else """
-**Maximum Chunks to Process:** Limits the number of document chunks to process. Recommend starting with 20-50 for testing. More chunks increase cost but provide more comprehensive knowledge graphs.
-
-**Confidence Threshold:** Filters AI extraction results by minimum confidence. Higher thresholds (0.7+) produce more accurate but potentially fewer results.
-
-**Enable Entity Deduplication:** Automatically merges similar entities (e.g., "machine learning" and "ML") to reduce redundancy.
-
-**Enable Physics Simulation:** Enables physics engine in interactive network graphs for automatic layout and animation effects.
-            """,
-            "step3_title": "第三步：实体与关系类型选择" if lang == "中文" else "Step 3: Entity and Relation Type Selection",
-            "step3_info": "选择要从文献中提取的实体和关系类型。" if lang == "中文" else "Choose which entity and relation types to extract from literature.",
-            "step3_help_title": "实体和关系类型说明" if lang == "中文" else "Entity and Relation Types Help",
-            "step3_help_content": """
-**实体类型说明：**
-- **研究主题(research_topic)：** 研究的核心领域或话题
-- **方法论(methodology)：** 研究方法、技术或工具
-- **研究人群(population)：** 研究对象、样本群体
-- **结果(outcome)：** 研究发现、结论或测量指标
-- **概念(concept)：** 理论概念或抽象概念
-- **疾病(disease)：** 疾病、症状或健康状况
-- **治疗(treatment)：** 治疗方法、药物或干预措施
-- **发现(finding)：** 具体的研究发现或观察结果
-
-**关系类型说明：**
-- **使用方法(uses_method)：** 研究使用某种方法
-- **研究人群(studies_population)：** 研究某个人群
-- **调查主题(investigates_topic)：** 研究某个主题
-- **报告结果(reports_outcome)：** 报告某个结果
-- **相关性(relates_to)：** 一般性关联关系
-- **因果关系(causes)：** 因果关系
-- **治疗关系(treats)：** 治疗某种疾病
-- **影响关系(affects)：** 影响某个对象
-            """ if lang == "中文" else """
-**Entity Types:**
-- **Research Topic:** Core research fields or topics
-- **Methodology:** Research methods, techniques, or tools
-- **Population:** Study subjects or sample groups
-- **Outcome:** Research findings, conclusions, or measured metrics
-- **Concept:** Theoretical or abstract concepts
-- **Disease:** Diseases, symptoms, or health conditions
-- **Treatment:** Treatment methods, drugs, or interventions
-- **Finding:** Specific research findings or observations
-
-**Relation Types:**
-- **Uses Method:** Research uses a certain method
-- **Studies Population:** Studies a certain population
-- **Investigates Topic:** Investigates a certain topic
-- **Reports Outcome:** Reports a certain outcome
-- **Relates To:** General associative relationship
-- **Causes:** Causal relationship
-- **Treats:** Treats a certain disease
-- **Affects:** Affects a certain object
-            """,
-            "step4_title": "第四步：知识图谱生成" if lang == "中文" else "Step 4: Knowledge Graph Generation",
-            "step4_info": "开始从文档中提取实体和关系，构建知识图谱。" if lang == "中文" else "Start extracting entities and relations from documents to build the knowledge graph.",
-            "step4_help_title": "知识图谱生成说明" if lang == "中文" else "Knowledge Graph Generation Help",
-            "step4_help_content": """
-**生成过程：**
-1. 将文档分块送入GPT模型进行实体识别
-2. 对识别的实体进行关系抽取
-3. 计算置信度并过滤低质量结果
-4. 去重和标准化实体名称
-5. 构建网络图结构
-
-**注意事项：**
-- 生成过程可能需要几分钟，取决于文档数量
-- 会产生OpenAI API调用费用，建议先小规模测试
-- 结果会自动保存，可重复使用避免重复计算
-- 建议在网络稳定的环境下运行
-            """ if lang == "中文" else """
-**Generation Process:**
-1. Send document chunks to GPT model for entity recognition
-2. Extract relationships between identified entities
-3. Calculate confidence scores and filter low-quality results
-4. Deduplicate and standardize entity names
-5. Build network graph structure
-
-**Important Notes:**
-- Generation may take several minutes depending on document quantity
-- Will incur OpenAI API costs - recommend testing with small datasets first
-- Results are automatically saved and can be reused to avoid recomputation
-- Recommend running in stable network environment
-            """,
-            "step5_title": "第五步：提取结果" if lang == "中文" else "Step 5: Extraction Results",
-            "step6_title": "第六步：知识图谱可视化" if lang == "中文" else "Step 6: Knowledge Graph Visualization",
-            
-            # Project Selection
-            "project_selection": "项目选择" if lang == "中文" else "Project Selection",
-            "no_project": "请先选择项目" if lang == "中文" else "Please select a project first",
-            "no_projects": "未发现项目，请先在RAG标签页创建项目。" if lang == "中文" else "No projects found. Please create a project in the RAG tab first.",
-            "select_project": "选择知识图谱项目：" if lang == "中文" else "Select Project for Knowledge Graph:",
-            "please_select_project": "请先选择项目" if lang == "中文" else "Please select a project",
-            "no_chunks_warning": "此项目尚未处理文档。请先在RAG标签页上传并预处理PDF文件。" if lang == "中文" else "No processed documents found in this project. Please upload and preprocess PDF files in the RAG tab first.",
-            
-            # Configuration
-            "configuration": "知识图谱配置" if lang == "中文" else "Knowledge Graph Configuration",
-            "max_chunks": "最大处理分块数：" if lang == "中文" else "Maximum Chunks to Process:",
-            "max_chunks_help": "限制处理的文档分块数量以控制成本和时间" if lang == "中文" else "Limit the number of document chunks to process for cost and time control",
-            "confidence_threshold": "置信度阈值：" if lang == "中文" else "Confidence Threshold:",
-            "confidence_help": "过滤低置信度的实体和关系" if lang == "中文" else "Filter out low-confidence entities and relationships",
-            "enable_deduplication": "启用实体去重" if lang == "中文" else "Enable Entity Deduplication",
-            "deduplication_help": "合并相似的实体以简化图谱" if lang == "中文" else "Merge similar entities to simplify the graph",
-            "physics_enabled": "启用物理模拟" if lang == "中文" else "Enable Physics Simulation",
-            "physics_help": "在交互式可视化中启用物理引擎" if lang == "中文" else "Enable physics engine in interactive visualization",
-            
-            # Entity and Relation Configuration
-            "entity_relation_config": "实体与关系类型配置" if lang == "中文" else "Entity and Relation Type Configuration",
-            "entity_types": "选择实体类型：" if lang == "中文" else "Select Entity Types:",
-            "entity_types_help": "选择要从文献中提取的实体类型" if lang == "中文" else "Choose which entity types to extract from literature",
-            "relation_types": "选择关系类型：" if lang == "中文" else "Select Relation Types:",
-            "relation_types_help": "选择要识别的关系类型" if lang == "中文" else "Choose which relation types to identify",
-            
-            # Knowledge Graph Generation
-            "knowledge_graph_generation": "知识图谱生成" if lang == "中文" else "Knowledge Graph Generation",
-            "existing_results_found": "发现已有的提取结果" if lang == "中文" else "Found existing extraction results",
-            "load_existing": "加载已有结果" if lang == "中文" else "Load Existing Results",
-            "load_existing_help": "使用之前保存的实体和关系数据" if lang == "中文" else "Use previously saved entity and relation data",
-            "regenerate": "重新生成" if lang == "中文" else "Regenerate",
-            "regenerate_help": "重新分析文档并提取实体关系" if lang == "中文" else "Re-analyze documents and extract entity relationships",
-            "generate_knowledge_graph": "生成知识图谱" if lang == "中文" else "Generate Knowledge Graph",
-            "generate_help": "开始从文档中提取实体和关系" if lang == "中文" else "Start extracting entities and relationships from documents",
-            
-            # Processing Status
-            "initializing_extraction": "正在初始化提取过程..." if lang == "中文" else "Initializing extraction process...",
-            "loading_chunks": "正在加载文档分块..." if lang == "中文" else "Loading document chunks...",
-            "no_chunks_found": "未找到文档分块" if lang == "中文" else "No document chunks found",
-            "processing_chunks": "正在处理 {n} 个分块" if lang == "中文" else "Processing {n} chunks",
-            "extracting_entities_relations": "正在提取实体和关系..." if lang == "中文" else "Extracting entities and relationships...",
-            "extraction_complete": "提取完成！发现 {entities} 个实体和 {relations} 个关系" if lang == "中文" else "Extraction complete! Found {entities} entities and {relations} relationships",
-            "loaded_existing_results": "已加载已有结果" if lang == "中文" else "Loaded existing results",
-            
-            # Results Display
-            "extraction_results": "提取结果" if lang == "中文" else "Extraction Results",
-            "total_entities": "实体总数" if lang == "中文" else "Total Entities",
-            "total_relations": "关系总数" if lang == "中文" else "Total Relations",
-            "avg_entity_confidence": "平均实体置信度" if lang == "中文" else "Average Entity Confidence",
-            "avg_relation_confidence": "平均关系置信度" if lang == "中文" else "Average Relation Confidence",
-            "entity_summary": "实体类型统计" if lang == "中文" else "Entity Type Summary",
-            "relation_summary": "关系类型统计" if lang == "中文" else "Relation Type Summary",
-            "no_entities": "未发现实体" if lang == "中文" else "No entities found",
-            "no_relations": "未发现关系" if lang == "中文" else "No relationships found",
-            "most_connected": "连接度最高的实体" if lang == "中文" else "Most Connected Entities",
-            
-            # Visualization
-            "knowledge_graph_visualization": "知识图谱可视化" if lang == "中文" else "Knowledge Graph Visualization",
-            "building_graph": "正在构建图谱..." if lang == "中文" else "Building graph...",
-            "graph_nodes": "图谱节点数" if lang == "中文" else "Graph Nodes",
-            "graph_edges": "图谱边数" if lang == "中文" else "Graph Edges",
-            "graph_density": "图谱密度" if lang == "中文" else "Graph Density",
-            "visualization_type": "可视化类型：" if lang == "中文" else "Visualization Type:",
-            "interactive_network": "交互式网络图" if lang == "中文" else "Interactive Network",
-            "static_plotly": "静态网络图" if lang == "中文" else "Static Network Plot",
-            "statistics_dashboard": "统计仪表板" if lang == "中文" else "Statistics Dashboard",
-            "creating_visualization": "正在创建可视化..." if lang == "中文" else "Creating visualization...",
-            "creating_dashboard": "正在创建仪表板..." if lang == "中文" else "Creating dashboard...",
-            "insufficient_data": "数据不足，无法生成有意义的可视化" if lang == "中文" else "Insufficient data to generate meaningful visualization",
-            
-            # Export Options
-            "export_options": "导出选项" if lang == "中文" else "Export Options",
-            "export_graph_data": "导出图谱数据" if lang == "中文" else "Export Graph Data",
-            "export_visualization": "导出可视化" if lang == "中文" else "Export Visualization",
-            "graph_exported": "图谱数据已导出至：{path}" if lang == "中文" else "Graph data exported to: {path}",
-            "visualization_exported": "可视化已导出至：{path}" if lang == "中文" else "Visualization exported to: {path}",
-            "select_project_and_configure": "请选择项目并配置参数后开始生成知识图谱" if lang == "中文" else "Please select a project and configure parameters to start generating knowledge graph",
+            "header": "LitMap Knowledge Graph",
+            "description": "Build and visualize a knowledge graph from your research literature. Process, review, and merge entity/relation data with full control.",
+            "step1_title": "Step 1: Select Project",
+            "step1_info": "Select a project to build and review the knowledge graph. Make sure you have processed your PDFs in the RAG tab.",
+            "no_projects": "No projects found. Please create a project in the RAG tab first.",
+            "select_project": "Select Project:",
+            "no_project": "Please select a project.",
+            "no_chunks_warning": "No processed chunks found. Please preprocess files in the RAG tab first.",
+            "step2_title": "Step 2: Configure Extraction Settings",
+            "step2_info": "Set up entity/relation types, deduplication, and other extraction parameters.",
+            "progress_label": "Progress",
+            "last_processed_at": "Last processed at",
+            "max_chunks": "Maximum Chunks to Process",
+            "max_chunks_help": "How many chunks to process at once.",
+            "confidence_threshold": "Confidence Threshold",
+            "confidence_help": "Minimum confidence for entities/relations.",
+            "enable_deduplication": "Enable Entity Deduplication",
+            "deduplication_help": "Remove duplicate entities.",
+            "physics_enabled": "Enable Physics Simulation",
+            "physics_help": "Use physics for network visualization.",
+            "entity_types": "Select Entity Types",
+            "entity_types_help": "Choose which entity types to extract.",
+            "enable_entity_custom": "Enable custom entity types",
+            "custom_entity_types": "Custom entity types (comma separated)",
+            "custom_entity_types_help": "Enter custom entity types, comma separated.",
+            "relation_types": "Select Relation Types",
+            "relation_types_help": "Choose which relation types to extract.",
+            "enable_relation_custom": "Enable custom relation types",
+            "custom_relation_types": "Custom relation types (comma separated)",
+            "custom_relation_types_help": "Enter custom relation types, comma separated.",
+            "reprocess_all": "Reprocess All",
+            "reprocess_all_help": "Reset all chunk status and reprocess all data.",
+            "continue_from_last": "Continue from Last",
+            "continue_from_last_help": "Only process unprocessed chunks, keep history.",
+            "dry_run": "Dry Run (Preview Only)",
+            "clear_status": "Clear Status",
+            "clear_status_help": "Clear progress and stats display.",
+            "initializing_extraction": "Initializing extraction...",
+            "no_unprocessed_chunks": "No unprocessed chunks to process.",
+            "processing_chunks": "Processing {n} chunks...",
+            "estimated_processing": "Estimated processing: {n} chunks, estimated time {t} minutes, estimated cost ${c}",
+            "processing_progress": "Progress: {current}/{total} ({percent:.1%})",
+            "extraction_error": "Extraction error",
+            "extraction_complete": "Extraction complete: {entities} entities, {relations} relations.",
+            "step3_title": "Step 3: Data Review & Merge",
+            "step3_info": "Preview newly extracted data, load all historical data, and decide when to merge new data into the main database.",
+            "preview_new_data": "Preview New Data",
+            "load_history_data": "Load All History",
+            "merge_new_data": "Merge New Data to Main DB",
+            "showing_new_data": "Currently showing: newly processed data (not yet merged)",
+            "showing_history_data": "Currently showing: historical data (already merged/saved)",
+            "history_loaded": "All historical data loaded.",
+            "step4_title": "Step 4: Statistics",
+            "total_entities": "Total Entities",
+            "total_relations": "Total Relations",
+            "avg_entity_confidence": "Avg. Entity Confidence",
+            "avg_relation_confidence": "Avg. Relation Confidence",
+            "most_connected": "Most Connected Entities",
+            "no_connected_entities": "No connected entities found.",
+            "step5_title": "Step 5: Visualization",
+            "building_graph": "Building knowledge graph...",
+            "graph_nodes": "Graph Nodes",
+            "graph_edges": "Graph Edges",
+            "graph_density": "Graph Density",
+            "visualization_type": "Visualization Type:",
+            "interactive_network": "Interactive Network",
+            "statistics_dashboard": "Statistics Dashboard",
+            "creating_visualization": "Creating interactive network...",
+            "creating_dashboard": "Creating statistics dashboard...",
+            "export_options": "Export Options",
+            "export_graph_data": "Export Graph Data (GEXF)",
+            "graph_exported": "Graph data exported to {path}",
+            "export_visualization": "Export Visualization (HTML)",
+            "visualization_exported": "Visualization exported to {path}",
+            "insufficient_data": "Not enough data to visualize. Please process or load more data.",
+            "select_project_and_configure": "Please select a project and configure extraction settings."
         }
     }

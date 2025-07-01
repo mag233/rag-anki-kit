@@ -1,3 +1,4 @@
+import re
 """
 LitMap Tab - Knowledge Graph Generation from Research Literature
 
@@ -31,15 +32,17 @@ def cached_load_all_chunks(chunks_folder):
 
 
 def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
+    def clean_title(title):
+        # Remove leading markdown headers like ###, ##, # and whitespace
+        return re.sub(r"^#+\\s*", "", title).strip()
     """Render the LitMap knowledge graph tab."""
     text = get_text(lang)["litmap_tab"]
     
     st.header(text["header"])
     st.info(text["description"])
-    
-    # Step 1: 项目选择 (following same pattern as other tabs)
-    st.markdown("### " + text["step1_title"])
-    st.info(text["step1_info"])
+    st.divider()
+    st.subheader(clean_title(text['step1_title']))
+    st.caption(text["step1_info"])
     projects = [d for d in os.listdir(PROJECTS_DIR) if os.path.isdir(os.path.join(PROJECTS_DIR, d))]
     
     if not projects:
@@ -83,9 +86,9 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         st.warning(text["no_chunks_warning"])
         return
     
-    # Step 2: 配置设置
-    st.markdown("### " + text["step2_title"])
-    st.info(text["step2_info"])
+    st.divider()
+    st.subheader(clean_title(text['step2_title']))
+    st.caption(text["step2_info"])
 
     # --- Knowledge Graph Chunk Processing State Management ---
     status_file = os.path.join(litmap_folder, "kg_chunk_status.json")
@@ -124,7 +127,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     n_pending = total_chunks - n_processed
 
     # --- DEBUG OUTPUT: Show chunk aggregation info ---
-    with st.expander("[DEBUG] Chunk Aggregation Info", expanded=True):
+    with st.expander("[DEBUG] Chunk Aggregation Info", expanded=False):
         st.write(f"chunk_files: {len(chunk_files)} files")
         st.write(f"chunk_files names: {chunk_files[:5]}{' ...' if len(chunk_files) > 5 else ''}")
         st.write(f"chunk_ids: {len(chunk_ids)} ids (first 10: {chunk_ids[:10]})")
@@ -372,9 +375,9 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             st.error(st.session_state['litmap_errors'][0])
             return
 
-    # --- Step 3: 新/历史数据预览与合并 ---
-    st.markdown("### 3. 数据预览与合并")
-    st.info("您可以预览本次新处理的数据，或加载全部历史数据，并决定是否合并新数据到主数据库。")
+    st.divider()
+    st.subheader(clean_title(text['step3_title']))
+    st.caption(text["step3_info"])
 
     # 初始化 session_state
     if 'litmap_new_entities' not in st.session_state:
@@ -396,13 +399,14 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         with open(temp_new_relations_path, "w", encoding="utf-8") as f:
             json.dump(st.session_state['litmap_new_relations'], f, ensure_ascii=False, indent=2)
 
+    # --- Step 3: Data Review & Merge Controls (soft-coded English) ---
     col_preview, col_load_history, col_merge = st.columns(3)
     with col_preview:
-        preview_new = st.button("预览新处理数据", key="preview_new_data")
+        preview_new = st.button(text.get("preview_new_data", "Preview New Data"), key="preview_new_data")
     with col_load_history:
-        load_history = st.button("加载全部历史数据", key="load_history_data")
+        load_history = st.button(text.get("load_history_data", "Load All History"), key="load_history_data")
     with col_merge:
-        if st.button("合并新数据到主数据库", key="merge_new_data"):
+        if st.button(text.get("merge_new_data", "Merge New Data to Main DB"), key="merge_new_data"):
             st.session_state['litmap_merge_pending'] = True
             st.rerun()
 
@@ -413,8 +417,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     # 1. 预览新数据（仅显示新处理结果，不影响历史）
     if preview_new:
         st.session_state['litmap_view_mode'] = 'new'
-        # 新数据应在主处理逻辑后写入 session_state['litmap_new_entities']
-        # 这里仅切换视图
+        st.info(text["showing_new_data"])
 
     # 2. 加载历史数据（从磁盘读取，覆盖 session_state，切换为历史视图）
     if load_history:
@@ -429,10 +432,9 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         else:
             st.session_state['litmap_relations'] = []
         st.session_state['litmap_view_mode'] = 'history'
-        # 清空新数据，防止干扰
         st.session_state['litmap_new_entities'] = []
         st.session_state['litmap_new_relations'] = []
-        st.success("已加载全部历史数据")
+        st.success(text["history_loaded"])
         st.rerun()
 
     # 3. 合并新数据到主数据库（去重，写入磁盘，切换为历史视图）
@@ -521,42 +523,38 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     if st.session_state.get('litmap_view_mode') == 'new':
         entities = st.session_state.get('litmap_new_entities', [])
         relations = st.session_state.get('litmap_new_relations', [])
-        st.info("当前显示：新处理数据（未合并）")
+        st.info(text["showing_new_data"])
     else:
         entities = st.session_state.get('litmap_entities', [])
         relations = st.session_state.get('litmap_relations', [])
-        st.info("当前显示：历史数据（已合并/保存）")
+        st.info(text["showing_history_data"])
 
     # --- step 4/5: 后续统计和可视化全部用 entities/relations 变量 ---
-    # --- Step 4: 统计 ---
+    st.divider()
     if entities or relations:
-        st.markdown("### " + text["step4_title"])
-        
+        st.subheader(clean_title(text['step4_title']))
         col_stats1, col_stats2 = st.columns(2)
-        
         with col_stats1:
             st.metric(text["total_entities"], len(entities))
             st.metric(text["total_relations"], len(relations))
-        
         with col_stats2:
             if entities:
                 avg_entity_confidence = sum(e.get('confidence', 0) for e in entities) / len(entities)
                 st.metric(text["avg_entity_confidence"], f"{avg_entity_confidence:.3f}")
-            
             if relations:
                 avg_relation_confidence = sum(r.get('confidence', 0) for r in relations) / len(relations)
                 st.metric(text["avg_relation_confidence"], f"{avg_relation_confidence:.3f}")
-        
-        # Most connected entities
+        # Most connected entities (improved)
         if relations:
-            st.markdown("#### " + text["most_connected"])
+            st.subheader(clean_title(text['most_connected']))
             connected_entities = get_most_connected_entities(relations, top_n=10)
-            connected_df = pd.DataFrame(connected_entities)
-            st.dataframe(connected_df, use_container_width=True)
-        
-        # --- Step 5: 可视化 ---
-        st.markdown("### " + text["step5_title"])
-        
+            if connected_entities and any(e['entity'] for e in connected_entities):
+                connected_df = pd.DataFrame(connected_entities)
+                st.dataframe(connected_df, use_container_width=True)
+            else:
+                st.info(text.get("no_connected_entities", "No connected entities found."))
+        st.divider()
+        st.subheader(clean_title(text['step5_title']))
         if entities and relations:
             try:
                 # Build graph
@@ -586,15 +584,13 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 with col_graph_stats3:
                     st.metric(text["graph_density"], f"{stats['density']:.3f}")
                 
-                # Visualization options
+                # Visualization options (remove Static Network Plot)
                 viz_type = st.radio(
                     text["visualization_type"],
-                    options=[text["interactive_network"], text["static_plotly"], text["statistics_dashboard"]],
+                    options=[text["interactive_network"], text["statistics_dashboard"]],
                     horizontal=True
                 )
-                
                 visualizer = KnowledgeGraphVisualizer()
-                
                 if viz_type == text["interactive_network"]:
                     # Pyvis interactive network
                     with st.spinner(text["creating_visualization"]):
@@ -603,75 +599,24 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                             height="600px", 
                             physics=physics_enabled
                         )
-                        
                         # Save to temporary file and display
                         with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as f:
                             temp_path = f.name
                             net.save_graph(temp_path)
-                        
                         # Read and display HTML
                         with open(temp_path, 'r') as f:
                             html_content = f.read()
-                        
                         st.components.v1.html(html_content, height=650)
-                        
                         # Cleanup
                         os.unlink(temp_path)
-                
-                elif viz_type == text["static_plotly"]:
-                    # Plotly static network  
-                    layout_options = [
-                        (text.get("layout_kamada_kawai", "Kamada-Kawai"), "kamada_kawai"),
-                        (text.get("layout_spring", "Spring (Fruchterman-Reingold)"), "spring"),
-                        (text.get("layout_circular", "Circular"), "circular"),
-                        (text.get("layout_shell", "Shell"), "shell"),
-                        (text.get("layout_random", "Random"), "random"),
-                        (text.get("layout_hierarchical", "Hierarchical"), "hierarchical"),
-                        (text.get("layout_community", "Community"), "community")
-                    ]
-                    layout_labels = [x[0] for x in layout_options]
-                    layout_values = [x[1] for x in layout_options]
-                    selected_layout_label = st.selectbox(
-                        text.get("layout_select_label", "选择网络布局算法"),
-                        options=layout_labels,
-                        index=0,
-                        help=text.get("layout_select_help", "不同布局算法可减少节点重叠，推荐Kamada-Kawai、Hierarchical或Community")
-                    )
-                    selected_layout = layout_values[layout_labels.index(selected_layout_label)]
-                    node_font_size = st.slider(
-                        text.get("node_font_size_label", "节点标签字号"),
-                        min_value=8, max_value=32, value=14, step=1,
-                        help=text.get("node_font_size_help", "调整节点标签字号以提升可读性")
-                    )
-                    node_spacing = st.slider(
-                        text.get("node_spacing_label", "节点间距"),
-                        min_value=50, max_value=500, value=200, step=10,
-                        help=text.get("node_spacing_help", "增大间距可减少重叠")
-                    )
-                    show_labels = st.checkbox(
-                        text.get("show_labels_label", "显示节点标签"),
-                        value=True,
-                        help=text.get("show_labels_help", "关闭可减少遮挡")
-                    )
-                    with st.spinner(text["creating_visualization"]):
-                        fig = visualizer.create_plotly_network(
-                            graph,
-                            layout=selected_layout,
-                            node_font_size=node_font_size,
-                            node_spacing=node_spacing,
-                            show_labels=show_labels
-                        )
-                        st.plotly_chart(fig, use_container_width=True)
-                
                 else:  # Statistics dashboard
                     with st.spinner(text["creating_dashboard"]):
                         dashboard_figs = visualizer.create_statistics_dashboard(graph)
-                        
                         for title, fig in dashboard_figs.items():
                             st.plotly_chart(fig, use_container_width=True)
                 
                 # Export options
-                st.markdown("### " + text["export_options"])
+                st.subheader(clean_title(text['export_options']))
                 
                 col_exp1, col_exp2 = st.columns(2)
                 
