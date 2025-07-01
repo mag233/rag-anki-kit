@@ -55,6 +55,20 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     if not selected_project:
         st.warning(text["no_project"])
         return
+
+    # 初始化 session_state，防止 KeyError
+    if 'litmap_entities' not in st.session_state:
+        st.session_state['litmap_entities'] = []
+    if 'litmap_relations' not in st.session_state:
+        st.session_state['litmap_relations'] = []
+    if 'litmap_loaded_project' not in st.session_state:
+        st.session_state['litmap_loaded_project'] = None
+
+    # 只有在切换项目时清空 session_state
+    if st.session_state['litmap_loaded_project'] != selected_project:
+        st.session_state['litmap_entities'] = []
+        st.session_state['litmap_relations'] = []
+        st.session_state['litmap_loaded_project'] = selected_project
     
     project_path = os.path.join(PROJECTS_DIR, selected_project)
     chunks_folder = os.path.join(project_path, "processed", "chunks")
@@ -88,11 +102,13 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     now = datetime.datetime.now().isoformat()
 
     # Load or initialize chunk status metadata
-    if os.path.exists(status_file):
-        with open(status_file, "r", encoding="utf-8") as f:
-            chunk_status = json.load(f)
-    else:
-        chunk_status = {}
+    def load_chunk_status():
+        if os.path.exists(status_file):
+            with open(status_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        else:
+            return {}
+    chunk_status = load_chunk_status()
 
     # Sync metadata with current chunks
     # Add new chunks as pending, remove missing
@@ -107,81 +123,57 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     n_processed = len([cid for cid in chunk_ids if chunk_status.get(cid, {}).get("status") == "processed"])
     n_pending = total_chunks - n_processed
 
+    # --- DEBUG OUTPUT: Show chunk aggregation info ---
+    with st.expander("[DEBUG] Chunk Aggregation Info", expanded=True):
+        st.write(f"chunk_files: {len(chunk_files)} files")
+        st.write(f"chunk_files names: {chunk_files[:5]}{' ...' if len(chunk_files) > 5 else ''}")
+        st.write(f"chunk_ids: {len(chunk_ids)} ids (first 10: {chunk_ids[:10]})")
+        st.write(f"total_chunks: {total_chunks}")
+        st.write(f"n_processed: {n_processed}")
+        st.write(f"chunk_status keys: {len(chunk_status)}")
+        st.write(f"n_pending: {n_pending}")
+        st.write(f"unprocessed_cids: {len([cid for cid in chunk_ids if chunk_status.get(cid, {}).get('status') != 'processed'])}")
+        st.write(f"status_file: {status_file}")
+
     # --- UI: Progress Bar and Controls ---
     st.markdown(f"**{text.get('progress_label', 'Progress')}: {n_processed} / {total_chunks} ({(n_processed/total_chunks*100 if total_chunks else 0):.1f}%)**")
     st.progress(n_processed/total_chunks if total_chunks else 0.0)
 
-    col_reset, col_dryrun = st.columns(2)
-    with col_reset:
-        reprocess_all = st.button(text.get("reprocess_all", "Reprocess All"), key="kg_reprocess_all")
-    with col_dryrun:
-        dry_run = st.checkbox(text.get("dry_run", "Dry Run (Preview Only)"), value=False, key="kg_dry_run")
+    # Show last processed time
+    last_processed_times = [chunk_status[cid]["last_processed_at"] for cid in chunk_ids if chunk_status[cid]["last_processed_at"]]
+    if last_processed_times:
+        last_time = max(last_processed_times)
+        st.info(text.get("last_processed_at", "Last processed at") + f": {last_time}")
 
-    # Reset all chunk statuses if requested
-    if reprocess_all:
-        for cid in chunk_status:
-            chunk_status[cid]["status"] = "pending"
-            chunk_status[cid]["last_processed_at"] = None
-            chunk_status[cid]["confidence_score"] = None
-        with open(status_file, "w", encoding="utf-8") as f:
-            json.dump(chunk_status, f, ensure_ascii=False, indent=2)
-        st.success(text.get("reset_success", "All chunk statuses reset."))
-        st.rerun()
-
-    with st.expander("❓ " + text["step2_help_title"], expanded=False):
-        st.markdown(text["step2_help_content"])
-    
+    # --- Chunk processing parameters (must be defined before action logic) ---
     col1, col2 = st.columns(2)
     with col1:
         max_chunks = st.slider(
-            text["max_chunks"],
+            text.get("max_chunks", "Maximum Chunks to Process"),
             min_value=5, max_value=100, value=20,
-            help=text["max_chunks_help"]
+            help=text.get("max_chunks_help", "How many chunks to process at once.")
         )
         confidence_threshold = st.slider(
-            text["confidence_threshold"],
+            text.get("confidence_threshold", "Confidence Threshold"),
             min_value=0.0, max_value=1.0, value=0.6, step=0.1,
-            help=text["confidence_help"]
+            help=text.get("confidence_help", "Minimum confidence for entities/relations.")
         )
     with col2:
         enable_deduplication = st.checkbox(
-            text["enable_deduplication"],
+            text.get("enable_deduplication", "Enable Entity Deduplication"),
             value=True,
-            help=text["deduplication_help"]
+            help=text.get("deduplication_help", "Remove duplicate entities.")
         )
         physics_enabled = st.checkbox(
-            text["physics_enabled"],
+            text.get("physics_enabled", "Enable Physics Simulation"),
             value=True,
-            help=text["physics_help"]
+            help=text.get("physics_help", "Use physics for network visualization.")
         )
 
-    # --- Determine which chunks to process ---
-    unprocessed_cids = [cid for cid in chunk_ids if chunk_status[cid]["status"] != "processed"]
-    next_cids = unprocessed_cids[:max_chunks]
-    next_chunks = [c for c in all_chunks if c.get("chunk_id") in next_cids]
-
-    # Dry run preview
-    if dry_run:
-        st.info(f"Dry Run: Would process {len(next_chunks)} chunks: " + ", ".join([c.get('chunk_id','')[:8] for c in next_chunks]))
-
-    # Save chunk status metadata (after any changes)
-    with open(status_file, "w", encoding="utf-8") as f:
-        json.dump(chunk_status, f, ensure_ascii=False, indent=2)
-
-    # Step 3: 实体和关系类型选择
-    st.markdown("### " + text["step3_title"])
-    st.info(text["step3_info"])
-    with st.expander("❓ " + text["step3_help_title"], expanded=False):
-        st.markdown(text["step3_help_content"])
-
-    # 提前初始化 extractor
-    try:
-        extractor = EntityRelationExtractor()
-    except Exception as e:
-        st.error(f"Configuration loading error: {e}")
-        return
-
-    # 自定义类型持久化文件
+    # --- Entity/Relation type list (must be before UI controls) ---
+    # Initialize extractor before using its config
+    extractor = EntityRelationExtractor()
+    # Custom types file
     custom_types_file = os.path.join(litmap_folder, "custom_types.json")
     if os.path.exists(custom_types_file):
         with open(custom_types_file, "r", encoding="utf-8") as f:
@@ -191,415 +183,386 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     else:
         custom_entity_types = []
         custom_relation_types = []
-
-    # 默认类型扩展（如有必要，可补充更多生物医学常用类型）
+    # Default types
     default_entity_types = extractor.config['ENTITY_TYPES'] + [
         'gene', 'protein', 'chemical', 'symptom', 'biomarker'
     ]
-    default_entity_types = list(dict.fromkeys(default_entity_types))  # 去重
+    default_entity_types = list(dict.fromkeys(default_entity_types))
     default_relation_types = extractor.config['RELATION_TYPES'] + [
         'interacts_with', 'associated_with', 'expresses', 'inhibits', 'induces', 'encodes'
     ]
     default_relation_types = list(dict.fromkeys(default_relation_types))
-
-    # 合并自定义类型
+    # Merge custom types
     all_entity_types = default_entity_types + [t for t in custom_entity_types if t not in default_entity_types]
     all_relation_types = default_relation_types + [t for t in custom_relation_types if t not in default_relation_types]
 
-    # --- UI: 实体类型选择与自定义 ---
+    # --- UI: Entity/Relation type selection (must be before action logic) ---
     col_entities, col_relations = st.columns(2)
     with col_entities:
         selected_entity_types = st.multiselect(
-            text["entity_types"],
+            text.get("entity_types", "Select Entity Types"),
             options=all_entity_types,
             default=all_entity_types,
-            help=text["entity_types_help"]
+            help=text.get("entity_types_help", "Choose which entity types to extract.")
         )
-        new_entity_type = st.text_input("+ " + text.get("add_entity_type", "Add custom entity type"), "", key="add_entity_type")
-        if st.button(text.get("add_entity_type_btn", "Add Entity Type"), key="add_entity_type_btn"):
-            new_type = new_entity_type.strip()
-            if not new_type or not new_type.isalnum():
-                st.warning(text.get("invalid_entity_type", "Invalid entity type name (must be non-empty, alphanumeric)."))
-            elif new_type in all_entity_types:
-                st.warning(text.get("duplicate_entity_type", "Entity type already exists."))
-            else:
-                custom_entity_types.append(new_type)
-                with open(custom_types_file, "w", encoding="utf-8") as f:
-                    json.dump({
-                        "customEntityTypes": custom_entity_types,
-                        "customRelationTypes": custom_relation_types
-                    }, f, ensure_ascii=False, indent=2)
-                st.success(text.get("entity_type_added", "Custom entity type added."))
-                st.rerun()
-        # 删除自定义类型
-        if custom_entity_types:
-            st.markdown(text.get("custom_entity_types", "Custom entity types:") + " " + ", ".join([
-                f"{t} [🗑️]" for t in custom_entity_types
-            ]))
-            for t in custom_entity_types:
-                if st.button(f"Delete {t}", key=f"del_entity_{t}"):
-                    custom_entity_types.remove(t)
-                    with open(custom_types_file, "w", encoding="utf-8") as f:
-                        json.dump({
-                            "customEntityTypes": custom_entity_types,
-                            "customRelationTypes": custom_relation_types
-                        }, f, ensure_ascii=False, indent=2)
-                    st.success(text.get("entity_type_deleted", "Custom entity type deleted."))
-                    st.rerun()
-
-    # --- UI: 关系类型选择与自定义 ---
+        # Optional: custom entity types
+        if st.checkbox(text.get("enable_entity_custom", "Enable custom entity types"), value=False):
+            custom_entity_types = st.text_area(
+                text.get("custom_entity_types", "Custom entity types (comma separated)"),
+                value="",
+                help=text.get("custom_entity_types_help", "Enter custom entity types, comma separated.")
+            )
+            if custom_entity_types:
+                custom_entity_types = [et.strip() for et in custom_entity_types.split(",") if et.strip()]
+                selected_entity_types = list(set(selected_entity_types) | set(custom_entity_types))
     with col_relations:
         selected_relation_types = st.multiselect(
-            text["relation_types"],
+            text.get("relation_types", "Select Relation Types"),
             options=all_relation_types,
             default=all_relation_types,
-            help=text["relation_types_help"]
+            help=text.get("relation_types_help", "Choose which relation types to extract.")
         )
-        new_relation_type = st.text_input("+ " + text.get("add_relation_type", "Add custom relation type"), "", key="add_relation_type")
-        if st.button(text.get("add_relation_type_btn", "Add Relation Type"), key="add_relation_type_btn"):
-            new_type = new_relation_type.strip()
-            if not new_type or not new_type.isalnum():
-                st.warning(text.get("invalid_relation_type", "Invalid relation type name (must be non-empty, alphanumeric)."))
-            elif new_type in all_relation_types:
-                st.warning(text.get("duplicate_relation_type", "Relation type already exists."))
-            else:
-                custom_relation_types.append(new_type)
-                with open(custom_types_file, "w", encoding="utf-8") as f:
-                    json.dump({
-                        "customEntityTypes": custom_entity_types,
-                        "customRelationTypes": custom_relation_types
-                    }, f, ensure_ascii=False, indent=2)
-                st.success(text.get("relation_type_added", "Custom relation type added."))
-                st.rerun()
-        # 删除自定义类型
-        if custom_relation_types:
-            st.markdown(text.get("custom_relation_types", "Custom relation types:") + " " + ", ".join([
-                f"{t} [🗑️]" for t in custom_relation_types
-            ]))
-            for t in custom_relation_types:
-                if st.button(f"Delete {t}", key=f"del_relation_{t}"):
-                    custom_relation_types.remove(t)
-                    with open(custom_types_file, "w", encoding="utf-8") as f:
-                        json.dump({
-                            "customEntityTypes": custom_entity_types,
-                            "customRelationTypes": custom_relation_types
-                        }, f, ensure_ascii=False, indent=2)
-                    st.success(text.get("relation_type_deleted", "Custom relation type deleted."))
-                    st.rerun()
-    
-    # Step 4: 知识图谱生成
-    st.markdown("### " + text["step4_title"])
-    st.info(text["step4_info"])
-    
-    with st.expander("❓ " + text["step4_help_title"], expanded=False):
-        st.markdown(text["step4_help_content"])
-    
-    # Check for existing extraction results
-    entities_file = os.path.join(litmap_folder, f"{selected_project}_entities.json")
-    relations_file = os.path.join(litmap_folder, f"{selected_project}_relations.json")
-    
-    has_existing_results = os.path.exists(entities_file) and os.path.exists(relations_file)
-    
-    if has_existing_results:
-        st.success(text["existing_results_found"])
-        
-        # 显示现有结果信息
-        try:
-            existing_entities, existing_relations = load_extraction_results(entities_file, relations_file)
-            col_exist1, col_exist2 = st.columns(2)
-            
-            with col_exist1:
-                st.metric(text["extracted_entities_count"], len(existing_entities))  # <-- use text key
-            with col_exist2:
-                st.metric(text["extracted_relations_count"], len(existing_relations))  # <-- use text key
-        except:
-            pass
-        
-        col_load, col_regenerate = st.columns(2)
-        
-        with col_load:
-            load_existing = st.button(
-                text["load_existing"],  # <-- use text key
-                type="primary",
-                help=text["load_existing_help"]
+        # Optional: custom relation types
+        if st.checkbox(text.get("enable_relation_custom", "Enable custom relation types"), value=False):
+            custom_relation_types = st.text_area(
+                text.get("custom_relation_types", "Custom relation types (comma separated)"),
+                value="",
+                help=text.get("custom_relation_types_help", "Enter custom relation types, comma separated.")
             )
-        
-        with col_regenerate:
-            regenerate = st.button(
-                text["regenerate"],  # <-- use text key
-                type="secondary",
-                help=text["regenerate_help"]
-            )
-    else:
-        load_existing = False
-        regenerate = st.button(
-            text["generate_knowledge_graph"],  # <-- use text key
-            type="primary",
-            help=text["generate_help"]
-        )
-    
-    # --- 使用 session_state 管理实体和关系数据 ---
-    if 'litmap_entities' not in st.session_state:
-        st.session_state['litmap_entities'] = []
-    if 'litmap_relations' not in st.session_state:
-        st.session_state['litmap_relations'] = []
-    if 'litmap_loaded_project' not in st.session_state:
-        st.session_state['litmap_loaded_project'] = None
+            if custom_relation_types:
+                custom_relation_types = [rt.strip() for rt in custom_relation_types.split(",") if rt.strip()]
+                selected_relation_types = list(set(selected_relation_types) | set(custom_relation_types))
 
-    # 只有在切换项目时清空 session_state
-    if st.session_state['litmap_loaded_project'] != selected_project:
-        st.session_state['litmap_entities'] = []
-        st.session_state['litmap_relations'] = []
-        st.session_state['litmap_loaded_project'] = selected_project
+    # --- Determine which chunks to process ---
+    unprocessed_cids = [cid for cid in chunk_ids if chunk_status[cid]["status"] != "processed"]
+    next_cids = unprocessed_cids[:max_chunks]
+    next_chunks = [c for c in all_chunks if c.get("chunk_id") in next_cids]
 
-    # 只在点击按钮时更新 session_state
-    if load_existing:
+    # --- Action buttons ---
+    col_reprocess, col_continue, col_dryrun, col_clear = st.columns([1,1,1,1])
+    with col_reprocess:
+        reprocess_all = st.button(text.get("reprocess_all", "Reprocess All"), key="kg_reprocess_all", help=text.get("reprocess_all_help", "Reset all chunk status and reprocess all data."))
+    with col_continue:
+        continue_from_last = st.button(text.get("continue_from_last", "Continue from Last"), key="kg_continue_from_last", help=text.get("continue_from_last_help", "Only process unprocessed chunks, keep history."))
+    with col_dryrun:
+        dry_run = st.checkbox(text.get("dry_run", "Dry Run (Preview Only)"), value=False, key="kg_dry_run")
+    with col_clear:
+        clear_status = st.button(text.get("clear_status", "Clear Status"), key="kg_clear_status", help=text.get("clear_status_help", "Clear progress and stats display."))
+
+    # Action logic
+    if reprocess_all:
+        for cid in chunk_status:
+            chunk_status[cid]["status"] = "pending"
+            chunk_status[cid]["last_processed_at"] = None
+            chunk_status[cid]["confidence_score"] = None
+        with open(status_file, "w", encoding="utf-8") as f:
+            json.dump(chunk_status, f, ensure_ascii=False, indent=2)
+        # 先设置 processing 状态
+        st.session_state["litmap_status"] = "processing"
+        st.session_state["litmap_progress"] = text.get("initializing_extraction", "Initializing extraction...")
+        st.session_state["litmap_errors"] = []
+        st.session_state["litmap_view_mode"] = 'new'
+        # 再清空其他相关 session_state（但不删 litmap_status 等）
+        for k in ["litmap_stats", "litmap_entities", "litmap_relations", "litmap_new_entities", "litmap_new_relations"]:
+            if k in st.session_state:
+                del st.session_state[k]
+        st.rerun()
+    elif continue_from_last:
+        st.session_state["litmap_status"] = "processing"
+        st.session_state["litmap_progress"] = text.get("initializing_extraction", "Initializing extraction...")
+        st.session_state["litmap_errors"] = []
+    elif clear_status:
+        for k in ["litmap_status", "litmap_progress", "litmap_stats", "litmap_errors"]:
+            if k in st.session_state:
+                del st.session_state[k]
+        st.experimental_rerun()
+
+    # Progress/Stats/Errors display (always visible if not idle)
+    if st.session_state.get("litmap_status") == "processing":
+        st.info(st.session_state.get("litmap_progress", ""))
+    if st.session_state.get("litmap_status") == "done":
+        stats = st.session_state.get("litmap_stats", {})
+        st.success(text.get("extraction_complete", "Extraction complete: {entities} entities, {relations} relations.").format(
+            entities=stats.get('entities', 0),
+            relations=stats.get('relations', 0)
+        ))
+        # Optionally show more stats here
+    if st.session_state.get("litmap_status") == "error":
+        errors = st.session_state.get("litmap_errors", [])
+        if errors:
+            st.error("\n".join(errors))
+
+    # --- Main processing logic (only run if status is 'processing') ---
+    if st.session_state.get("litmap_status") == "processing":
         try:
-            entities, relations = load_extraction_results(entities_file, relations_file)
-            st.session_state['litmap_entities'] = entities
-            st.session_state['litmap_relations'] = relations
-            st.success(text["loaded_existing_results"])
-        except Exception as e:
-            st.error(f"{text.get('error_loading_results', 'Error loading existing results')}: {e}")
-            return
-    elif regenerate:
-        try:
-            # 初始化进度跟踪
             progress_placeholder = st.empty()
             status_placeholder = st.empty()
-            
-            with status_placeholder.container():
-                st.info("🔄 " + text.get("initializing_extraction", "Initializing extraction..."))
-            
-            # --- Use only next unprocessed chunks ---
             process_chunks = next_chunks
             if not process_chunks:
+                st.session_state["litmap_status"] = "idle"
                 st.warning(text.get("no_unprocessed_chunks", "No unprocessed chunks to process."))
                 return
-            
-            # 限制chunks数量
-            process_chunks = all_chunks[:max_chunks] if max_chunks else all_chunks
-            
+            # 不要再覆盖 process_chunks，确保只处理未处理的chunk
             with status_placeholder.container():
-                st.info(f"📚 " + text["processing_chunks"].format(n=len(process_chunks)))
-            
-            # 初始化extractor
+                st.info(text.get("processing_chunks", "Processing {n} chunks...").format(n=len(process_chunks)))
             extractor = EntityRelationExtractor()
             extractor.reset_stats()
-            
-            # 显示预估信息
-            estimated_cost = len(process_chunks) * 0.002  # rough estimate
+            estimated_cost = len(process_chunks) * 0.002
             with status_placeholder.container():
-                st.info(f"📊 {text.get('estimated_processing', 'Estimated processing')}: {len(process_chunks)} {text.get('chunks', 'chunks')}, {text.get('estimated_time', 'estimated time')} {len(process_chunks)*2} {text.get('minutes', 'minutes')}, {text.get('estimated_cost', 'estimated cost')} ${estimated_cost:.3f}")
-            
-            # 定义进度回调函数
+                st.info(text.get('estimated_processing', 'Estimated processing: {n} chunks, estimated time {t} minutes, estimated cost ${c}').format(
+                    n=len(process_chunks),
+                    t=len(process_chunks)*2,
+                    c=f"{estimated_cost:.3f}"
+                ))
             def update_progress(progress_info):
                 current = progress_info['current']
                 total = progress_info['total']
-                chunk_id = progress_info['chunk_id']
-                entities_found = progress_info['entities_found']
-                relations_found = progress_info['relations_found']
-                stats = progress_info['stats']
-                
-                # 更新进度条
                 progress_percentage = current / total
+                msg = text.get("processing_progress", "Progress: {current}/{total} ({percent:.1%})").format(
+                    current=current, total=total, percent=progress_percentage)
+                st.session_state['litmap_progress'] = msg
                 with progress_placeholder.container():
-                    st.progress(progress_percentage, 
-                              text=f"处理进度: {current}/{total} ({progress_percentage:.1%})")
-                
-                # 更新状态信息
-                with status_placeholder.container():
-                    col1, col2, col3, col4 = st.columns(4)
-                    
-                    with col1:
-                        st.metric("当前Chunk", f"{current}/{total}")
-                        st.text(f"ID: {chunk_id[:15]}...")
-                    
-                    with col2:
-                        st.metric("本次发现", f"实体: {entities_found}")
-                        st.text(f"关系: {relations_found}")
-                    
-                    with col3:
-                        st.metric("累计统计", f"实体: {stats['total_entities']}")
-                        st.text(f"关系: {stats['total_relations']}")
-                    
-                    with col4:
-                        st.metric("资源消耗", f"API: {stats['total_api_calls']}")
-                        st.text(f"Token: {stats['total_tokens_used']}")
-                        
-                        # 计算实时成本
-                        current_cost = stats['total_tokens_used'] * 0.00015 / 1000
-                        st.text(f"费用: ${current_cost:.4f}")
-            
-            # 执行提取
+                    st.progress(progress_percentage, text=msg)
             entities, relations = extractor.extract_from_chunks(
                 process_chunks, 
                 max_chunks=max_chunks,
                 progress_callback=update_progress
             )
-            # --- Mark processed chunks in metadata ---
+            # --- FIX: Always load and update the full status file, only update processed chunks ---
+            # Load the full status file again to avoid overwriting previous progress
+            full_chunk_status = load_chunk_status()
             for c in process_chunks:
                 cid = c.get("chunk_id")
                 if cid:
-                    chunk_status[cid]["status"] = "processed"
-                    chunk_status[cid]["last_processed_at"] = datetime.datetime.now().isoformat()
+                    full_chunk_status[cid] = {
+                        "status": "processed",
+                        "last_processed_at": datetime.datetime.now().isoformat(),
+                        "confidence_score": None
+                    }
             with open(status_file, "w", encoding="utf-8") as f:
-                json.dump(chunk_status, f, ensure_ascii=False, indent=2)
-            
-            # 保存结果
-            save_extraction_results(entities, relations, litmap_folder, selected_project)
-            st.session_state['litmap_entities'] = entities
-            st.session_state['litmap_relations'] = relations
-            
-            # 获取最终统计
-            final_stats = extractor.get_stats()
-            
-            # 清除进度显示
-            progress_placeholder.empty()
-            
-            # 显示完成状态
-            with status_placeholder.container():
-                st.success("✅ " + text["extraction_complete"].format(
-                    entities=len(entities), 
-                    relations=len(relations)
-                ))
-                
-                # 详细统计报告
-                with st.expander("📊 详细处理报告", expanded=True):
-                    col_stats1, col_stats2, col_stats3 = st.columns(3)
-                    
-                    with col_stats1:
-                        st.markdown("**📈 处理统计**")
-                        st.metric("总Chunks", final_stats['total_chunks'])
-                        st.metric("成功处理", final_stats['successful_chunks'])
-                        st.metric("处理失败", final_stats['failed_chunks'])
-                        success_rate = (final_stats['successful_chunks'] / final_stats['total_chunks'] * 100) if final_stats['total_chunks'] > 0 else 0
-                        st.metric("成功率", f"{success_rate:.1f}%")
-                    
-                    with col_stats2:
-                        st.markdown("**🎯 提取结果**")
-                        st.metric("实体总数", final_stats['total_entities'])
-                        st.metric("关系总数", final_stats['total_relations'])
-                        avg_entities = final_stats['total_entities'] / final_stats['successful_chunks'] if final_stats['successful_chunks'] > 0 else 0
-                        st.metric("平均实体/Chunk", f"{avg_entities:.1f}")
-                    
-                    with col_stats3:
-                        st.markdown("**💰 资源消耗**")
-                        st.metric("API调用次数", final_stats['total_api_calls'])
-                        st.metric("Token消耗", final_stats['total_tokens_used'])
-                        st.metric("处理时间", f"{final_stats['processing_time']:.1f}秒")
-                        
-                        # 估算成本（基于GPT-4o-mini价格）
-                        input_cost = final_stats['total_tokens_used'] * 0.00015 / 1000  # $0.15/1M tokens
-                        st.metric("估算成本", f"${input_cost:.4f}")
-                    
-                    # 错误报告
-                    if final_stats['errors']:
-                        st.markdown("**⚠️ 错误报告**")
-                        error_expander = st.expander(f"查看 {len(final_stats['errors'])} 个错误")
-                        with error_expander:
-                            for i, error in enumerate(final_stats['errors'][:10]):  # 只显示前10个错误
-                                st.text(f"{i+1}. {error}")
-                            if len(final_stats['errors']) > 10:
-                                st.text(f"... 还有 {len(final_stats['errors']) - 10} 个错误")
-        
-        except Exception as e:
-            st.error(f"❌ 提取过程发生错误: {e}")
-            return
-    
-    # 只要 session_state 里有数据，直接用
-    entities = st.session_state['litmap_entities']
-    relations = st.session_state['litmap_relations']
+                json.dump(full_chunk_status, f, ensure_ascii=False, indent=2)
+            chunk_status = full_chunk_status  # for UI update
 
-    # Display results if we have them
-    if entities or relations:
-        
-        # Apply confidence filtering
-        if confidence_threshold > 0:
-            filtered_entities, filtered_relations = filter_by_confidence(
-                entities, relations, confidence_threshold
-            )
+            # --- 修正：新处理数据只放入 litmap_new_entities/relations，不动历史 ---
+            st.session_state['litmap_new_entities'] = entities
+            st.session_state['litmap_new_relations'] = relations
+            # 处理完成后自动切换到新数据预览模式
+            st.session_state['litmap_view_mode'] = 'new'
+            # 历史数据不变，只有合并时才会合并
+
+            final_stats = extractor.get_stats()
+            st.session_state['litmap_stats'] = {
+                'entities': len(entities),
+                'relations': len(relations),
+                'total_chunks': final_stats.get('total_chunks', 0),
+                'successful_chunks': final_stats.get('successful_chunks', 0),
+                'failed_chunks': final_stats.get('failed_chunks', 0),
+                'total_entities': final_stats.get('total_entities', 0),
+                'total_relations': final_stats.get('total_relations', 0),
+                'processing_time': final_stats.get('processing_time', 0),
+                'errors': final_stats.get('errors', [])
+            }
+            st.session_state['litmap_errors'] = final_stats.get('errors', [])
+            st.session_state['litmap_status'] = "done"
+            progress_placeholder.empty()
+            status_placeholder.empty()
+        except Exception as e:
+            st.session_state['litmap_errors'] = [text.get("extraction_error", "Extraction error") + f": {e}"]
+            st.session_state['litmap_status'] = "error"
+            st.error(st.session_state['litmap_errors'][0])
+            return
+
+    # --- Step 3: 新/历史数据预览与合并 ---
+    st.markdown("### 3. 数据预览与合并")
+    st.info("您可以预览本次新处理的数据，或加载全部历史数据，并决定是否合并新数据到主数据库。")
+
+    # 初始化 session_state
+    if 'litmap_new_entities' not in st.session_state:
+        st.session_state['litmap_new_entities'] = []
+    if 'litmap_new_relations' not in st.session_state:
+        st.session_state['litmap_new_relations'] = []
+    if 'litmap_view_mode' not in st.session_state:
+        st.session_state['litmap_view_mode'] = 'history'  # 'new' or 'history'
+    if 'litmap_merge_pending' not in st.session_state:
+        st.session_state['litmap_merge_pending'] = False
+
+    # 新增：每次处理新chunk后自动保存到临时文件，防止session_state丢失
+    temp_new_entities_path = os.path.join(litmap_folder, f"{selected_project}_new_entities.tmp.json")
+    temp_new_relations_path = os.path.join(litmap_folder, f"{selected_project}_new_relations.tmp.json")
+    if st.session_state.get('litmap_new_entities'):
+        with open(temp_new_entities_path, "w", encoding="utf-8") as f:
+            json.dump(st.session_state['litmap_new_entities'], f, ensure_ascii=False, indent=2)
+    if st.session_state.get('litmap_new_relations'):
+        with open(temp_new_relations_path, "w", encoding="utf-8") as f:
+            json.dump(st.session_state['litmap_new_relations'], f, ensure_ascii=False, indent=2)
+
+    col_preview, col_load_history, col_merge = st.columns(3)
+    with col_preview:
+        preview_new = st.button("预览新处理数据", key="preview_new_data")
+    with col_load_history:
+        load_history = st.button("加载全部历史数据", key="load_history_data")
+    with col_merge:
+        if st.button("合并新数据到主数据库", key="merge_new_data"):
+            st.session_state['litmap_merge_pending'] = True
+            st.rerun()
+
+    # 处理按钮逻辑
+    entities_path = os.path.join(litmap_folder, f"{selected_project}_entities.json")
+    relations_path = os.path.join(litmap_folder, f"{selected_project}_relations.json")
+
+    # 1. 预览新数据（仅显示新处理结果，不影响历史）
+    if preview_new:
+        st.session_state['litmap_view_mode'] = 'new'
+        # 新数据应在主处理逻辑后写入 session_state['litmap_new_entities']
+        # 这里仅切换视图
+
+    # 2. 加载历史数据（从磁盘读取，覆盖 session_state，切换为历史视图）
+    if load_history:
+        if os.path.exists(entities_path):
+            with open(entities_path, "r", encoding="utf-8") as f:
+                st.session_state['litmap_entities'] = json.load(f)
         else:
-            filtered_entities, filtered_relations = entities, relations
-        
-        # Create summary statistics
-        st.markdown("### " + text["step5_title"])
+            st.session_state['litmap_entities'] = []
+        if os.path.exists(relations_path):
+            with open(relations_path, "r", encoding="utf-8") as f:
+                st.session_state['litmap_relations'] = json.load(f)
+        else:
+            st.session_state['litmap_relations'] = []
+        st.session_state['litmap_view_mode'] = 'history'
+        # 清空新数据，防止干扰
+        st.session_state['litmap_new_entities'] = []
+        st.session_state['litmap_new_relations'] = []
+        st.success("已加载全部历史数据")
+        st.rerun()
+
+    # 3. 合并新数据到主数据库（去重，写入磁盘，切换为历史视图）
+    if st.session_state.get('litmap_merge_pending', False):
+        st.session_state['litmap_merge_pending'] = False  # 重置
+        # Debug: 打印新旧数据长度
+        debug_msg1 = f"[DEBUG] 合并前：历史实体数={len(st.session_state.get('litmap_entities', []))}，新实体数={len(st.session_state.get('litmap_new_entities', []))}"
+        debug_msg2 = f"[DEBUG] 合并前：历史关系数={len(st.session_state.get('litmap_relations', []))}，新关系数={len(st.session_state.get('litmap_new_relations', []))}"
+        print(debug_msg1)
+        print(debug_msg2)
+        st.write(debug_msg1)
+        st.write(debug_msg2)
+        # 合并前强制从磁盘加载历史数据，防止 session_state 被清空
+        if os.path.exists(entities_path):
+            with open(entities_path, "r", encoding="utf-8") as f:
+                disk_entities = json.load(f)
+        else:
+            disk_entities = []
+        if os.path.exists(relations_path):
+            with open(relations_path, "r", encoding="utf-8") as f:
+                disk_relations = json.load(f)
+        else:
+            disk_relations = []
+        # 新增：合并时优先从临时文件读取新数据，防止session_state丢失
+        if os.path.exists(temp_new_entities_path):
+            with open(temp_new_entities_path, "r", encoding="utf-8") as f:
+                new_entities = json.load(f)
+        else:
+            new_entities = st.session_state.get('litmap_new_entities', [])
+        if os.path.exists(temp_new_relations_path):
+            with open(temp_new_relations_path, "r", encoding="utf-8") as f:
+                new_relations = json.load(f)
+        else:
+            new_relations = st.session_state.get('litmap_new_relations', [])
+        # 合并并去重
+        # Robust deduplication for entities and relations
+        def dedup_items(items, item_type):
+            seen = set()
+            result = []
+            for item in items:
+                if 'id' in item and item['id']:
+                    key = f"{item['id']}"
+                elif item_type == 'entity':
+                    key = f"{item.get('name','')}|{item.get('type','')}"
+                elif item_type == 'relation':
+                    key = f"{item.get('subject','')}|{item.get('object','')}|{item.get('relation_type','')}"
+                else:
+                    key = str(item)
+                if key not in seen:
+                    seen.add(key)
+                    result.append(item)
+            return result
+        # 合并
+        all_entities = disk_entities + new_entities
+        all_relations = disk_relations + new_relations
+        debug_msg3 = f"[DEBUG] 合并后实体数={len(all_entities)}，合并后关系数={len(all_relations)}"
+        print(debug_msg3)
+        st.write(debug_msg3)
+        # 去重
+        all_entities = dedup_items(all_entities, 'entity')
+        all_relations = dedup_items(all_relations, 'relation')
+        debug_msg4 = f"[DEBUG] 去重后实体数={len(all_entities)}，去重后关系数={len(all_relations)}"
+        print(debug_msg4)
+        st.write(debug_msg4)
+        # 保存
+        with open(entities_path, "w", encoding="utf-8") as f:
+            json.dump(all_entities, f, ensure_ascii=False, indent=2)
+        with open(relations_path, "w", encoding="utf-8") as f:
+            json.dump(all_relations, f, ensure_ascii=False, indent=2)
+        st.session_state['litmap_entities'] = all_entities
+        st.session_state['litmap_relations'] = all_relations
+        st.session_state['litmap_new_entities'] = []
+        st.session_state['litmap_new_relations'] = []
+        st.session_state['litmap_view_mode'] = 'history'
+        # 合并后清理临时文件
+        if os.path.exists(temp_new_entities_path):
+            os.remove(temp_new_entities_path)
+        if os.path.exists(temp_new_relations_path):
+            os.remove(temp_new_relations_path)
+        msg = f"新数据已合并到主数据库并保存！共{len(all_entities)}个实体，{len(all_relations)}条关系。"
+        print(msg)
+        st.success(msg)
+        st.rerun()
+    
+    # --- 选择数据源：新 or 历史 ---
+    if st.session_state.get('litmap_view_mode') == 'new':
+        entities = st.session_state.get('litmap_new_entities', [])
+        relations = st.session_state.get('litmap_new_relations', [])
+        st.info("当前显示：新处理数据（未合并）")
+    else:
+        entities = st.session_state.get('litmap_entities', [])
+        relations = st.session_state.get('litmap_relations', [])
+        st.info("当前显示：历史数据（已合并/保存）")
+
+    # --- step 4/5: 后续统计和可视化全部用 entities/relations 变量 ---
+    # --- Step 4: 统计 ---
+    if entities or relations:
+        st.markdown("### " + text["step4_title"])
         
         col_stats1, col_stats2 = st.columns(2)
         
         with col_stats1:
-            st.metric(text["total_entities"], len(filtered_entities))
-            st.metric(text["total_relations"], len(filtered_relations))
+            st.metric(text["total_entities"], len(entities))
+            st.metric(text["total_relations"], len(relations))
         
         with col_stats2:
             if entities:
-                avg_entity_confidence = sum(e.get('confidence', 0) for e in filtered_entities) / len(filtered_entities)
+                avg_entity_confidence = sum(e.get('confidence', 0) for e in entities) / len(entities)
                 st.metric(text["avg_entity_confidence"], f"{avg_entity_confidence:.3f}")
             
             if relations:
-                avg_relation_confidence = sum(r.get('confidence', 0) for r in filtered_relations) / len(filtered_relations)
+                avg_relation_confidence = sum(r.get('confidence', 0) for r in relations) / len(relations)
                 st.metric(text["avg_relation_confidence"], f"{avg_relation_confidence:.3f}")
         
-        # Summary tables
-        summary_dfs = None
-        # Patch: Ensure all relations have 'relation', 'source', 'target' key
-        missing_relation_key = False
-        missing_source_key = False
-        missing_target_key = False
-        patched_relations = []
-        for r in filtered_relations:
-            r = dict(r)  # copy
-            if 'relation' not in r:
-                missing_relation_key = True
-                r['relation'] = 'unknown'
-            if 'source' not in r:
-                missing_source_key = True
-                r['source'] = 'unknown'
-            if 'target' not in r:
-                missing_target_key = True
-                r['target'] = 'unknown'
-            patched_relations.append(r)
-        if missing_relation_key or missing_source_key or missing_target_key:
-            st.warning("Some relations are missing required fields ('relation', 'source', 'target'). They have been filled as 'unknown'. Please check your extraction logic.")
-        summary_dfs = create_summary_dataframes(filtered_entities, patched_relations)
-        
-        col_table1, col_table2 = st.columns(2)
-        
-        with col_table1:
-            st.markdown("#### " + text["entity_summary"])
-            if not summary_dfs['entities'].empty:
-                st.dataframe(summary_dfs['entities'], use_container_width=True)
-            else:
-                # 检查是否所有实体的'type'字段都为'unknown'或缺失
-                type_list = [e.get('type', 'unknown') for e in filtered_entities]
-                if type_list and all(t == 'unknown' or not t for t in type_list):
-                    st.warning('所有实体的type字段均为unknown或缺失，统计图无法分类。请检查实体抽取和type字段赋值逻辑。')
-                else:
-                    st.info(text["no_entities"])
-        
-        with col_table2:
-            st.markdown("#### " + text["relation_summary"])
-            if not summary_dfs['relations'].empty:
-                st.dataframe(summary_dfs['relations'], use_container_width=True)
-            else:
-                st.info(text["no_relations"])
-        
         # Most connected entities
-        if filtered_relations:
+        if relations:
             st.markdown("#### " + text["most_connected"])
-            connected_entities = get_most_connected_entities(filtered_relations, top_n=10)
+            connected_entities = get_most_connected_entities(relations, top_n=10)
             connected_df = pd.DataFrame(connected_entities)
             st.dataframe(connected_df, use_container_width=True)
         
-        # Step 6: 知识图谱可视化
-        st.markdown("### " + text["step6_title"])
+        # --- Step 5: 可视化 ---
+        st.markdown("### " + text["step5_title"])
         
-        if filtered_entities and filtered_relations:
+        if entities and relations:
             try:
                 # Build graph
                 with st.spinner(text["building_graph"]):
                     builder = KnowledgeGraphBuilder()
-                    graph = builder.build_graph(filtered_entities, filtered_relations)
+                    graph = builder.build_graph(entities, relations)
                     
                     # Filter graph if needed
                     if selected_entity_types or selected_relation_types:
