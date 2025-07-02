@@ -50,7 +50,10 @@ class KnowledgeGraphVisualizer:
         var options = {
           "interaction": {
             "hover": true,
-            "tooltipDelay": 200
+            "tooltipDelay": 200,
+            "dragNodes": true,
+            "navigationButtons": true,
+            "keyboard": true
           },
           "nodes": {
             "shape": "dot",
@@ -58,7 +61,31 @@ class KnowledgeGraphVisualizer:
           },
           "physics": {
             "enabled": %s,
-            "stabilization": {"iterations": 100}
+            "stabilization": {"iterations": 100},
+            "barnesHut": {
+              "gravitationalConstant": -30000,
+              "centralGravity": 0.2,
+              "springLength": 180,
+              "springConstant": 0.04,
+              "damping": 0.09,
+              "avoidOverlap": 1
+            }
+          },
+          "edges": {
+            "smooth": {
+              "type": "dynamic"
+            },
+            "arrows": {
+              "to": {"enabled": true, "scaleFactor": 1.2}
+            }
+          },
+          "manipulation": false,
+          "layout": {
+            "improvedLayout": true
+          },
+          "fullscreen": {
+            "enabled": true,
+            "button": true
           }
         }
         """ % ("true" if physics else "false"))
@@ -73,21 +100,13 @@ class KnowledgeGraphVisualizer:
             color = node_colors.get(node_type, '#95A5A6')
             degree = graph.degree(node)
             size = max(10, min(50, 10 + degree * 3))
-            # 只保留一份内容，且只用 <br>，不再拼接 \n 版本，避免重复
-            def safe_trunc(val, maxlen=120):
-                if not val:
-                    return ''
-                val = str(val)
-                return val if len(val) <= maxlen else val[:maxlen] + '...'
-            title = f"{safe_trunc(node, 60)}<br>Type: {safe_trunc(node_type)}<br>Connections: {degree}"
+            # 简洁tooltip：只显示置信度和DOI（如有），不显示label/type/degree/description/source_papers
+            tooltip_parts = []
             if 'confidence' in data:
-                title += f"<br>Confidence: {data['confidence']:.2f}"
-            if data.get('description'):
-                title += f"<br>Description: {safe_trunc(data['description'], 200)}"
-            if data.get('source_papers'):
-                title += f"<br>Source Papers: {safe_trunc(data['source_papers'], 200)}"
+                tooltip_parts.append(f"Confidence: {data['confidence']:.2f}")
             if data.get('doi'):
-                title += f"<br>DOI: {safe_trunc(data['doi'], 100)}"
+                tooltip_parts.append(f"DOI: {data['doi']}")
+            title = " | ".join(tooltip_parts) if tooltip_parts else ""
             net.add_node(
                 node,
                 label=node,
@@ -101,12 +120,12 @@ class KnowledgeGraphVisualizer:
         for u, v, data in graph.edges(data=True):
             relation = data.get('relation', 'relates_to')
             color = edge_colors.get(relation, '#95A5A6')
-            
+            # 边tooltip只显示关系类型
             net.add_edge(
                 u, v,
                 label=relation,
                 color=color,
-                title=f"Relation: {relation}"
+                title=relation
             )
         
         return net
