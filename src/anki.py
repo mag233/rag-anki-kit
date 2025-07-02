@@ -124,28 +124,66 @@ def export_llm_cards_to_csv(
     output_path: str
 ) -> str:
     """
-    将LLM输出（表格形式）保存为csv文件。
+    将LLM输出（竖线分隔格式）保存为标准CSV文件。
     """
     import csv
-    import io
     from datetime import datetime
 
     if not llm_response.strip():
         raise ValueError("LLM response is empty, nothing to export.")
 
+    # 解析竖线分隔的内容
+    lines = llm_response.strip().split('\n')
+    rows = []
+    for line in lines:
+        if line.strip():
+            if '|' in line:
+                row = [cell.strip() for cell in line.split('|')]
+            else:
+                # fallback到逗号分隔符处理
+                import io
+                try:
+                    reader = csv.reader(io.StringIO(line))
+                    row = next(reader)
+                except:
+                    row = [line.strip()]
+            
+            if any(cell.strip() for cell in row):
+                rows.append(row)
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"anki_cards_{timestamp}.csv"
     filepath = os.path.join(output_path, filename)
+    
+    # 写入标准CSV格式
     with open(filepath, "w", newline="", encoding="utf-8") as f:
-        reader = csv.reader(io.StringIO(llm_response))
         writer = csv.writer(f)
-        for row in reader:
+        for row in rows:
             writer.writerow(row)
+    
     return filepath
 
 def parse_csv_to_table(csv_content: str):
     """
-    解析LLM生成的CSV文本为表格，便于预览。
+    解析LLM生成的文本为表格，支持竖线分隔符，便于预览。
     """
-    reader = csv.reader(io.StringIO(csv_content))
-    return [row for row in reader if any(cell.strip() for cell in row)]
+    lines = csv_content.strip().split('\n')
+    rows = []
+    for line in lines:
+        if line.strip():
+            # 首先尝试竖线分隔符
+            if '|' in line:
+                row = [cell.strip() for cell in line.split('|')]
+            else:
+                # fallback到逗号分隔符
+                import csv
+                import io
+                try:
+                    reader = csv.reader(io.StringIO(line))
+                    row = next(reader)
+                except:
+                    row = [line.strip()]
+            
+            if any(cell.strip() for cell in row):
+                rows.append(row)
+    return rows

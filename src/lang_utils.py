@@ -240,7 +240,11 @@ Generate reference according formal academic writing style [Chicago style], incl
             "error_generating": "生成卡片出错: {err}" if lang == "中文" else "Error generating cards: {err}",
             "export_csv": "导出为CSV" if lang == "中文" else "Export to CSV",
             "csv_saved": "CSV文件已保存至: {path}" if lang == "中文" else "CSV file saved to: {path}",
-            "download_cards": "下载卡片" if lang == "中文" else "Download Cards"
+            "download_cards": "下载卡片" if lang == "中文" else "Download Cards",
+            "cards_generated_success": "✅ 成功生成 {count} 张卡片" if lang == "中文" else "✅ Successfully generated {count} cards",
+            "invalid_card_data": "无法解析任何有效的卡片数据" if lang == "中文" else "Unable to parse any valid card data",
+            "invalid_row_format": "第 {row_num} 行格式不正确: {row}" if lang == "中文" else "Row {row_num} format incorrect: {row}",
+            "no_valid_csv": "LLM没有返回有效的CSV格式数据" if lang == "中文" else "LLM did not return valid CSV format data"
         },
         "litmap_tab": {
             "header": "LitMap Knowledge Graph",

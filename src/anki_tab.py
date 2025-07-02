@@ -12,6 +12,26 @@ from lang_utils import get_text  # 新增
 def render_anki_tab(PROJECTS_DIR, lang):
     text = get_text(lang)["anki_tab"]
 
+    # Add CSS for better table display with text wrapping
+    st.markdown("""
+    <style>
+    .stDataFrame {
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+    }
+    .stDataFrame [data-testid="stDataFrame"] > div {
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+    }
+    .stDataFrame [data-testid="stDataFrame"] div[data-testid="column"] div {
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        max-height: 150px !important;
+        overflow-y: auto !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     st.header(text["header"])
 
     # 1. 读取所有项目
@@ -191,7 +211,8 @@ def render_anki_tab(PROJECTS_DIR, lang):
                     num_cards=num_cards,
                     top_k=top_k,
                     relevance_threshold=relevance_threshold,
-                    optimize_prompt=True  # 总是使用优化
+                    optimize_prompt=True,  # 总是使用优化
+                    lang=lang  # 传递语言参数
                 )
                 st.subheader(text["llm_output"])
                 rows = parse_csv_to_table(llm_response)
@@ -222,20 +243,68 @@ def render_anki_tab(PROJECTS_DIR, lang):
                             elif len(row) == 1:
                                 df_data.append([row[0], "", ""])
                             else:
-                                st.warning(f"第 {i+1} 行格式不正确: {row}")
+                                st.warning(text["invalid_row_format"].format(row_num=i+1, row=row))
                         
                         if df_data:
                             df = pd.DataFrame(df_data, columns=headers)
-                            st.dataframe(df, use_container_width=True)
-                            st.success(f"✅ 成功生成 {len(df_data)} 张卡片")
+                            
+                            # Configure column display for better text wrapping
+                            column_config = {
+                                headers[0]: st.column_config.TextColumn(
+                                    headers[0],
+                                    width="medium",
+                                    help="Question content"
+                                ),
+                                headers[1]: st.column_config.TextColumn(
+                                    headers[1],
+                                    width="large",
+                                    help="Answer content"
+                                ),
+                                headers[2]: st.column_config.TextColumn(
+                                    headers[2],
+                                    width="medium",
+                                    help="Extra information"
+                                )
+                            }
+                            
+                            st.dataframe(
+                                df, 
+                                use_container_width=True,
+                                column_config=column_config,
+                                height=400,  # Set a fixed height to enable scrolling
+                                hide_index=True
+                            )
+                            st.success(text["cards_generated_success"].format(count=len(df_data)))
                         else:
-                            st.error("无法解析任何有效的卡片数据")
-                            st.table(rows)
+                            st.error(text["invalid_card_data"])
+                            # Display raw data in a DataFrame for better formatting
+                            if rows:
+                                fallback_df = pd.DataFrame(rows[1:], columns=rows[0] if rows else ["Data"])
+                                st.dataframe(fallback_df, use_container_width=True, height=300)
+                            else:
+                                st.table(rows)
                     else:
-                        # Cloze类型直接显示
-                        st.table(rows)
+                        # Cloze类型直接显示，也使用DataFrame改善显示
+                        if rows and len(rows) > 1:
+                            # Try to create a single-column DataFrame for Cloze content
+                            cloze_df = pd.DataFrame(rows[1:], columns=["Cloze Content"])
+                            st.dataframe(
+                                cloze_df, 
+                                use_container_width=True,
+                                height=400,
+                                hide_index=True,
+                                column_config={
+                                    "Cloze Content": st.column_config.TextColumn(
+                                        "Cloze Content",
+                                        width="large",
+                                        help="Cloze deletion content"
+                                    )
+                                }
+                            )
+                        else:
+                            st.table(rows)
                 else:
-                    st.error("LLM没有返回有效的CSV格式数据")
+                    st.error(text["no_valid_csv"])
                     st.info(text["no_content_preview"])
 
                 st.session_state["anki_llm_response"] = llm_response

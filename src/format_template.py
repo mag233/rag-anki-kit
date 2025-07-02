@@ -10,15 +10,23 @@ CARD_FORMAT_PROMPT = """
 
 请严格按照以下CSV表格格式输出（不需要表头）：
 
-- 若为"Q&A"类型，每行格式为：1 详细描述的问题,2 详细的答案，计算题要有过程和anki友好的公式模型, 3 补充的相关背景信息
+- 若为"Q&A"类型，每行格式为：问题|答案|补充信息
+  * 问题：清晰具体的问题，避免过于宽泛
+  * 答案：详细完整的答案，包含关键要点、解释和步骤。对于概念题，需要包含定义、特点、应用等；对于计算题，需要包含完整计算过程和公式
+  * 补充信息：相关概念、实例、数据、背景知识、应用场景或延伸阅读，帮助深入理解
+
 - 若为"Cloze"类型，每行格式为：填空句子（使用{{c1::...}}格式标记需要隐藏的内容）
 
-注意事项：
-- 不要输出除CSV内容以外的任何文字。
-- 问题和答案或填空句子之间用英文逗号分隔。
-- 根据提供的上下文内容，生成相关的学习卡片。不得使用上下文内容以外的内容。
-- 生成的卡片要具有规定的的难度和细节程度，适合不同水平的学习者。
-- 不需要标题行。
+重要格式要求：
+- 使用竖线"|"作为字段分隔符，不要使用逗号
+- 如果内容中包含竖线，请用"丨"（中文竖线）替代
+- 不要输出除CSV内容以外的任何文字，包括```csv等标记
+- 根据提供的上下文内容生成卡片，不得添加上下文以外的内容
+- 答案长度应为150-300字，补充信息应为100-200字
+- 不需要标题行
+
+示例格式：
+什么是知识管理？|知识管理是指组织系统地收集、组织、共享和应用知识的过程，旨在提高组织的学习能力和创新能力。它包括显性知识和隐性知识的管理，通过建立知识库、专家网络等方式实现知识的有效利用。|知识管理在企业中的应用包括最佳实践分享、专家经验传承、创新管理等。著名的知识管理模型包括SECI模型（社会化、外化、组合、内化）和知识螺旋理论。
 """
 
 CARD_FORMAT_PROMPT_EN = """
@@ -29,24 +37,25 @@ User query: {query}
 Relevant content:
 {context}
 
-Strictly output in the following CSV format (no header):
+Strictly output in the following format (no header):
 
-- For "Q&A" type: each line as Question,Answer,Extra Info
-- For "Cloze" type: each line as a cloze sentence (use {{c1::...}} to mark hidden content)
+- For "Q&A" type: Question|Answer|Extra Info
+  * Question: Clear and specific question, avoid being too broad
+  * Answer: Detailed and comprehensive answer including key points, explanations, and steps. For concepts, include definitions, characteristics, and applications; for calculations, include complete process and formulas
+  * Extra Info: Related concepts, examples, data, background knowledge, application scenarios, or further reading to enhance understanding
 
-Notes:
-- Do NOT output anything except the CSV content.
-- Use a comma to separate question and answer or cloze sentences.
-- Only use the provided context content; do not invent additional information.
-- The cards should be sufficiently detailed and challenging for learners at specified levels.
-- No title rows needed.
+- For "Cloze" type: Cloze sentence (use {{c1::...}} to mark hidden content)
 
-Q&A Example:
-who am I?, I am a cat.,This explains my behavior.
-Cloze Example:
-I am a {{c1::cat}}.,This explains my behavior.
+Important formatting requirements:
+- Use vertical bar "|" as field separator, NOT commas
+- If content contains vertical bars, replace with "丨" (Chinese vertical bar)
+- Do NOT output anything except the content, including ```csv markers
+- Only use the provided context content; do not add external information
+- Answer length should be 150-300 characters, Extra Info should be 100-200 characters
+- No title rows needed
 
-Do not include any additional text or symbols such as ```csv.
+Example format:
+What is knowledge management?|Knowledge management refers to the systematic process of collecting, organizing, sharing, and applying knowledge within an organization to enhance learning and innovation capabilities. It encompasses both explicit and tacit knowledge management through knowledge bases, expert networks, and other mechanisms.|Applications include best practice sharing, expert knowledge transfer, and innovation management. Famous models include the SECI model (Socialization, Externalization, Combination, Internalization) and knowledge spiral theory.
 """
 
 SUMMARIZE_PROMPT = """
