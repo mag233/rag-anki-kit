@@ -247,16 +247,16 @@ Generate reference according formal academic writing style [Chicago style], incl
             "no_valid_csv": "LLM没有返回有效的CSV格式数据" if lang == "中文" else "LLM did not return valid CSV format data"
         },
         "litmap_tab": {
-            "header": "LitMap Knowledge Graph",
-            "description": "Build and visualize a knowledge graph from your research literature. Process, review, and merge entity/relation data with full control.",
-            "step1_title": "Step 1: Select Project",
-            "step1_info": "Select a project to build and review the knowledge graph. Make sure you have processed your PDFs in the RAG tab.",
-            "no_projects": "No projects found. Please create a project in the RAG tab first.",
-            "select_project": "Select Project:",
-            "no_project": "Please select a project.",
-            "no_chunks_warning": "No processed chunks found. Please preprocess files in the RAG tab first.",
-            "step2_title": "Step 2: Configure Extraction Settings",
-            "step2_info": "Set up entity/relation types, deduplication, and other extraction parameters.",
+            "header": "LitMap 知识图谱" if lang == "中文" else "LitMap Knowledge Graph",
+            "description": "从研究文献构建和可视化知识图谱。处理、审查和合并实体/关系数据，完全可控。" if lang == "中文" else "Build and visualize a knowledge graph from your research literature. Process, review, and merge entity/relation data with full control.",
+            "step1_title": "步骤1：选择项目" if lang == "中文" else "Step 1: Select Project",
+            "step1_info": "选择一个项目来构建和审查知识图谱。确保您已在RAG标签页中处理了PDF文件。" if lang == "中文" else "Select a project to build and review the knowledge graph. Make sure you have processed your PDFs in the RAG tab.",
+            "no_projects": "未找到项目。请先在RAG标签页中创建项目。" if lang == "中文" else "No projects found. Please create a project in the RAG tab first.",
+            "select_project": "选择项目：" if lang == "中文" else "Select Project:",
+            "no_project": "请选择一个项目。" if lang == "中文" else "Please select a project.",
+            "no_chunks_warning": "未找到已处理的文本块。请先在RAG标签页中预处理文件。" if lang == "中文" else "No processed chunks found. Please preprocess files in the RAG tab first.",
+            "step2_title": "步骤2：配置提取设置" if lang == "中文" else "Step 2: Configure Extraction Settings",
+            "step2_info": "设置实体/关系类型、去重和其他提取参数。" if lang == "中文" else "Set up entity/relation types, deduplication, and other extraction parameters.",
             "progress_label": "Progress",
             "last_processed_at": "Last processed at",
             "max_chunks": "Maximum Chunks to Process",
@@ -304,8 +304,50 @@ Generate reference according formal academic writing style [Chicago style], incl
             "total_relations": "Total Relations",
             "avg_entity_confidence": "Avg. Entity Confidence",
             "avg_relation_confidence": "Avg. Relation Confidence",
-            "most_connected": "Most Connected Entities",
-            "no_connected_entities": "No connected entities found.",
+            "most_connected": "最关联实体" if lang == "中文" else "Most Connected Entities",
+            "no_connected_entities": "未找到关联实体。" if lang == "中文" else "No connected entities found.",
+            "entity_name": "实体名称" if lang == "中文" else "Entity Name",
+            "entity_type": "类型" if lang == "中文" else "Type", 
+            "total_connections": "总连接数" if lang == "中文" else "Total Connections",
+            "as_source": "作为源" if lang == "中文" else "As Source",
+            "as_target": "作为目标" if lang == "中文" else "As Target",
+            "unique_partners": "独特伙伴数" if lang == "中文" else "Unique Partners",
+            "relation_diversity": "关系类型数" if lang == "中文" else "Relation Types",
+            "avg_confidence": "平均置信度" if lang == "中文" else "Avg Confidence",
+            "influence_score": "影响力评分" if lang == "中文" else "Influence Score",
+            "most_connected_explanation": "📊 理解最关联实体" if lang == "中文" else "📊 Understanding Most Connected Entities",
+            "detailed_table": "📊 详细分析" if lang == "中文" else "📊 Detailed Analysis",
+            "summary_cards": "📋 概览卡片" if lang == "中文" else "📋 Summary Cards",
+            "relation_types": "关系类型" if lang == "中文" else "Relationship Types",
+            "connected_entities_help": """
+**影响力评分**：总连接数与平均置信度的组合权重
+- **总连接数**：此实体参与了多少个关系
+- **作为源/目标**：关系的方向性（主动vs被动角色）
+- **独特伙伴数**：连接到的不同实体数量
+- **关系类型数**：不同关系类型的数量
+- **平均置信度**：AI提取实体的平均置信度
+
+影响力评分高的实体通常是您文献中的核心概念、关键方法或重要研究主题。
+
+**颜色编码：**
+- 🔥 **高影响力** (评分 ≥ 10)：核心研究概念
+- ⭐ **中等影响力** (评分 5-10)：重要支撑概念  
+- 📍 **新兴概念** (评分 < 5)：特定或细分概念
+            """ if lang == "中文" else """
+**Influence Score**: Combination of total connections weighted by average confidence
+- **Total Connections**: How many relationships this entity participates in
+- **As Source/Target**: Direction of relationships (active vs passive role)
+- **Unique Partners**: Number of different entities connected to
+- **Relation Diversity**: Number of different relationship types
+- **Avg Confidence**: Average AI confidence in entity extraction
+
+Entities with high influence scores are typically central concepts, key methodologies, or important research topics in your literature.
+
+**Color Coding:**
+- 🔥 **High Impact** (Score ≥ 10): Core research concepts
+- ⭐ **Moderate Impact** (Score 5-10): Important supporting concepts  
+- 📍 **Emerging** (Score < 5): Specific or niche concepts
+            """,
             "step5_title": "Step 5: Visualization",
             "building_graph": "Building knowledge graph...",
             "graph_nodes": "Graph Nodes",

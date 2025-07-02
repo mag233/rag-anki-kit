@@ -133,27 +133,95 @@ def filter_by_confidence(entities: List[Dict], relations: List[Dict],
     return filtered_entities, filtered_relations
 
 
-def get_most_connected_entities(relations: List[Dict], top_n: int = 10) -> List[Dict]:
+def get_most_connected_entities(relations: List[Dict], entities: List[Dict] = None, top_n: int = 10) -> List[Dict]:
     """
-    Get entities with the most connections (degree centrality).
+    Get entities with the most connections and comprehensive analysis metrics.
     
     Args:
         relations: List of relations
+        entities: List of entities (optional, for additional metadata)
         top_n: Number of top entities to return
         
     Returns:
-        List of most connected entities with counts
+        List of most connected entities with detailed analysis
     """
     from collections import defaultdict
     
-    # Count how many times each entity appears as source or target
-    entity_counts = defaultdict(int)
+    # Create entity lookup for metadata
+    entity_lookup = {}
+    if entities:
+        for entity in entities:
+            name = entity.get('name', '')
+            entity_lookup[name] = entity
+    
+    # Analyze connections and relationships
+    entity_stats = defaultdict(lambda: {
+        'total_connections': 0,
+        'as_source': 0,
+        'as_target': 0,
+        'relation_types': set(),
+        'unique_partners': set(),
+        'avg_confidence': 0.0,
+        'confidence_scores': []
+    })
     
     for relation in relations:
-        entity_counts[relation.get('source', '')] += 1
-        entity_counts[relation.get('target', '')] += 1
+        # Support both 'subject'/'object' and 'source'/'target' field names
+        source = relation.get('subject', '') or relation.get('source', '')
+        target = relation.get('object', '') or relation.get('target', '')
+        relation_type = relation.get('relation_type', '') or relation.get('relation', '')
+        confidence = relation.get('confidence', 0.0)
+        
+        if source:
+            stats = entity_stats[source]
+            stats['total_connections'] += 1
+            stats['as_source'] += 1
+            stats['relation_types'].add(relation_type)
+            stats['unique_partners'].add(target)
+            stats['confidence_scores'].append(confidence)
+            
+        if target:
+            stats = entity_stats[target]
+            stats['total_connections'] += 1
+            stats['as_target'] += 1
+            stats['relation_types'].add(relation_type)
+            stats['unique_partners'].add(source)
+            stats['confidence_scores'].append(confidence)
     
-    # Sort by count and return top N
-    sorted_entities = sorted(entity_counts.items(), key=lambda x: x[1], reverse=True)
+    # Calculate final metrics and prepare results
+    results = []
+    for entity_name, stats in entity_stats.items():
+        if not entity_name:
+            continue
+            
+        # Calculate average confidence
+        if stats['confidence_scores']:
+            stats['avg_confidence'] = sum(stats['confidence_scores']) / len(stats['confidence_scores'])
+        
+        # Get entity metadata
+        entity_info = entity_lookup.get(entity_name, {})
+        entity_type = entity_info.get('type', 'unknown')
+        description = entity_info.get('description', '')
+        
+        # Calculate influence score (combination of connections and confidence)
+        influence_score = stats['total_connections'] * (stats['avg_confidence'] + 0.5)
+        
+        result = {
+            'entity': entity_name,
+            'type': entity_type,
+            'description': description[:100] + '...' if len(description) > 100 else description,
+            'total_connections': stats['total_connections'],
+            'as_source': stats['as_source'],
+            'as_target': stats['as_target'],
+            'unique_partners': len(stats['unique_partners']),
+            'relation_diversity': len(stats['relation_types']),
+            'avg_confidence': round(stats['avg_confidence'], 3),
+            'influence_score': round(influence_score, 2),
+            'relation_types': list(stats['relation_types'])
+        }
+        results.append(result)
     
-    return [{'entity': entity, 'connections': count} for entity, count in sorted_entities[:top_n]]
+    # Sort by influence score (connections weighted by confidence)
+    results.sort(key=lambda x: x['influence_score'], reverse=True)
+    
+    return results[:top_n]

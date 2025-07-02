@@ -544,13 +544,130 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             if relations:
                 avg_relation_confidence = sum(r.get('confidence', 0) for r in relations) / len(relations)
                 st.metric(text["avg_relation_confidence"], f"{avg_relation_confidence:.3f}")
-        # Most connected entities (improved)
-        if relations:
+        # Most connected entities (enhanced with comprehensive analysis)
+        if relations and entities:
             st.subheader(clean_title(text['most_connected']))
-            connected_entities = get_most_connected_entities(relations, top_n=10)
+            
+            connected_entities = get_most_connected_entities(relations, entities, top_n=10)
+            
             if connected_entities and any(e['entity'] for e in connected_entities):
-                connected_df = pd.DataFrame(connected_entities)
-                st.dataframe(connected_df, use_container_width=True)
+                # Create tabs for different views
+                tab1, tab2 = st.tabs([
+                    text.get("detailed_table", "📊 Detailed Analysis"), 
+                    text.get("summary_cards", "📋 Summary Cards")
+                ])
+                
+                with tab1:
+                    # Create a more informative dataframe
+                    display_data = []
+                    for entity in connected_entities:
+                        display_data.append({
+                            text.get("entity_name", "Entity"): entity['entity'],
+                            text.get("entity_type", "Type"): entity['type'],
+                            text.get("total_connections", "Total Connections"): entity['total_connections'],
+                            text.get("as_source", "As Source"): entity['as_source'],
+                            text.get("as_target", "As Target"): entity['as_target'],
+                            text.get("unique_partners", "Unique Partners"): entity['unique_partners'],
+                            text.get("relation_diversity", "Relation Types"): entity['relation_diversity'],
+                            text.get("avg_confidence", "Avg Confidence"): f"{entity['avg_confidence']:.3f}",
+                            text.get("influence_score", "Influence Score"): f"{entity['influence_score']:.2f}"
+                        })
+                    
+                    connected_df = pd.DataFrame(display_data)
+                    st.dataframe(connected_df, use_container_width=True)
+                
+                with tab2:
+                    # Create visually appealing cards for top entities
+                    for i, entity in enumerate(connected_entities[:6]):  # Show top 6 in cards
+                        with st.container():
+                            # Color coding based on influence score
+                            influence = entity['influence_score']
+                            if influence >= 10:
+                                color = "🔥"
+                                border_color = "#FF6B6B"
+                            elif influence >= 5:
+                                color = "⭐"
+                                border_color = "#4ECDC4"
+                            else:
+                                color = "📍"
+                                border_color = "#95A5A6"
+                            
+                            # Create custom styled container
+                            st.markdown(f"""
+                            <div style="
+                                border: 2px solid {border_color}; 
+                                border-radius: 10px; 
+                                padding: 15px; 
+                                margin: 10px 0;
+                                background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.9));
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                            ">
+                                <h4 style="margin: 0; color: #2C3E50;">
+                                    {color} <strong>{entity['entity']}</strong>
+                                    <span style="float: right; font-size: 0.8em; color: #7F8C8D;">
+                                        {text.get('influence_score', 'Influence')}: {entity['influence_score']:.1f}
+                                    </span>
+                                </h4>
+                                <p style="margin: 5px 0; color: #7F8C8D; font-style: italic;">
+                                    <strong>{text.get('entity_type', 'Type')}:</strong> {entity['type']}
+                                </p>
+                                {f'<p style="margin: 5px 0; color: #5D6D7E; font-size: 0.9em;">{entity["description"]}</p>' if entity.get('description') else ''}
+                            </div>
+                            """, unsafe_allow_html=True)
+                            
+                            # Metrics in columns
+                            col1, col2, col3, col4 = st.columns(4)
+                            with col1:
+                                st.metric(
+                                    text.get("total_connections", "Connections"), 
+                                    entity['total_connections']
+                                )
+                            with col2:
+                                st.metric(
+                                    text.get("unique_partners", "Partners"), 
+                                    entity['unique_partners']
+                                )
+                            with col3:
+                                st.metric(
+                                    text.get("relation_diversity", "Rel. Types"), 
+                                    entity['relation_diversity']
+                                )
+                            with col4:
+                                st.metric(
+                                    text.get("avg_confidence", "Confidence"), 
+                                    f"{entity['avg_confidence']:.3f}"
+                                )
+                            
+                            # Show relationship types as tags
+                            if entity.get('relation_types'):
+                                st.markdown("**" + text.get("relation_types", "Relationship Types") + ":**")
+                                relation_tags = " ".join([
+                                    f'<span style="background-color: #E8F4FD; color: #1B4F72; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; margin: 2px;">{rel_type}</span>'
+                                    for rel_type in entity['relation_types'][:5]  # Show max 5 types
+                                ])
+                                if len(entity['relation_types']) > 5:
+                                    relation_tags += f' <span style="color: #7F8C8D; font-size: 0.8em;">+{len(entity["relation_types"]) - 5} more</span>'
+                                st.markdown(relation_tags, unsafe_allow_html=True)
+                            
+                            st.markdown("---")
+                
+                # Add explanatory section
+                with st.expander(text.get("most_connected_explanation", "📊 Understanding Most Connected Entities")):
+                    st.markdown(text.get("connected_entities_help", """
+                    **Influence Score**: Combination of total connections weighted by average confidence
+                    - **Total Connections**: How many relationships this entity participates in
+                    - **As Source/Target**: Direction of relationships (active vs passive role)
+                    - **Unique Partners**: Number of different entities connected to
+                    - **Relation Diversity**: Number of different relationship types
+                    - **Avg Confidence**: Average AI confidence in entity extraction
+                    
+                    Entities with high influence scores are typically central concepts, key methodologies, or important research topics in your literature.
+                    
+                    **Color Coding:**
+                    - 🔥 **High Impact** (Score ≥ 10): Core research concepts
+                    - ⭐ **Moderate Impact** (Score 5-10): Important supporting concepts  
+                    - 📍 **Emerging** (Score < 5): Specific or niche concepts
+                    """))
             else:
                 st.info(text.get("no_connected_entities", "No connected entities found."))
         st.divider()
