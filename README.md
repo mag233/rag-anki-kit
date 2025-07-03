@@ -1,9 +1,9 @@
 <!-- Logo -->
 <p align="center">
-  <img src="assets/logo.png" alt="ScholarPilot: AI Literature Review & Knowledge Pipeline Logo" width="220"/>
+  <img src="assets/logo.png" alt="RAG Anki Kit: AI-Powered Literature Review & Knowledge Pipeline Logo" width="220"/>
 </p>
 
-# Personal Knowledge Base & Learning Assistant
+# RAG Anki Kit: AI-Powered Literature Review & Knowledge Pipeline
 
 [中文版说明请见 README.zh.md](README.zh.md)
 
@@ -15,86 +15,63 @@
   <img src="assets/intro.png" alt="Project Introduction" width="400" height="400"/>
 </p>
 
-Hello! This is my very first programming project. Although I am not a computer science major, I am passionate about learning new technologies and wanted to challenge myself by building something practical and interesting. I am still learning, and any feedback or suggestions are very welcome!
+**RAG Anki Kit** is a comprehensive AI-powered research assistant that transforms your academic papers and documents into an intelligent knowledge pipeline. From document ingestion to knowledge graph generation, from semantic search to automated flashcard creation, this toolkit streamlines the entire research workflow.
+
+This project represents my journey from a non-CS background into the exciting world of AI and natural language processing. Built with passion for learning and research efficiency, it integrates multiple cutting-edge technologies to create a seamless academic research experience.
 
 ---
 
+## ✨ Key Features
 
-## Tech Stack & What I Learned
+### 🔍 **RAG (Retrieval-Augmented Generation)**
+- **Smart Document Processing**: Upload PDFs, Word docs, Excel files, Markdown, and HTML
+- **Flexible Chunking Strategies**: Sentence-based, paragraph-based, page-based, or custom length splitting
+- **Semantic Search**: Vector embeddings powered by ChromaDB for intelligent document retrieval
+- **Interactive Q&A**: Ask research questions and get contextual answers with source citations
 
-This project is a hands-on journey for me to explore and integrate the following technologies:
+### 📚 **Literature Review Assistant**
+- **Automated Summarization**: Generate comprehensive literature summaries from your document collection
+- **Citation Management**: Automatic extraction and formatting of references
+- **Research Gap Analysis**: Identify knowledge gaps and research opportunities
+- **Multi-language Support**: Process documents in multiple languages
 
-- **Python**: Main programming language for backend logic and data processing.
-- **Streamlit**: Rapidly building interactive web apps for data science and ML.
-- **OpenAI API**: Using large language models for text generation, summarization, and Q&A.
-- **ChromaDB**: Vector database for semantic search and retrieval-augmented generation (RAG).
-- **LangChain**: Framework for chaining LLMs and document loaders.
-- **PyMuPDF, Unstructured, etc.**: Document parsing and chunking.
-- **Anki Export**: Automated generation of flashcards for spaced repetition.
-- **Docker & Git**: Basic experience with containerization and version control.
+### 🧠 **LitMap: Knowledge Graph Generation**
+- **Entity & Relation Extraction**: AI-powered extraction of research entities and their relationships
+- **Interactive Visualizations**: Dynamic network graphs with customizable layouts
+- **Research Analytics Dashboard**: Statistical insights into your knowledge base
+- **Export Capabilities**: Save graphs in multiple formats (JSON, GraphML, images)
 
-I learned a lot about API integration, prompt engineering, and how to connect different Python libraries to create a full-stack application. I am still improving my code style and best practices.
-
----
-
-## Features
-
-- **Document Ingestion**: Upload and process PDFs, Word, Excel, Markdown, and HTML files.
-- **Flexible Chunking**: Split documents by sentence, paragraph, page, or fixed length for downstream tasks.
-- **Semantic Search (RAG)**: Retrieve relevant document chunks using vector embeddings and similarity search.
-- **Literature Review & Q&A**: Ask research questions and get summarized answers with citations.
-- **Anki Card Generation**: Automatically create Q&A and cloze flashcards from your knowledge base.
-- **Interactive Dashboard**: Visualize project status, chunk/embedding counts, and processing progress.
-- **Customizable Templates**: Edit summarization and card generation prompts to fit your needs.
-- **Multi-language UI**: Supports both English and Chinese interfaces.
+### 🎯 **Anki Integration**
+- **Automated Flashcard Generation**: Create Q&A and cloze deletion cards from your research
+- **Customizable Templates**: Tailor card formats to your learning style
+- **Batch Export**: Generate hundreds of cards in minutes
+- **Spaced Repetition Ready**: Seamlessly import into Anki for optimized learning
 
 ---
 
-## Project Progress
+## 🛠 Tech Stack & Architecture
 
-| Milestone                   | Status         | Notes                            |
-| --------------------------- | -------------- | -------------------------------- |
-| Initial Project Setup       | ✅ Completed    | Streamlit skeleton created       |
-| PDF Ingestion & Chunking    | ✅ Completed    | Supports multiple chunk methods  |
-| Vector Database Integration | ✅ Completed    | Chroma DB integration            |
-| Retrieval QA Module         | 🔄 In Progress | Streaming Chat UX refinement     |
-| Anki Card Export            | 🔄 In Progress | Q\&A and cloze formats supported |
-| Dashboard & Metrics         | 🔲 Pending     | Design visualization components  |
-| Wish List Integration       | 🔲 Pending     | Add wishlist management UI       |
+This project integrates modern AI and web technologies:
 
----
-
-## Roadmap & Future Plans
-
-- [ ] Improve UI/UX and add more visualizations to the dashboard.
-- [ ] Add support for more document types and languages.
-- [ ] Enhance citation and bibliography export features.
-- [ ] Mobile-friendly interface or companion app.
-- [ ] Cloud sync and multi-device support.
-- [ ] More advanced analytics for learning progress.
-- [ ] Refactor code for better modularity and maintainability.
+- **🐍 Python**: Core backend logic and data processing
+- **🌊 Streamlit**: Interactive web application framework
+- **🤖 OpenAI API**: GPT-powered text analysis, summarization, and extraction
+- **📊 ChromaDB**: Vector database for semantic search and embeddings
+- **🕸️ NetworkX**: Graph analysis and knowledge network construction
+- **📈 Plotly**: Interactive data visualizations and analytics dashboards
+- **📄 PyMuPDF/Unstructured**: Advanced document parsing and processing
+- **🧮 NumPy/Pandas**: Data manipulation and analysis
+- **🎨 CSS/HTML**: Custom styling and responsive design
 
 ---
 
-## Project Structure
+## 🚀 Quick Start
 
-```
-anki_llm_withqa/
-├── app.py               # Streamlit app entry point
-├── anki/                # Flashcard generation logic
-├── embed/               # Embedding and vector DB logic
-├── preprocess/          # Document loading and chunking
-├── retrieve/            # Semantic search and RAG
-├── dashboard/           # UI components and metrics
-├── data/                # Raw and processed files
-├── requirements.txt     # Python dependencies
-├── README.md            # Project overview (this file)
-└── LICENSE
-```
+### Prerequisites
+- Python 3.8+
+- OpenAI API key
 
----
-
-## How to Run
+### Installation
 
 1. **Clone the repository:**
    ```bash
@@ -107,41 +84,172 @@ anki_llm_withqa/
    pip install -r requirements.txt
    ```
 
-3. **Set your OpenAI API key:**
+3. **Configure your OpenAI API key:**
    ```bash
-   export OPENAI_API_KEY="your_api_key"
+   # Create a .env file in the project root
+   echo "OPENAI_API_KEY=your_api_key_here" > .env
    ```
 
-4. **Start the app:**
+4. **Launch the application:**
    ```bash
-   streamlit run app.py
+   streamlit run src/app.py
    ```
 
----
-
-## Usage
-
-- Go to the **RAG** tab to upload and process your documents.
-- Use the **Literature Review** tab to ask questions and get summaries.
-- Generate and export flashcards in the **Anki Cards** tab.
+5. **Open your browser** and navigate to `http://localhost:8501`
 
 ---
 
-## Contributing
+## 📖 Usage Guide
 
-I am still learning and open to all suggestions! If you have ideas or want to help, feel free to:
+### 1. **RAG Tab** - Document Processing & Q&A
+- Upload your research documents (PDF, DOCX, etc.)
+- Configure chunking strategy based on your needs
+- Generate embeddings and build your vector database
+- Ask questions and get AI-powered answers with citations
 
-1. Fork this repo.
-2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Commit your changes.
-4. Open a Pull Request.
+### 2. **Literature Tab** - Research Synthesis
+- Generate comprehensive literature reviews
+- Analyze multiple papers simultaneously
+- Extract key findings and research trends
+- Export formatted bibliographies
+
+### 3. **LitMap Tab** - Knowledge Graph Generation
+- **Step 1**: Select your processed project
+- **Step 2**: Configure extraction settings (confidence thresholds, entity types)
+- **Step 3**: Choose entity and relation types to extract
+- **Step 4**: Generate the knowledge graph with real-time progress tracking
+- **Step 5**: Explore interactive visualizations and analytics
+- **Step 6**: Export your knowledge graph in various formats
+
+### 4. **Anki Tab** - Flashcard Creation
+- Generate study cards from your knowledge base
+- Customize question and answer formats
+- Export directly to Anki for spaced repetition learning
 
 ---
 
-## License
+## 🏗 Project Structure
 
-This project is licensed under the [MIT License](LICENSE).
+```
+rag-anki-kit/
+├── src/                      # Main source code
+│   ├── app.py               # Main Streamlit application entry point
+│   ├── rag_tab.py           # Document processing & RAG functionality
+│   ├── literature_tab.py    # Literature review and summarization features
+│   ├── litmap_tab.py        # Knowledge graph generation UI interface
+│   ├── anki_tab.py          # Flashcard generation and export
+│   ├── anki.py              # Core Anki card creation logic
+│   ├── embed.py             # Vector embedding and database operations
+│   ├── literature.py        # Literature analysis core functions
+│   ├── preprocess.py        # Document parsing and chunking
+│   ├── retrieve.py          # Semantic search and retrieval logic
+│   ├── summarize.py         # Text summarization functions
+│   ├── format_template.py   # Template formatting utilities
+│   ├── lang_utils.py        # Multi-language support utilities
+│   ├── knowledge_graph/     # Knowledge graph processing module
+│   │   ├── __init__.py      # Module initialization
+│   │   ├── config.yaml      # Configuration for entity/relation types
+│   │   ├── extractor.py     # AI-powered entity & relation extraction
+│   │   ├── graph_builder.py # NetworkX graph construction and analysis
+│   │   ├── visualizer.py    # Interactive graph visualizations & analytics
+│   │   ├── prompts/         # LLM prompt templates
+│   │   │   ├── entity_extraction.txt    # Entity extraction prompts
+│   │   │   └── relation_extraction.txt  # Relation extraction prompts
+│   │   └── utils/           # Knowledge graph helper utilities
+│   │       ├── __init__.py  # Utils module initialization
+│   │       └── helpers.py   # Graph analysis and data processing helpers
+│   ├── projects/            # User project data storage
+│   ├── experimental/        # Experimental features and utilities
+│   │   └── deep_clean.py    # Advanced data cleaning tools
+│   └── lib/                 # Frontend assets and libraries
+├── assets/                  # Project assets
+│   ├── logo.png            # Application logo
+│   └── intro.png           # Introduction image
+├── lib/                    # External libraries and assets
+├── .env                    # Environment variables (not in repo)
+├── .gitignore             # Git ignore rules
+├── requirements.txt       # Python dependencies
+├── README.md             # Project documentation (English)
+├── README.zh.md          # Project documentation (Chinese)
+├── LITMAP_FEATURE_COMPLETE.md      # LitMap feature documentation
+└── LITMAP_IMPLEMENTATION_SUMMARY.md # Implementation details
+```
 
 ---
 
-Thank you for checking out my project! If you have any advice or want to connect, please reach out via GitHub.
+## 🎯 Advanced Features
+
+### Knowledge Graph Analytics
+- **Centrality Analysis**: Identify the most important entities in your research domain
+- **Community Detection**: Discover research clusters and thematic groups
+- **Temporal Analysis**: Track how knowledge evolves across different papers
+- **Gap Analysis**: Find underexplored connections and research opportunities
+
+### Customization Options
+- **Custom Entity Types**: Define domain-specific entities for extraction
+- **Template System**: Modify AI prompts for different research domains
+- **Export Formats**: Multiple output formats for different use cases
+- **Language Support**: Full bilingual interface (English/Chinese)
+
+### Performance Features
+- **Batch Processing**: Handle large document collections efficiently
+- **Progress Tracking**: Real-time updates on processing status
+- **Cost Estimation**: Monitor OpenAI API usage and costs
+- **Error Recovery**: Robust handling of processing failures
+
+---
+
+## 📊 Project Status
+
+| Component | Status | Features |
+|-----------|--------|----------|
+| RAG Module | ✅ Complete | Document processing, semantic search, Q&A |
+| Literature Review | ✅ Complete | Summarization, citation extraction |
+| Knowledge Graphs | ✅ Complete | Entity extraction, graph visualization, analytics |
+| Anki Integration | ✅ Complete | Automated card generation, batch export |
+| Multi-language UI | ✅ Complete | English/Chinese interface |
+| Visualization Optimization | 🌟 Wishlist | Enhanced charts, interactive dashboards, analytics |
+| LLM Prompt Control | 🌟 Wishlist | Optimized prompts, configurable templates, fine-tuned extraction |
+| OCR Support | 🌟 Wishlist | Optical character recognition for scanned documents and images |
+| Enhanced PDF Processing | 🌟 Wishlist | Advanced PDF parsing, table extraction, layout analysis |
+
+---
+
+## 🤝 Contributing
+
+I welcome contributions from the community! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
+
+### How to Contribute:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Areas for Contribution:
+- 🐛 Bug fixes and performance improvements
+- 🎨 UI/UX enhancements
+- 📚 Documentation improvements
+- 🔧 New features and integrations
+- 🌍 Additional language support
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- OpenAI for their powerful GPT models
+- The Streamlit team for their excellent framework
+- ChromaDB for vector database capabilities
+- The open-source community for inspiration and tools
+
+---
+
+**Built with ❤️ for researchers, students, and lifelong learners**
+
+*Questions? Feedback? Feel free to reach out via GitHub Issues or connect with me directly!*

@@ -108,9 +108,51 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     def load_chunk_status():
         if os.path.exists(status_file):
             with open(status_file, "r", encoding="utf-8") as f:
-                return json.load(f)
+                loaded_status = json.load(f)
+                # Ensure all entries have required fields for backward compatibility
+                for cid, status_data in loaded_status.items():
+                    if not isinstance(status_data, dict):
+                        loaded_status[cid] = {"status": "pending", "last_processed_at": None, "confidence_score": None}
+                    else:
+                        # Ensure all required fields exist
+                        status_data.setdefault("status", "pending")
+                        status_data.setdefault("last_processed_at", None)
+                        status_data.setdefault("confidence_score", None)
+                return loaded_status
         else:
             return {}
+
+    def _start_full_reprocess(chunk_status, status_file, text, litmap_folder, selected_project):
+        """开始全量重新处理模式"""
+        # 1. 重置所有chunk状态
+        for cid in chunk_status:
+            chunk_status[cid]["status"] = "pending"
+            chunk_status[cid]["last_processed_at"] = None
+            chunk_status[cid]["confidence_score"] = None
+        with open(status_file, "w", encoding="utf-8") as f:
+            json.dump(chunk_status, f, ensure_ascii=False, indent=2)
+        
+        # 2. 删除历史数据文件
+        entities_file = os.path.join(litmap_folder, f"{selected_project}_entities.json")
+        relations_file = os.path.join(litmap_folder, f"{selected_project}_relations.json")
+        temp_entities_file = os.path.join(litmap_folder, f"{selected_project}_new_entities.tmp.json")
+        temp_relations_file = os.path.join(litmap_folder, f"{selected_project}_new_relations.tmp.json")
+        
+        for file_path in [entities_file, relations_file, temp_entities_file, temp_relations_file]:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        
+        # 3. 清空相关session state
+        for k in ["litmap_stats", "litmap_entities", "litmap_relations", "litmap_new_entities", "litmap_new_relations"]:
+            if k in st.session_state:
+                del st.session_state[k]
+        
+        # 4. 设置全量处理模式
+        st.session_state["litmap_status"] = "processing"
+        st.session_state["litmap_progress"] = text.get("initializing_full_reprocess", "Starting full reprocessing from scratch...")
+        st.session_state["litmap_errors"] = []
+        st.session_state["reprocess_mode"] = "full"
+        st.session_state['litmap_view_mode'] = 'direct'  # 直接替换模式
     chunk_status = load_chunk_status()
 
     # Sync metadata with current chunks
@@ -143,7 +185,11 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     st.progress(n_processed/total_chunks if total_chunks else 0.0)
 
     # Show last processed time
-    last_processed_times = [chunk_status[cid]["last_processed_at"] for cid in chunk_ids if chunk_status[cid]["last_processed_at"]]
+    last_processed_times = [
+        chunk_status.get(cid, {}).get("last_processed_at") 
+        for cid in chunk_ids 
+        if chunk_status.get(cid, {}).get("last_processed_at")
+    ]
     if last_processed_times:
         last_time = max(last_processed_times)
         st.info(text.get("last_processed_at", "Last processed at") + f": {last_time}")
@@ -237,48 +283,58 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 selected_relation_types = list(set(selected_relation_types) | set(custom_relation_types))
 
     # --- Determine which chunks to process ---
-    unprocessed_cids = [cid for cid in chunk_ids if chunk_status[cid]["status"] != "processed"]
+    unprocessed_cids = [cid for cid in chunk_ids if chunk_status.get(cid, {}).get("status") != "processed"]
     next_cids = unprocessed_cids[:max_chunks]
     next_chunks = [c for c in all_chunks if c.get("chunk_id") in next_cids]
 
     # --- Action buttons ---
     col_reprocess, col_continue, col_dryrun, col_clear = st.columns([1,1,1,1])
     with col_reprocess:
-        reprocess_all = st.button(text.get("reprocess_all", "Reprocess All"), key="kg_reprocess_all", help=text.get("reprocess_all_help", "Reset all chunk status and reprocess all data."))
+        # 添加确认对话框
+        if 'show_reprocess_confirm' not in st.session_state:
+            st.session_state['show_reprocess_confirm'] = False
+        
+        if st.button(text.get("reprocess_all", "Reprocess All"), key="kg_reprocess_all", help=text.get("reprocess_all_help", "Reset all chunk status and reprocess all data from scratch.")):
+            st.session_state['show_reprocess_confirm'] = True
+        
+        # 添加警告说明
+        st.caption("⚠️ " + text.get("reprocess_all_warning", "Will process ALL chunks (ignores the limit above) and delete existing data."))
+            
+        if st.session_state.get('show_reprocess_confirm'):
+            st.warning("⚠️ " + text.get("reprocess_warning", "This will delete all existing data and reprocess everything from scratch. Continue?"))
+            col_yes, col_no = st.columns(2)
+            with col_yes:
+                if st.button("✅ " + text.get("yes_reprocess", "Yes, Reprocess All"), key="confirm_reprocess"):
+                    st.session_state['reprocess_mode'] = 'full'
+                    st.session_state['show_reprocess_confirm'] = False
+                    # 立即开始全量重处理
+                    _start_full_reprocess(chunk_status, status_file, text, litmap_folder, selected_project)
+                    st.rerun()
+            with col_no:
+                if st.button("❌ " + text.get("cancel", "Cancel"), key="cancel_reprocess"):
+                    st.session_state['show_reprocess_confirm'] = False
+                    st.rerun()
+    
     with col_continue:
         continue_from_last = st.button(text.get("continue_from_last", "Continue from Last"), key="kg_continue_from_last", help=text.get("continue_from_last_help", "Only process unprocessed chunks, keep history."))
+        # 添加说明
+        st.caption("ℹ️ " + text.get("continue_from_last_info", "Respects the chunk limit above and preserves existing data."))
     with col_dryrun:
         dry_run = st.checkbox(text.get("dry_run", "Dry Run (Preview Only)"), value=False, key="kg_dry_run")
     with col_clear:
         clear_status = st.button(text.get("clear_status", "Clear Status"), key="kg_clear_status", help=text.get("clear_status_help", "Clear progress and stats display."))
 
     # Action logic
-    if reprocess_all:
-        for cid in chunk_status:
-            chunk_status[cid]["status"] = "pending"
-            chunk_status[cid]["last_processed_at"] = None
-            chunk_status[cid]["confidence_score"] = None
-        with open(status_file, "w", encoding="utf-8") as f:
-            json.dump(chunk_status, f, ensure_ascii=False, indent=2)
-        # 先设置 processing 状态
+    if continue_from_last:
         st.session_state["litmap_status"] = "processing"
         st.session_state["litmap_progress"] = text.get("initializing_extraction", "Initializing extraction...")
         st.session_state["litmap_errors"] = []
-        st.session_state["litmap_view_mode"] = 'new'
-        # 再清空其他相关 session_state（但不删 litmap_status 等）
-        for k in ["litmap_stats", "litmap_entities", "litmap_relations", "litmap_new_entities", "litmap_new_relations"]:
-            if k in st.session_state:
-                del st.session_state[k]
-        st.rerun()
-    elif continue_from_last:
-        st.session_state["litmap_status"] = "processing"
-        st.session_state["litmap_progress"] = text.get("initializing_extraction", "Initializing extraction...")
-        st.session_state["litmap_errors"] = []
+        st.session_state["reprocess_mode"] = "incremental"  # 增量处理模式
     elif clear_status:
         for k in ["litmap_status", "litmap_progress", "litmap_stats", "litmap_errors"]:
             if k in st.session_state:
                 del st.session_state[k]
-        st.experimental_rerun()
+        st.rerun()
 
     # Progress/Stats/Errors display (always visible if not idle)
     if st.session_state.get("litmap_status") == "processing":
@@ -300,14 +356,25 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         try:
             progress_placeholder = st.empty()
             status_placeholder = st.empty()
-            process_chunks = next_chunks
-            if not process_chunks:
-                st.session_state["litmap_status"] = "idle"
-                st.warning(text.get("no_unprocessed_chunks", "No unprocessed chunks to process."))
-                return
-            # 不要再覆盖 process_chunks，确保只处理未处理的chunk
-            with status_placeholder.container():
-                st.info(text.get("processing_chunks", "Processing {n} chunks...").format(n=len(process_chunks)))
+            
+            # 根据处理模式决定要处理的chunks
+            reprocess_mode = st.session_state.get("reprocess_mode", "incremental")
+            
+            if reprocess_mode == "full":
+                # 全量重处理：处理所有chunks，不分批
+                process_chunks = all_chunks
+                with status_placeholder.container():
+                    st.info(text.get("full_reprocessing", "🔄 Full reprocessing: Processing all {n} chunks...").format(n=len(process_chunks)))
+            else:
+                # 增量处理：只处理未处理的chunks，分批处理
+                process_chunks = next_chunks
+                if not process_chunks:
+                    st.session_state["litmap_status"] = "idle"
+                    st.warning(text.get("no_unprocessed_chunks", "No unprocessed chunks to process."))
+                    return
+                with status_placeholder.container():
+                    st.info(text.get("processing_chunks", "📝 Incremental processing: Processing {n} chunks...").format(n=len(process_chunks)))
+            
             extractor = EntityRelationExtractor()
             extractor.reset_stats()
             estimated_cost = len(process_chunks) * 0.002
@@ -326,9 +393,13 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 st.session_state['litmap_progress'] = msg
                 with progress_placeholder.container():
                     st.progress(progress_percentage, text=msg)
+            
+            # 对于全量重处理，使用更大的max_chunks值或None来处理所有chunks
+            max_chunks_to_use = None if reprocess_mode == "full" else max_chunks
+            
             entities, relations = extractor.extract_from_chunks(
                 process_chunks, 
-                max_chunks=max_chunks,
+                max_chunks=max_chunks_to_use,
                 progress_callback=update_progress
             )
             # --- FIX: Always load and update the full status file, only update processed chunks ---
@@ -346,12 +417,36 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 json.dump(full_chunk_status, f, ensure_ascii=False, indent=2)
             chunk_status = full_chunk_status  # for UI update
 
-            # --- 修正：新处理数据只放入 litmap_new_entities/relations，不动历史 ---
-            st.session_state['litmap_new_entities'] = entities
-            st.session_state['litmap_new_relations'] = relations
-            # 处理完成后自动切换到新数据预览模式
-            st.session_state['litmap_view_mode'] = 'new'
-            # 历史数据不变，只有合并时才会合并
+            # 根据处理模式决定数据保存方式
+            if reprocess_mode == "full":
+                # 全量重处理：直接替换历史数据
+                entities_file = os.path.join(litmap_folder, f"{selected_project}_entities.json")
+                relations_file = os.path.join(litmap_folder, f"{selected_project}_relations.json")
+                
+                with open(entities_file, "w", encoding="utf-8") as f:
+                    json.dump(entities, f, ensure_ascii=False, indent=2)
+                with open(relations_file, "w", encoding="utf-8") as f:
+                    json.dump(relations, f, ensure_ascii=False, indent=2)
+                
+                # 直接加载到主session state
+                st.session_state['litmap_entities'] = entities
+                st.session_state['litmap_relations'] = relations
+                st.session_state['litmap_view_mode'] = 'history'  # 查看历史数据（即新处理的数据）
+                
+                # 清空临时数据
+                st.session_state['litmap_new_entities'] = []
+                st.session_state['litmap_new_relations'] = []
+                
+                with status_placeholder.container():
+                    st.success(f"✅ " + text.get("full_reprocess_complete", "Full reprocessing complete! Processed {n} entities and {r} relations.").format(n=len(entities), r=len(relations)))
+            else:
+                # 增量处理：放入新数据区域，等待预览合并
+                st.session_state['litmap_new_entities'] = entities
+                st.session_state['litmap_new_relations'] = relations
+                st.session_state['litmap_view_mode'] = 'new'  # 查看新数据
+                
+                with status_placeholder.container():
+                    st.info(f"📝 " + text.get("incremental_complete", "Incremental processing complete! Found {n} new entities and {r} new relations. Please review and merge.").format(n=len(entities), r=len(relations)))
 
             final_stats = extractor.get_stats()
             st.session_state['litmap_stats'] = {

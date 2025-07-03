@@ -13,6 +13,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from pyvis.network import Network
 import pandas as pd
+import numpy as np
 from collections import defaultdict
 import math
 
@@ -481,16 +482,24 @@ class KnowledgeGraphVisualizer:
                 
                 # Add slight jittering for overlapping points (especially if low variance)
                 if confidence_variance < 0.01:  # Very low variance in confidence
-                    jitter_conf = np.random.normal(0, 0.005, len(df_nodes))
-                    df_nodes['confidence_plot'] = df_nodes['confidence'] + jitter_conf
+                    jitter_conf = np.random.normal(0, 0.01, len(df_nodes))  # Increased jitter
+                    df_nodes['confidence_plot'] = np.clip(df_nodes['confidence'] + jitter_conf, 0, 1)
                 else:
                     df_nodes['confidence_plot'] = df_nodes['confidence']
                 
-                if degree_variance < 1:  # Very low variance in degree
-                    jitter_deg = np.random.normal(0, 0.1, len(df_nodes))
-                    df_nodes['degree_plot'] = df_nodes['degree'] + jitter_deg
+                if degree_variance < 2:  # Increased threshold for degree jittering
+                    jitter_deg = np.random.normal(0, max(0.2, df_nodes['degree'].max() * 0.05), len(df_nodes))
+                    df_nodes['degree_plot'] = np.maximum(0, df_nodes['degree'] + jitter_deg)
                 else:
                     df_nodes['degree_plot'] = df_nodes['degree']
+                
+                # Add rank-based transformation for better distribution if needed
+                if len(df_nodes) > 20 and confidence_variance < 0.005:
+                    # Use rank-based transformation for extremely clustered confidence values
+                    from scipy.stats import rankdata
+                    ranks = rankdata(df_nodes['confidence'], method='average')
+                    # Map ranks to 0.3-0.9 range for better spread
+                    df_nodes['confidence_plot'] = 0.3 + (ranks - 1) / (len(ranks) - 1) * 0.6
                 
                 # Normalize clustering coefficient for better marker sizing
                 max_clustering = df_nodes['clustering'].max() if df_nodes['clustering'].max() > 0 else 1
@@ -508,9 +517,21 @@ class KnowledgeGraphVisualizer:
                 # Create enhanced scatter plot with better data distribution
                 fig_impact = go.Figure()
                 
-                # Define distinct colors for better visibility
+                # Define distinct colors with better contrast for better visibility
                 type_colors = {}
-                default_colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F']
+                # Enhanced color palette with better accessibility and contrast
+                default_colors = [
+                    '#E74C3C',  # Red
+                    '#3498DB',  # Blue  
+                    '#2ECC71',  # Green
+                    '#F39C12',  # Orange
+                    '#9B59B6',  # Purple
+                    '#1ABC9C',  # Turquoise
+                    '#E67E22',  # Dark Orange
+                    '#34495E',  # Dark Blue Gray
+                    '#E91E63',  # Pink
+                    '#00BCD4'   # Cyan
+                ]
                 
                 # Group by entity type for better legend and coloring
                 for i, entity_type in enumerate(df_nodes['type'].unique()):
@@ -530,9 +551,10 @@ class KnowledgeGraphVisualizer:
                         marker=dict(
                             size=type_data['size_normalized'],
                             color=color,
-                            opacity=0.75,
-                            line=dict(width=1.5, color='white'),
-                            sizemode='diameter'
+                            opacity=0.8,  # Increased opacity for better visibility
+                            line=dict(width=2, color='white'),  # Thicker white border
+                            sizemode='diameter',
+                            symbol='circle'  # Explicit circle for consistency
                         ),
                         name=f'{entity_type} ({len(type_data)})',
                         text=type_data['node'],
@@ -586,17 +608,20 @@ class KnowledgeGraphVisualizer:
                     xaxis=dict(
                         range=x_range,
                         showgrid=True,
-                        gridwidth=1,
-                        gridcolor='rgba(128,128,128,0.2)',
+                        gridwidth=1.5,  # Thicker grid lines
+                        gridcolor='rgba(128,128,128,0.3)',  # More visible grid
                         zeroline=True,
-                        zerolinecolor='rgba(128,128,128,0.3)'
+                        zerolinecolor='rgba(128,128,128,0.5)',
+                        zerolinewidth=2,
+                        tickfont=dict(size=12)  # Larger tick font
                     ),
                     yaxis=dict(
                         range=y_range,
                         showgrid=True,
-                        gridwidth=1,
-                        gridcolor='rgba(128,128,128,0.2)',
-                        zeroline=False
+                        gridwidth=1.5,  # Thicker grid lines
+                        gridcolor='rgba(128,128,128,0.3)',  # More visible grid
+                        zeroline=False,
+                        tickfont=dict(size=12)  # Larger tick font
                     )
                 )
                 
