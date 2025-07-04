@@ -1,4 +1,3 @@
-import re
 """
 LitMap Tab - Knowledge Graph Generation from Research Literature
 
@@ -7,6 +6,7 @@ knowledge graphs from research papers using the LitMap feature.
 """
 
 import os
+import re
 import streamlit as st
 import pandas as pd
 from typing import Dict, Any, List
@@ -168,17 +168,16 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     n_processed = len([cid for cid in chunk_ids if chunk_status.get(cid, {}).get("status") == "processed"])
     n_pending = total_chunks - n_processed
 
-    # --- DEBUG OUTPUT: Show chunk aggregation info ---
-    with st.expander("[DEBUG] Chunk Aggregation Info", expanded=False):
-        st.write(f"chunk_files: {len(chunk_files)} files")
-        st.write(f"chunk_files names: {chunk_files[:5]}{' ...' if len(chunk_files) > 5 else ''}")
-        st.write(f"chunk_ids: {len(chunk_ids)} ids (first 10: {chunk_ids[:10]})")
-        st.write(f"total_chunks: {total_chunks}")
-        st.write(f"n_processed: {n_processed}")
-        st.write(f"chunk_status keys: {len(chunk_status)}")
-        st.write(f"n_pending: {n_pending}")
-        st.write(f"unprocessed_cids: {len([cid for cid in chunk_ids if chunk_status.get(cid, {}).get('status') != 'processed'])}")
-        st.write(f"status_file: {status_file}")
+    # --- Processing Information ---
+    with st.expander("ℹ️ Processing Information", expanded=False):
+        st.write(f"Available chunk files: {len(chunk_files)} files")
+        st.write(f"Total chunk IDs: {len(chunk_ids)}")
+        st.write(f"Total chunks: {total_chunks}")
+        st.write(f"Processed: {n_processed}")
+        st.write(f"Pending: {n_pending}")
+        if chunk_status:
+            last_processed = chunk_status.get('last_processed_at', 'Never')
+            st.write(f"Last processed: {last_processed}")
 
     # --- UI: Progress Bar and Controls ---
     st.markdown(f"**{text.get('progress_label', 'Progress')}: {n_processed} / {total_chunks} ({(n_processed/total_chunks*100 if total_chunks else 0):.1f}%)**")
@@ -535,13 +534,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     # 3. 合并新数据到主数据库（去重，写入磁盘，切换为历史视图）
     if st.session_state.get('litmap_merge_pending', False):
         st.session_state['litmap_merge_pending'] = False  # 重置
-        # Debug: 打印新旧数据长度
-        debug_msg1 = f"[DEBUG] 合并前：历史实体数={len(st.session_state.get('litmap_entities', []))}，新实体数={len(st.session_state.get('litmap_new_entities', []))}"
-        debug_msg2 = f"[DEBUG] 合并前：历史关系数={len(st.session_state.get('litmap_relations', []))}，新关系数={len(st.session_state.get('litmap_new_relations', []))}"
-        print(debug_msg1)
-        print(debug_msg2)
-        st.write(debug_msg1)
-        st.write(debug_msg2)
+        
         # 合并前强制从磁盘加载历史数据，防止 session_state 被清空
         if os.path.exists(entities_path):
             with open(entities_path, "r", encoding="utf-8") as f:
@@ -553,6 +546,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 disk_relations = json.load(f)
         else:
             disk_relations = []
+        
         # 新增：合并时优先从临时文件读取新数据，防止session_state丢失
         if os.path.exists(temp_new_entities_path):
             with open(temp_new_entities_path, "r", encoding="utf-8") as f:
@@ -585,15 +579,11 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         # 合并
         all_entities = disk_entities + new_entities
         all_relations = disk_relations + new_relations
-        debug_msg3 = f"[DEBUG] 合并后实体数={len(all_entities)}，合并后关系数={len(all_relations)}"
-        print(debug_msg3)
-        st.write(debug_msg3)
+        
         # 去重
         all_entities = dedup_items(all_entities, 'entity')
         all_relations = dedup_items(all_relations, 'relation')
-        debug_msg4 = f"[DEBUG] 去重后实体数={len(all_entities)}，去重后关系数={len(all_relations)}"
-        print(debug_msg4)
-        st.write(debug_msg4)
+        
         # 保存
         with open(entities_path, "w", encoding="utf-8") as f:
             json.dump(all_entities, f, ensure_ascii=False, indent=2)

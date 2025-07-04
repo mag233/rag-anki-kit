@@ -85,3 +85,4 @@ src/projects/KT/vectorstore/chroma_db/ca0aeb1a-1ac2-4ca4-aec0-c6fab94261ca/heade
 src/projects/KT/vectorstore/chroma_db/ca0aeb1a-1ac2-4ca4-aec0-c6fab94261ca/length.bin
 src/projects/KT/vectorstore/chroma_db/ca0aeb1a-1ac2-4ca4-aec0-c6fab94261ca/link_lists.bin
 src/projects/KT/vectorstore/chroma_db/chroma.sqlite3
+.DS_Store

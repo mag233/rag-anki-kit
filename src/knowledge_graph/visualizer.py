@@ -101,13 +101,50 @@ class KnowledgeGraphVisualizer:
             color = node_colors.get(node_type, '#95A5A6')
             degree = graph.degree(node)
             size = max(10, min(50, 10 + degree * 3))
-            # 简洁tooltip：只显示置信度和DOI（如有），不显示label/type/degree/description/source_papers
-            tooltip_parts = []
-            if 'confidence' in data:
-                tooltip_parts.append(f"Confidence: {data['confidence']:.2f}")
-            if data.get('doi'):
-                tooltip_parts.append(f"DOI: {data['doi']}")
-            title = " | ".join(tooltip_parts) if tooltip_parts else ""
+            
+            # Multi-line hover information: node name + connections + key details
+            tooltip_parts = [
+                f"Entity: {node}",
+                f"Type: {node_type}",
+                f"Connections: {degree}"
+            ]
+            
+            # Add confidence score if available
+            if data.get('confidence'):
+                tooltip_parts.append(f"Confidence: {data['confidence']:.3f}")
+            
+            # Add description with proper truncation
+            if data.get('description'):
+                desc = data['description']
+                if len(desc) > 100:
+                    desc = desc[:97] + "..."
+                tooltip_parts.append(f"Description: {desc}")
+            
+            # Add source paper information
+            if data.get('source_paper'):
+                source_paper = data['source_paper']
+                if isinstance(source_paper, list):
+                    tooltip_parts.append(f"Source Papers: {len(source_paper)} papers")
+                    # Show first few papers if available
+                    if len(source_paper) <= 3:
+                        for paper in source_paper:
+                            paper_name = paper if len(paper) <= 40 else paper[:37] + "..."
+                            tooltip_parts.append(f"  • {paper_name}")
+                else:
+                    paper_name = source_paper if len(source_paper) <= 40 else source_paper[:37] + "..."
+                    tooltip_parts.append(f"Source: {paper_name}")
+            
+            # Add merge information
+            if data.get('merged_from') and len(data['merged_from']) > 1:
+                tooltip_parts.append(f"Merged from: {len(data['merged_from'])} entities")
+            
+            # Add frequency information if available
+            if data.get('frequency'):
+                tooltip_parts.append(f"Frequency: {data['frequency']}")
+            
+            # For Pyvis, use simple line breaks as HTML might not work in some browsers
+            title = "\n".join(tooltip_parts)
+            
             net.add_node(
                 node,
                 label=node,
@@ -121,12 +158,39 @@ class KnowledgeGraphVisualizer:
         for u, v, data in graph.edges(data=True):
             relation = data.get('relation', 'relates_to')
             color = edge_colors.get(relation, '#95A5A6')
-            # 边tooltip只显示关系类型
+            
+            # Enhanced edge hover information
+            edge_tooltip_parts = [
+                f"Relationship: {relation}",
+                f"From: {u}",
+                f"To: {v}"
+            ]
+            
+            # Add confidence if available
+            if data.get('confidence'):
+                edge_tooltip_parts.append(f"Confidence: {data['confidence']:.3f}")
+            
+            # Add source paper information
+            if data.get('source_paper'):
+                paper = data['source_paper']
+                paper_name = paper if len(paper) <= 40 else paper[:37] + "..."
+                edge_tooltip_parts.append(f"Source: {paper_name}")
+            
+            # Add context information if available
+            if data.get('context'):
+                context = data['context']
+                if len(context) > 80:
+                    context = context[:77] + "..."
+                edge_tooltip_parts.append(f"Context: {context}")
+            
+            # Use simple line breaks
+            edge_title = "\n".join(edge_tooltip_parts)
+            
             net.add_edge(
                 u, v,
                 label=relation,
                 color=color,
-                title=relation
+                title=edge_title
             )
         
         return net
@@ -176,12 +240,58 @@ class KnowledgeGraphVisualizer:
             node_type = data.get('node_type', 'concept')
             degree = graph.degree(node)
             
+            # Build multi-line hover information with enhanced details
+            hover_parts = [
+                f"<b>{node}</b>",
+                f"Type: {node_type}",
+                f"Connections: {degree}"
+            ]
+            
+            # Add confidence score
+            if data.get('confidence'):
+                hover_parts.append(f"Confidence: {data['confidence']:.3f}")
+            
+            # Add description with proper formatting
+            if data.get('description'):
+                desc = data['description']
+                if len(desc) > 120:
+                    desc = desc[:117] + "..."
+                hover_parts.append(f"Description: {desc}")
+            
+            # Add source paper information with better formatting
+            if data.get('source_paper'):
+                source_paper = data['source_paper']
+                if isinstance(source_paper, list):
+                    hover_parts.append(f"Source Papers: {len(source_paper)} papers")
+                    # Show first 2 papers for preview
+                    for i, paper in enumerate(source_paper[:2]):
+                        paper_name = paper if len(paper) <= 35 else paper[:32] + "..."
+                        hover_parts.append(f"  • {paper_name}")
+                    if len(source_paper) > 2:
+                        hover_parts.append(f"  • ... and {len(source_paper) - 2} more")
+                else:
+                    paper_name = source_paper if len(source_paper) <= 35 else source_paper[:32] + "..."
+                    hover_parts.append(f"Source: {paper_name}")
+            
+            # Add merge information
+            if data.get('merged_from') and len(data['merged_from']) > 1:
+                hover_parts.append(f"Merged from: {len(data['merged_from'])} entities")
+            
+            # Add frequency information
+            if data.get('frequency'):
+                hover_parts.append(f"Frequency: {data['frequency']}")
+                
+            # Add extraction context if available
+            if data.get('extraction_context'):
+                context = data['extraction_context']
+                if len(context) > 60:
+                    context = context[:57] + "..."
+                hover_parts.append(f"Context: {context}")
+            
             node_traces[node_type]['x'].append(x)
             node_traces[node_type]['y'].append(y)
             node_traces[node_type]['text'].append(node)
-            node_traces[node_type]['hovertext'].append(
-                f"{node}<br>Type: {node_type}<br>Connections: {degree}"
-            )
+            node_traces[node_type]['hovertext'].append("<br>".join(hover_parts))
         
         # Create edge traces
         edge_x = []
