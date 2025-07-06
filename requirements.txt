@@ -40,3 +40,6 @@ pyvis>=0.3.2
 plotly>=5.17.0
 pyyaml>=6.0.1
 
+# Optional: For semantic similarity in entity optimization (Phase 2)
+# sentence-transformers>=2.2.2
+

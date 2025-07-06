@@ -17,8 +17,14 @@ import time
 class EntityRelationExtractor:
     """Extracts entities and relations from research text using GPT models."""
     
-    def __init__(self, config_path: str = None):
-        """Initialize the extractor with configuration."""
+    def __init__(self, config_path: str = None, use_improved_extraction: bool = False):
+        """
+        Initialize the extractor with configuration.
+        
+        Args:
+            config_path: Path to configuration file
+            use_improved_extraction: Use improved prompts with built-in normalization
+        """
         if config_path is None:
             config_path = Path(__file__).parent / "config.yaml"
         
@@ -30,10 +36,21 @@ class EntityRelationExtractor:
             base_url=os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         )
         
+        self.use_improved_extraction = use_improved_extraction
+        
         # Load extraction prompts
         prompts_dir = Path(__file__).parent / "prompts"
-        with open(prompts_dir / "entity_extraction.txt", 'r') as f:
-            self.entity_prompt = f.read()
+        
+        if use_improved_extraction:
+            # Use improved prompts with normalization
+            with open(prompts_dir / "entity_extraction_improved.txt", 'r') as f:
+                self.entity_prompt = f.read()
+        else:
+            # Use improved prompts as well, but without the normalization flag
+            # (The improved prompt is better in all cases)
+            with open(prompts_dir / "entity_extraction_improved.txt", 'r') as f:
+                self.entity_prompt = f.read()
+        
         with open(prompts_dir / "relation_extraction.txt", 'r') as f:
             self.relation_prompt = f.read()
         

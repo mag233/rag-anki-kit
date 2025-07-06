@@ -218,9 +218,78 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             help=text.get("physics_help", "Use physics for network visualization.")
         )
 
+    # --- Advanced Entity Optimization Settings ---
+    with st.expander(text.get("advanced_optimization", "🔧 Advanced Entity Optimization")):
+        st.caption(text.get("optimization_description", 
+            "Entity optimization uses two phases: Phase 1 (linguistic normalization) is always enabled, "
+            "while Phase 2 (semantic similarity) is optional and computationally intensive."))
+        
+        col_opt1, col_opt2 = st.columns(2)
+        
+        with col_opt1:
+            enable_semantic = st.checkbox(
+                text.get("enable_semantic", "Enable Semantic Similarity (Phase 2)"),
+                value=False,
+                help=text.get("semantic_help", 
+                    "Use AI models to detect semantically similar entities (e.g., 'ML' and 'machine learning'). "
+                    "Requires sentence-transformers package and increases processing time.")
+            )
+            
+            # New option for extraction strategy
+            use_improved_extraction = st.checkbox(
+                text.get("improved_extraction", "Enable Improved Extraction (Pre-normalization)"),
+                value=True,
+                help=text.get("improved_extraction_help",
+                    "Normalize entities during extraction instead of post-processing. "
+                    "This reduces inconsistencies at the source and improves efficiency.")
+            )
+            
+        with col_opt2:
+            similarity_threshold = st.slider(
+                text.get("similarity_threshold", "Semantic Similarity Threshold"),
+                min_value=0.70, max_value=0.95, value=0.85, step=0.05,
+                disabled=not enable_semantic,
+                help=text.get("threshold_help", 
+                    "Higher values = more conservative merging. Recommended: 0.80-0.90")
+            )
+        
+        if enable_semantic:
+            st.info(text.get("semantic_warning", 
+                "⚠️ Semantic similarity will increase processing time significantly. "
+                "Consider testing with a small number of chunks first."))
+        
+        if use_improved_extraction:
+            st.info(text.get("improved_extraction_info",
+                "✨ Improved extraction applies normalization during entity extraction, "
+                "resulting in more consistent entities from the start."))
+        
+        # Display what Phase 1 does
+        st.write("**" + text.get("phase1_features", "Phase 1 (Always Enabled)") + ":**")
+        phase1_desc = text.get("phase1_description", 
+            "• Normalizes singular/plural forms (e.g., 'systematic reviews' → 'systematic review')\n"
+            "• Expands abbreviations (e.g., 'ML' → 'machine learning')\n"
+            "• Standardizes punctuation and word order\n"
+            "• Removes duplicate entities with exact name matches")
+        
+        if use_improved_extraction:
+            phase1_desc += text.get("phase1_extraction_note", 
+                "\n• **Applied during extraction** for maximum efficiency")
+        else:
+            phase1_desc += text.get("phase1_postprocess_note",
+                "\n• **Applied after extraction** as post-processing")
+            
+        st.write(phase1_desc)
+        
+        if enable_semantic:
+            st.write("**" + text.get("phase2_features", "Phase 2 (Semantic Similarity)") + ":**")
+            st.write(text.get("phase2_description", 
+                "• Detects semantically similar entities using AI embeddings\n"
+                "• Merges entities with similar meanings but different expressions\n"
+                "• Maintains entity source and confidence information"))
+
     # --- Entity/Relation type list (must be before UI controls) ---
     # Initialize extractor before using its config
-    extractor = EntityRelationExtractor()
+    extractor = EntityRelationExtractor(use_improved_extraction=use_improved_extraction)
     # Custom types file
     custom_types_file = os.path.join(litmap_folder, "custom_types.json")
     if os.path.exists(custom_types_file):
@@ -282,12 +351,20 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 selected_relation_types = list(set(selected_relation_types) | set(custom_relation_types))
 
     # --- Determine which chunks to process ---
+    # 未处理的chunks（用于增量处理）
     unprocessed_cids = [cid for cid in chunk_ids if chunk_status.get(cid, {}).get("status") != "processed"]
-    next_cids = unprocessed_cids[:max_chunks]
-    next_chunks = [c for c in all_chunks if c.get("chunk_id") in next_cids]
+    
+    # 根据模式确定要显示和处理的chunks
+    # 对于选择性重处理，我们允许选择任何chunks（已处理或未处理）
+    available_cids = chunk_ids[:max_chunks]  # 选择前N个chunks用于选择性重处理
+    unprocessed_next_cids = unprocessed_cids[:max_chunks]  # 用于增量处理
+    
+    # 准备chunk数据
+    next_chunks = [c for c in all_chunks if c.get("chunk_id") in available_cids]  # 选择性重处理用
+    unprocessed_next_chunks = [c for c in all_chunks if c.get("chunk_id") in unprocessed_next_cids]  # 增量处理用
 
     # --- Action buttons ---
-    col_reprocess, col_continue, col_dryrun, col_clear = st.columns([1,1,1,1])
+    col_reprocess, col_select, col_continue, col_dryrun, col_clear = st.columns([1,1,1,1,1])
     with col_reprocess:
         # 添加确认对话框
         if 'show_reprocess_confirm' not in st.session_state:
@@ -314,6 +391,15 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                     st.session_state['show_reprocess_confirm'] = False
                     st.rerun()
     
+    with col_select:
+        reprocess_select = st.button(
+            text.get("reprocess_select", "Reprocess Select"), 
+            key="kg_reprocess_select", 
+            help=text.get("reprocess_select_help", "Reprocess only the selected chunks (respects chunk limit above) and merge with existing data.")
+        )
+        # 添加说明
+        st.caption("🔄 " + text.get("reprocess_select_info", f"Will reprocess {min(max_chunks, len(available_cids))} chunks and merge results."))
+    
     with col_continue:
         continue_from_last = st.button(text.get("continue_from_last", "Continue from Last"), key="kg_continue_from_last", help=text.get("continue_from_last_help", "Only process unprocessed chunks, keep history."))
         # 添加说明
@@ -329,6 +415,12 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         st.session_state["litmap_progress"] = text.get("initializing_extraction", "Initializing extraction...")
         st.session_state["litmap_errors"] = []
         st.session_state["reprocess_mode"] = "incremental"  # 增量处理模式
+    elif reprocess_select:
+        # 选择性重处理模式
+        st.session_state["litmap_status"] = "processing" 
+        st.session_state["litmap_progress"] = text.get("initializing_select_reprocess", "Initializing selective reprocessing...")
+        st.session_state["litmap_errors"] = []
+        st.session_state["reprocess_mode"] = "selective"  # 选择性重处理模式
     elif clear_status:
         for k in ["litmap_status", "litmap_progress", "litmap_stats", "litmap_errors"]:
             if k in st.session_state:
@@ -364,9 +456,62 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 process_chunks = all_chunks
                 with status_placeholder.container():
                     st.info(text.get("full_reprocessing", "🔄 Full reprocessing: Processing all {n} chunks...").format(n=len(process_chunks)))
+            elif reprocess_mode == "selective":
+                # 选择性重处理：清空数据库并从头处理指定数量的chunks
+                process_chunks = next_chunks  # 使用max_chunks限制数量
+                if not process_chunks:
+                    st.session_state["litmap_status"] = "idle"
+                    st.warning(text.get("no_chunks_to_reprocess", "No chunks available for selective reprocessing."))
+                    return
+                
+                # === 清空数据库：删除所有实体和关系文件 ===
+                entities_file = os.path.join(litmap_folder, f"{selected_project}_entities.json")
+                relations_file = os.path.join(litmap_folder, f"{selected_project}_relations.json")
+                
+                # 清空主数据文件
+                if os.path.exists(entities_file):
+                    os.remove(entities_file)
+                if os.path.exists(relations_file):
+                    os.remove(relations_file)
+                
+                # 清空临时文件
+                temp_new_entities_path = os.path.join(litmap_folder, f"{selected_project}_new_entities.tmp.json")
+                temp_new_relations_path = os.path.join(litmap_folder, f"{selected_project}_new_relations.tmp.json")
+                if os.path.exists(temp_new_entities_path):
+                    os.remove(temp_new_entities_path)
+                if os.path.exists(temp_new_relations_path):
+                    os.remove(temp_new_relations_path)
+                
+                # === 重置所有chunks的状态（从头开始） ===
+                # 创建全新的chunk_status，所有chunks都设为pending
+                fresh_chunk_status = {}
+                for chunk in all_chunks:
+                    cid = chunk.get("chunk_id")
+                    if cid:
+                        fresh_chunk_status[cid] = {
+                            "status": "pending",
+                            "last_processed_at": None,
+                            "confidence_score": None
+                        }
+                
+                # 保存全新的状态文件
+                with open(status_file, "w", encoding="utf-8") as f:
+                    json.dump(fresh_chunk_status, f, ensure_ascii=False, indent=2)
+                
+                # 更新本地变量以使用新状态
+                chunk_status = fresh_chunk_status
+                
+                # 清空session state中的数据
+                st.session_state['litmap_entities'] = []
+                st.session_state['litmap_relations'] = []
+                st.session_state['litmap_new_entities'] = []
+                st.session_state['litmap_new_relations'] = []
+                
+                with status_placeholder.container():
+                    st.info(text.get("selective_reprocessing", "🔄 Selective reprocessing: Processing {n} selected chunks from scratch...").format(n=len(process_chunks)))
             else:
                 # 增量处理：只处理未处理的chunks，分批处理
-                process_chunks = next_chunks
+                process_chunks = unprocessed_next_chunks
                 if not process_chunks:
                     st.session_state["litmap_status"] = "idle"
                     st.warning(text.get("no_unprocessed_chunks", "No unprocessed chunks to process."))
@@ -374,7 +519,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 with status_placeholder.container():
                     st.info(text.get("processing_chunks", "📝 Incremental processing: Processing {n} chunks...").format(n=len(process_chunks)))
             
-            extractor = EntityRelationExtractor()
+            extractor = EntityRelationExtractor(use_improved_extraction=use_improved_extraction)
             extractor.reset_stats()
             estimated_cost = len(process_chunks) * 0.002
             with status_placeholder.container():
@@ -438,6 +583,27 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 
                 with status_placeholder.container():
                     st.success(f"✅ " + text.get("full_reprocess_complete", "Full reprocessing complete! Processed {n} entities and {r} relations.").format(n=len(entities), r=len(relations)))
+            elif reprocess_mode == "selective":
+                # 选择性重处理：直接保存到主数据库（已清空数据库）
+                entities_file = os.path.join(litmap_folder, f"{selected_project}_entities.json")
+                relations_file = os.path.join(litmap_folder, f"{selected_project}_relations.json")
+                
+                with open(entities_file, "w", encoding="utf-8") as f:
+                    json.dump(entities, f, ensure_ascii=False, indent=2)
+                with open(relations_file, "w", encoding="utf-8") as f:
+                    json.dump(relations, f, ensure_ascii=False, indent=2)
+                
+                # 直接加载到主session state
+                st.session_state['litmap_entities'] = entities
+                st.session_state['litmap_relations'] = relations
+                st.session_state['litmap_view_mode'] = 'history'  # 查看主数据
+                
+                # 清空临时数据
+                st.session_state['litmap_new_entities'] = []
+                st.session_state['litmap_new_relations'] = []
+                
+                with status_placeholder.container():
+                    st.success(f"✅ " + text.get("selective_complete", "Selective reprocessing complete! Processed {n} entities and {r} relations from {c} chunks.").format(n=len(entities), r=len(relations), c=len(process_chunks)))
             else:
                 # 增量处理：放入新数据区域，等待预览合并
                 st.session_state['litmap_new_entities'] = entities
@@ -445,7 +611,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 st.session_state['litmap_view_mode'] = 'new'  # 查看新数据
                 
                 with status_placeholder.container():
-                    st.info(f"📝 " + text.get("incremental_complete", "Incremental processing complete! Found {n} new entities and {r} new relations. Please review and merge.").format(n=len(entities), r=len(relations)))
+                    st.success(f"✅ " + text.get("incremental_complete", "Incremental processing complete! Found {n} new entities and {r} new relations. Please review and merge.").format(n=len(entities), r=len(relations)))
 
             final_stats = extractor.get_stats()
             st.session_state['litmap_stats'] = {
@@ -463,6 +629,9 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             st.session_state['litmap_status'] = "done"
             progress_placeholder.empty()
             status_placeholder.empty()
+            
+            # 重新运行页面以更新UI显示
+            st.rerun()
         except Exception as e:
             st.session_state['litmap_errors'] = [text.get("extraction_error", "Extraction error") + f": {e}"]
             st.session_state['litmap_status'] = "error"
@@ -759,9 +928,12 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         st.subheader(clean_title(text['step5_title']))
         if entities and relations:
             try:
-                # Build graph
+                # Build graph with optimization settings
                 with st.spinner(text["building_graph"]):
-                    builder = KnowledgeGraphBuilder()
+                    builder = KnowledgeGraphBuilder(
+                        enable_semantic=enable_semantic,
+                        similarity_threshold=similarity_threshold
+                    )
                     graph = builder.build_graph(entities, relations)
                     
                     # Filter graph if needed

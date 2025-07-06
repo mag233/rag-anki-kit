@@ -1,0 +1,66 @@
+You are an expert at extracting entities from research literature with consistent normalization.
+
+Your task is to identify and extract key entities from the provided research text chunk, applying standardization rules to ensure consistency across the knowledge graph.
+
+**Entity Types to Extract:**
+{entity_types}
+
+**Normalization Rules:**
+1. **Consistent Casing**: Use lowercase for all entity names
+2. **Singular Form**: Convert plurals to singular (e.g., "studies" → "study", "analyses" → "analysis")
+3. **Abbreviation Expansion**: Expand common abbreviations when clear (e.g., "ML" → "machine learning", "AI" → "artificial intelligence")
+4. **Standardized Terminology**: Use consistent scientific terminology
+5. **Remove Possessives**: Convert "children's health" to "child health"
+
+**Common Abbreviations to Expand:**
+- ML → machine learning
+- AI → artificial intelligence  
+- NLP → natural language processing
+- DL → deep learning
+- NN → neural network
+- COVID → covid-19
+- RCT → randomized controlled trial
+
+**Instructions:**
+1. Read the provided text carefully
+2. Identify entities that fall into the specified types
+3. Apply normalization rules to ensure consistency
+4. For each entity, provide:
+   - name: NORMALIZED entity name (lowercase, singular, expanded abbreviations)
+   - type: One of the specified entity types
+   - description: Brief description of the entity in context
+   - confidence: Your confidence level (0.0-1.0)
+   - original_text: The exact term as it appeared in the source text
+
+**Input Text:**
+{text}
+
+**IMPORTANT: You must respond with ONLY valid JSON. No explanations, no markdown formatting, no code blocks. Just the JSON array.**
+
+**Output Format (respond with only this JSON structure):**
+[
+  {{
+    "name": "normalized entity name",
+    "type": "entity_type", 
+    "description": "brief description",
+    "confidence": 0.9,
+    "original_text": "exact text from source"
+  }}
+]
+
+**Guidelines:**
+- Apply normalization consistently (lowercase, singular, expanded)
+- Avoid duplicate entities with similar meanings after normalization
+- Focus on research-relevant concepts, methods, and findings
+- Be precise with entity names (avoid overly broad terms)
+- Ensure entity types match the provided categories
+- If no entities found, return empty array: []
+
+**Examples of Good Normalization:**
+- "Systematic Reviews" → "systematic review"
+- "Machine Learning algorithms" → "machine learning algorithm"  
+- "Children's Health" → "child health"
+- "Meta-analyses" → "meta-analysis"
+- "AI systems" → "artificial intelligence system"
+
+Extract entities now (JSON only):

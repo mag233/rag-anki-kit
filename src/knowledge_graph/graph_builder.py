@@ -2,7 +2,7 @@
 Knowledge Graph Builder
 
 This module constructs NetworkX graphs from extracted entities and relations,
-with deduplication and graph analysis capabilities.
+with enhanced deduplication and graph analysis capabilities.
 """
 
 import networkx as nx
@@ -10,13 +10,21 @@ from typing import List, Dict, Any, Set
 from collections import defaultdict
 import yaml
 from pathlib import Path
+from .entity_optimizer import create_entity_optimizer
 
 
 class KnowledgeGraphBuilder:
-    """Builds and manages knowledge graphs using NetworkX."""
+    """Builds and manages knowledge graphs using NetworkX with enhanced entity optimization."""
     
-    def __init__(self, config_path: str = None):
-        """Initialize the graph builder with configuration."""
+    def __init__(self, config_path: str = None, enable_semantic: bool = False, similarity_threshold: float = 0.85):
+        """
+        Initialize the graph builder with configuration.
+        
+        Args:
+            config_path: Path to configuration file
+            enable_semantic: Enable semantic similarity for Phase 2 optimization
+            similarity_threshold: Threshold for semantic similarity matching
+        """
         if config_path is None:
             config_path = Path(__file__).parent / "config.yaml"
         
@@ -26,47 +34,34 @@ class KnowledgeGraphBuilder:
         self.graph = nx.MultiDiGraph()
         self.entity_counts = defaultdict(int)
         self.relation_counts = defaultdict(int)
+        
+        # Initialize entity optimizer with Phase 1 (always enabled) and optional Phase 2
+        self.entity_optimizer = create_entity_optimizer(
+            enable_semantic=enable_semantic,
+            similarity_threshold=similarity_threshold
+        )
     
-    def normalize_entity_name(self, name: str) -> str:
-        """Normalize entity names for deduplication."""
-        return name.lower().strip().replace("_", " ")
-    
-    def deduplicate_entities(self, entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def optimize_entities(self, entities: List[Dict[str, Any]]) -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
         """
-        Deduplicate entities based on normalized names and types.
+        Optimize entities using the entity optimizer (Phase 1 + optional Phase 2).
         
         Args:
-            entities: List of extracted entities
+            entities: List of raw entities
             
         Returns:
-            Deduplicated list of entities
+            Tuple of (optimized_entities, optimization_stats)
         """
-        seen = {}
-        deduplicated = []
-        
-        for entity in entities:
-            name = entity.get('name', '')
-            entity_type = entity.get('type', '')
-            normalized_name = self.normalize_entity_name(name)
-            
-            key = (normalized_name, entity_type)
-            
-            if key not in seen:
-                seen[key] = entity
-                deduplicated.append(entity)
-            else:
-                # Merge metadata from duplicate entities
-                existing = seen[key]
-                if 'source_chunk' in entity:
-                    if isinstance(existing.get('source_chunks'), list):
-                        existing['source_chunks'].append(entity['source_chunk'])
-                    else:
-                        existing['source_chunks'] = [
-                            existing.get('source_chunk', ''),
-                            entity['source_chunk']
-                        ]
-        
-        return deduplicated
+        return self.entity_optimizer.optimize_entities(entities)
+    
+    # Legacy method for backward compatibility
+    def normalize_entity_name(self, name: str) -> str:
+        """Legacy method - use entity_optimizer instead."""
+        return self.entity_optimizer.normalize_entity_name(name)
+    
+    def deduplicate_entities(self, entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Legacy method - use optimize_entities instead for better results."""
+        optimized_entities, _ = self.optimize_entities(entities)
+        return optimized_entities
     
     def add_entities(self, entities: List[Dict[str, Any]]) -> None:
         """
