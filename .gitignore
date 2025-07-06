@@ -58,31 +58,33 @@ cython_debug/
 # Environment variables
 .env
 .venv
-src/projects/.DS_Store
-src/projects/File_type_test/processed/.DS_Store
-src/projects/File_type_test/processed/chunks/.DS_Store
-src/projects/File_type_test/processed/chunks/_ark-_2008_-Predicting-Factors-of-PA-in-adolescents_chunks.json
-src/projects/KT/.DS_Store
-src/projects/KT/litmap/kg_chunk_status.json
-src/projects/KT/litmap/KT_entities.json
-src/projects/KT/litmap/KT_relations.json
-src/projects/KT/processed/chunks/1-s2.0-S215335392300161X-main_chunks.json
-src/projects/KT/processed/chunks/1-s2.0-S2153353923001621-main_chunks.json
-src/projects/KT/processed/chunks/Allot-2021-Litsuggest-a-web-based-system-for-l_chunks.json
-src/projects/KT/processed/chunks/Blaizot-2022-Using-artificial-intelligence-metho_chunks.json
-src/projects/KT/processed/chunks/Clark-2020-A-full-systematic-review-was-comple_chunks.json
-src/projects/KT/processed/chunks/Hamel-2020-An-evaluation-of-distillersrs-machi_chunks.json
-src/projects/KT/processed/manifest.json
-src/projects/KT/raw_pdfs/.DS_Store
-src/projects/KT/raw_pdfs/1-s2.0-S215335392300161X-main.pdf
-src/projects/KT/raw_pdfs/1-s2.0-S2153353923001621-main.pdf
-src/projects/KT/raw_pdfs/Allot-2021-Litsuggest-a-web-based-system-for-l.pdf
-src/projects/KT/raw_pdfs/Blaizot-2022-Using-artificial-intelligence-metho.pdf
-src/projects/KT/raw_pdfs/Clark-2020-A-full-systematic-review-was-comple.pdf
-src/projects/KT/raw_pdfs/Hamel-2020-An-evaluation-of-distillersrs-machi.pdf
-src/projects/KT/vectorstore/chroma_db/ca0aeb1a-1ac2-4ca4-aec0-c6fab94261ca/data_level0.bin
-src/projects/KT/vectorstore/chroma_db/ca0aeb1a-1ac2-4ca4-aec0-c6fab94261ca/header.bin
-src/projects/KT/vectorstore/chroma_db/ca0aeb1a-1ac2-4ca4-aec0-c6fab94261ca/length.bin
-src/projects/KT/vectorstore/chroma_db/ca0aeb1a-1ac2-4ca4-aec0-c6fab94261ca/link_lists.bin
-src/projects/KT/vectorstore/chroma_db/chroma.sqlite3
+
+# macOS files
+.DS_Store
+**/.DS_Store
+
+# Project-specific data
+src/projects/*/
+!src/projects/
+
+# Knowledge graph outputs
+*.json
+!requirements.txt
+!package.json
+!config.yaml
+
+# Vector store databases
+*.sqlite3
+*.bin
+
+# PDF files
+*.pdf
+
+# Debug and temporary files
+debug_*.py
+temp_*.py
+test_*.py
+*_debug.py
+*_temp.py
+*_test.py
 .DS_Store
