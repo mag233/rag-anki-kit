@@ -605,14 +605,39 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
 
     # --- Step 3: Data Review & Merge Controls (soft-coded English) ---
     col_preview, col_load_history, col_merge = st.columns(3)
+    
+    # 检查是否有新数据需要合并
+    has_new_data = (
+        len(st.session_state.get('litmap_new_entities', [])) > 0 or 
+        len(st.session_state.get('litmap_new_relations', [])) > 0 or
+        os.path.exists(temp_new_entities_path) or
+        os.path.exists(temp_new_relations_path)
+    )
+    
     with col_preview:
-        preview_new = st.button(text.get("preview_new_data", "Preview New Data"), key="preview_new_data")
+        preview_new = st.button(
+            text.get("preview_new_data", "Preview New Data"), 
+            key="preview_new_data",
+            disabled=not has_new_data
+        )
     with col_load_history:
         load_history = st.button(text.get("load_history_data", "Load All History"), key="load_history_data")
     with col_merge:
-        if st.button(text.get("merge_new_data", "Merge New Data to Main DB"), key="merge_new_data"):
+        merge_button = st.button(
+            text.get("merge_new_data", "Merge New Data to Main DB"), 
+            key="merge_new_data",
+            disabled=not has_new_data,
+            help=text.get("merge_help", "Only available when there is new data to merge") if not has_new_data else None
+        )
+        if merge_button and has_new_data:
             st.session_state['litmap_merge_pending'] = True
             st.rerun()
+        
+        # 添加状态说明
+        if not has_new_data:
+            st.caption("💡 " + text.get("no_new_data_to_merge", "No new data to merge"))
+        else:
+            st.caption("📥 " + text.get("new_data_ready", "New data ready to merge"))
 
     # 处理按钮逻辑
     entities_path = os.path.join(litmap_folder, f"{selected_project}_entities.json")
