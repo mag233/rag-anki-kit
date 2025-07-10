@@ -23,6 +23,15 @@ from knowledge_graph.utils import (
 )
 from literature import load_all_chunks
 from lang_utils import get_text
+from litmap import (
+    load_chunk_status, load_all_chunks_from_folder, sync_chunk_status,
+    get_processing_stats, start_full_reprocess, save_chunk_status,
+    update_processed_chunks_status, clear_database_files, 
+    create_fresh_chunk_status, save_extraction_data, load_extraction_data,
+    dedup_items, merge_and_save_data, load_custom_types,
+    get_all_entity_and_relation_types, get_last_processed_times,
+    get_chunks_to_process
+)
 
 
 @st.cache_data(show_spinner=False)
@@ -92,81 +101,20 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
 
     # --- Knowledge Graph Chunk Processing State Management ---
     status_file = os.path.join(litmap_folder, "kg_chunk_status.json")
-    # Patch: Always aggregate all chunk_ids from all *_chunks.json files
-    import glob
-    chunk_files = glob.glob(os.path.join(chunks_folder, "*_chunks.json"))
-    all_chunks = []
-    chunk_ids = []
-    for fn in chunk_files:
-        with open(fn, "r", encoding="utf-8") as f:
-            arr = json.load(f)
-            all_chunks.extend(arr)
-            chunk_ids.extend([c.get("chunk_id") for c in arr if c.get("chunk_id")])
+    # Load all chunks from chunks folder
+    all_chunks, chunk_ids, chunk_files = load_all_chunks_from_folder(chunks_folder)
     now = datetime.datetime.now().isoformat()
 
-    # Load or initialize chunk status metadata
-    def load_chunk_status():
-        if os.path.exists(status_file):
-            with open(status_file, "r", encoding="utf-8") as f:
-                loaded_status = json.load(f)
-                # Ensure all entries have required fields for backward compatibility
-                for cid, status_data in loaded_status.items():
-                    if not isinstance(status_data, dict):
-                        loaded_status[cid] = {"status": "pending", "last_processed_at": None, "confidence_score": None}
-                    else:
-                        # Ensure all required fields exist
-                        status_data.setdefault("status", "pending")
-                        status_data.setdefault("last_processed_at", None)
-                        status_data.setdefault("confidence_score", None)
-                return loaded_status
-        else:
-            return {}
+    chunk_status = load_chunk_status(status_file)
 
-    def _start_full_reprocess(chunk_status, status_file, text, litmap_folder, selected_project):
-        """开始全量重新处理模式"""
-        # 1. 重置所有chunk状态
-        for cid in chunk_status:
-            chunk_status[cid]["status"] = "pending"
-            chunk_status[cid]["last_processed_at"] = None
-            chunk_status[cid]["confidence_score"] = None
-        with open(status_file, "w", encoding="utf-8") as f:
-            json.dump(chunk_status, f, ensure_ascii=False, indent=2)
-        
-        # 2. 删除历史数据文件
-        entities_file = os.path.join(litmap_folder, f"{selected_project}_entities.json")
-        relations_file = os.path.join(litmap_folder, f"{selected_project}_relations.json")
-        temp_entities_file = os.path.join(litmap_folder, f"{selected_project}_new_entities.tmp.json")
-        temp_relations_file = os.path.join(litmap_folder, f"{selected_project}_new_relations.tmp.json")
-        
-        for file_path in [entities_file, relations_file, temp_entities_file, temp_relations_file]:
-            if os.path.exists(file_path):
-                os.remove(file_path)
-        
-        # 3. 清空相关session state
-        for k in ["litmap_stats", "litmap_entities", "litmap_relations", "litmap_new_entities", "litmap_new_relations"]:
-            if k in st.session_state:
-                del st.session_state[k]
-        
-        # 4. 设置全量处理模式
-        st.session_state["litmap_status"] = "processing"
-        st.session_state["litmap_progress"] = text.get("initializing_full_reprocess", "Starting full reprocessing from scratch...")
-        st.session_state["litmap_errors"] = []
-        st.session_state["reprocess_mode"] = "full"
-        st.session_state['litmap_view_mode'] = 'direct'  # 直接替换模式
-    chunk_status = load_chunk_status()
-
-    # Sync metadata with current chunks
-    # Add new chunks as pending, remove missing
-    for cid in chunk_ids:
-        if cid not in chunk_status:
-            chunk_status[cid] = {"status": "pending", "last_processed_at": None, "confidence_score": None}
-    for cid in list(chunk_status.keys()):
-        if cid not in chunk_ids:
-            del chunk_status[cid]
-    # Always use the true total and processed count
-    total_chunks = len(chunk_ids)
-    n_processed = len([cid for cid in chunk_ids if chunk_status.get(cid, {}).get("status") == "processed"])
-    n_pending = total_chunks - n_processed
+    # Sync metadata with current chunks using business logic
+    chunk_status = sync_chunk_status(chunk_status, chunk_ids)
+    
+    # Get processing statistics
+    stats = get_processing_stats(chunk_status, chunk_ids)
+    total_chunks = stats["total_chunks"]
+    n_processed = stats["n_processed"] 
+    n_pending = stats["n_pending"]
 
     # --- Processing Information ---
     with st.expander("ℹ️ Processing Information", expanded=False):
@@ -290,28 +238,12 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
     # --- Entity/Relation type list (must be before UI controls) ---
     # Initialize extractor before using its config
     extractor = EntityRelationExtractor(use_improved_extraction=use_improved_extraction)
-    # Custom types file
-    custom_types_file = os.path.join(litmap_folder, "custom_types.json")
-    if os.path.exists(custom_types_file):
-        with open(custom_types_file, "r", encoding="utf-8") as f:
-            custom_types = json.load(f)
-        custom_entity_types = custom_types.get("customEntityTypes", [])
-        custom_relation_types = custom_types.get("customRelationTypes", [])
-    else:
-        custom_entity_types = []
-        custom_relation_types = []
-    # Default types
-    default_entity_types = extractor.config['ENTITY_TYPES'] + [
-        'gene', 'protein', 'chemical', 'symptom', 'biomarker'
-    ]
-    default_entity_types = list(dict.fromkeys(default_entity_types))
-    default_relation_types = extractor.config['RELATION_TYPES'] + [
-        'interacts_with', 'associated_with', 'expresses', 'inhibits', 'induces', 'encodes'
-    ]
-    default_relation_types = list(dict.fromkeys(default_relation_types))
-    # Merge custom types
-    all_entity_types = default_entity_types + [t for t in custom_entity_types if t not in default_entity_types]
-    all_relation_types = default_relation_types + [t for t in custom_relation_types if t not in default_relation_types]
+    
+    # Load custom types and get all available types
+    custom_entity_types, custom_relation_types = load_custom_types(litmap_folder)
+    all_entity_types, all_relation_types = get_all_entity_and_relation_types(
+        extractor, custom_entity_types, custom_relation_types
+    )
 
     # --- UI: Entity/Relation type selection (must be before action logic) ---
     col_entities, col_relations = st.columns(2)
@@ -384,7 +316,16 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                     st.session_state['reprocess_mode'] = 'full'
                     st.session_state['show_reprocess_confirm'] = False
                     # 立即开始全量重处理
-                    _start_full_reprocess(chunk_status, status_file, text, litmap_folder, selected_project)
+                    start_full_reprocess(chunk_status, status_file, litmap_folder, selected_project)
+                    # 设置 UI 状态
+                    st.session_state["litmap_status"] = "processing"
+                    st.session_state["litmap_progress"] = text.get("initializing_full_reprocess", "Starting full reprocessing from scratch...")
+                    st.session_state["litmap_errors"] = []
+                    st.session_state['litmap_view_mode'] = 'direct'  # 直接替换模式
+                    # 清空相关session state
+                    for k in ["litmap_stats", "litmap_entities", "litmap_relations", "litmap_new_entities", "litmap_new_relations"]:
+                        if k in st.session_state:
+                            del st.session_state[k]
                     st.rerun()
             with col_no:
                 if st.button("❌ " + text.get("cancel", "Cancel"), key="cancel_reprocess"):
@@ -548,7 +489,7 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
             )
             # --- FIX: Always load and update the full status file, only update processed chunks ---
             # Load the full status file again to avoid overwriting previous progress
-            full_chunk_status = load_chunk_status()
+            full_chunk_status = load_chunk_status(status_file)
             for c in process_chunks:
                 cid = c.get("chunk_id")
                 if cid:
@@ -728,28 +669,11 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         else:
             new_relations = st.session_state.get('litmap_new_relations', [])
         # 合并并去重
-        # Robust deduplication for entities and relations
-        def dedup_items(items, item_type):
-            seen = set()
-            result = []
-            for item in items:
-                if 'id' in item and item['id']:
-                    key = f"{item['id']}"
-                elif item_type == 'entity':
-                    key = f"{item.get('name','')}|{item.get('type','')}"
-                elif item_type == 'relation':
-                    key = f"{item.get('subject','')}|{item.get('object','')}|{item.get('relation_type','')}"
-                else:
-                    key = str(item)
-                if key not in seen:
-                    seen.add(key)
-                    result.append(item)
-            return result
         # 合并
         all_entities = disk_entities + new_entities
         all_relations = disk_relations + new_relations
         
-        # 去重
+        # 去重 (使用业务逻辑模块的函数)
         all_entities = dedup_items(all_entities, 'entity')
         all_relations = dedup_items(all_relations, 'relation')
         
@@ -769,7 +693,8 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         if os.path.exists(temp_new_relations_path):
             os.remove(temp_new_relations_path)
         msg = f"新数据已合并到主数据库并保存！共{len(all_entities)}个实体，{len(all_relations)}条关系。"
-        print(msg)
+        print(f"DEBUG: 合并完成 - 实体: {len(all_entities)}, 关系: {len(all_relations)}")
+        print(f"DEBUG: session_state更新后 - 实体: {len(st.session_state['litmap_entities'])}, 关系: {len(st.session_state['litmap_relations'])}")
         st.success(msg)
         st.rerun()
     
@@ -778,10 +703,13 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
         entities = st.session_state.get('litmap_new_entities', [])
         relations = st.session_state.get('litmap_new_relations', [])
         st.info(text["showing_new_data"])
+        print(f"DEBUG: 显示新数据 - 实体: {len(entities)}, 关系: {len(relations)}")
     else:
         entities = st.session_state.get('litmap_entities', [])
         relations = st.session_state.get('litmap_relations', [])
         st.info(text["showing_history_data"])
+        print(f"DEBUG: 显示历史数据 - 实体: {len(entities)}, 关系: {len(relations)}")
+        print(f"DEBUG: view_mode = {st.session_state.get('litmap_view_mode')}")
 
     # --- step 4/5: 后续统计和可视化全部用 entities/relations 变量 ---
     st.divider()
@@ -926,7 +854,9 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 st.info(text.get("no_connected_entities", "No connected entities found."))
         st.divider()
         st.subheader(clean_title(text['step5_title']))
+        print(f"DEBUG: 可视化检查 - 实体: {len(entities)}, 关系: {len(relations)}")
         if entities and relations:
+            print("DEBUG: 开始构建知识图谱可视化")
             try:
                 # Build graph with optimization settings
                 with st.spinner(text["building_graph"]):
@@ -1011,7 +941,15 @@ def render_litmap_tab(PROJECTS_DIR: str, lang: str) -> None:
                 st.error(f"Visualization error: {e}")
         
         else:
-            st.warning(text["insufficient_data"])
+            print(f"DEBUG: 数据不足，无法创建可视化 - 实体: {len(entities)}, 关系: {len(relations)}")
+            if len(entities) == 0 and len(relations) == 0:
+                st.warning(text["insufficient_data"] + " (没有实体和关系数据)")
+            elif len(entities) == 0:
+                st.warning(text["insufficient_data"] + " (没有实体数据)")
+            elif len(relations) == 0:
+                st.warning(text["insufficient_data"] + " (没有关系数据)")
+            else:
+                st.warning(text["insufficient_data"])
     
     else:
         st.info(text["select_project_and_configure"])
