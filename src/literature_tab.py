@@ -1,7 +1,7 @@
 import os
 import json
 import streamlit as st
-from preprocess import process_documents
+from document_processing import process_documents
 from retrieve import initialize_chroma, search
 from embed import create_or_update_embeddings, generate_embedding
 from summarize import summarize_chunks, call_llm_with_prompt

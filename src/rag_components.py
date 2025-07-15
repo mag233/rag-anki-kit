@@ -14,8 +14,15 @@ from rag_utils import (
     UploadManager,
     get_embedding_model
 )
-from preprocess import process_documents
+from document_processing import process_documents
 from embed import create_or_update_embeddings
+from processing_config import (
+    get_chunking_methods_for_ui,
+    get_cleaning_levels_for_ui,
+    normalize_chunking_method,
+    normalize_cleaning_level,
+    get_display_text
+)
 
 
 def render_project_selection(projects_dir: str, text: Dict) -> Optional[str]:
@@ -115,72 +122,138 @@ def render_status_dashboard(db_manager: ChromaDBManager, file_manager: FileManag
 
 
 def render_preprocessing_section(paths: Dict, text: Dict):
-    """渲染预处理界面"""
+    """Render preprocessing interface with fine-grained controls"""
     st.divider()
-    st.markdown(text["step2_title"])
+    st.markdown("### Step 2: Document Processing")
     
-    # 分块方法选择
-    method = st.selectbox(text["chunk_method"], text["chunk_methods"], index=0)
+    # Create two columns layout
+    col1, col2 = st.columns(2)
     
-    # 分块大小设置
-    size = None
-    if method == text["chunk_length"]:
-        size = st.number_input(
-            text["chunk_length_label"], 
-            min_value=50, 
-            max_value=2000, 
-            value=400, 
-            step=50
+    with col1:
+        st.subheader("📄 Document Processing Options")
+        
+        # Chunking method selection (English only)
+        chunking_methods = ["by_sentence", "by_paragraph", "by_page", "fixed_size"]
+        method = st.selectbox("Chunking Method:", chunking_methods, index=0)
+        
+        # Chunk size setting (only for fixed_size)
+        size = None
+        if method == "fixed_size":
+            size = st.number_input(
+                "Chunk Size (characters)", 
+                min_value=50, 
+                max_value=2000, 
+                value=400, 
+                step=50
+            )
+        
+        # Chunk overlap setting
+        chunk_overlap = st.number_input(
+            "Chunk Overlap (tokens)",
+            min_value=0,
+            max_value=200,
+            value=50,
+            step=10,
+            help="Overlap between adjacent chunks helps maintain context continuity"
         )
+        
+        # Force reprocess option
+        force = st.checkbox("Force full reprocessing", value=False)
     
-    # 强制重新处理选项
-    force = st.checkbox(text["force_reprocess"], value=False)
+    with col2:
+        st.subheader("🧹 Cleaning Options")
+        
+        # Cleaning level selection (English only)
+        clean_level = st.radio(
+            "Cleaning Level",
+            ["basic", "deep"],
+            index=0,
+            help="Basic: Standard text cleaning\\nDeep: Remove references, footnotes, page numbers etc."
+        )
+        
+        # Deep clean detailed options (only show when deep cleaning is selected)
+        deep_clean_config = {}
+        if clean_level == "deep":
+            st.markdown("**Deep Cleaning Options:**")
+            deep_clean_config = {
+                'remove_references': st.checkbox("Remove References", value=True),
+                'remove_authors': st.checkbox("Remove Author Info", value=True),
+                'remove_citations': st.checkbox("Remove Citations", value=True),
+                'remove_page_numbers': st.checkbox("Remove Page Numbers", value=True),
+                'normalize_whitespace': st.checkbox("Normalize Whitespace", value=True)
+            }
+        
+        # Extraction options
+        st.markdown("**Extraction Options:**")
+        extract_tables = st.checkbox("Extract Tables", value=True)
+        extract_images = st.checkbox("Extract Images", value=True)
+        extract_meta = st.checkbox("Extract Metadata", value=True)
     
-    # 处理按钮
-    if st.button(text["start_preprocess"]):
-        _handle_preprocessing(paths, method, size, force, text)
+    # Process button
+    st.divider()
+    if st.button("Start Processing", type="primary"):
+        _handle_preprocessing(
+            paths, method, size, chunk_overlap, force,
+            clean_level, deep_clean_config, 
+            extract_tables, extract_images, extract_meta
+        )
 
 
-def _handle_preprocessing(paths: Dict, method: str, size: Optional[int], force: bool, text: Dict):
-    """处理预处理逻辑"""
+def _handle_preprocessing(paths: Dict, method: str, size: Optional[int], chunk_overlap: int, 
+                        force: bool, clean_level: str, deep_clean_config: Dict,
+                        extract_tables: bool, extract_images: bool, extract_meta: bool):
+    """Handle preprocessing logic"""
     try:
-        # 创建进度指示器
-        progress_placeholder = st.empty()
+        # Create progress indicators
         status_placeholder = st.empty()
         
         with status_placeholder.container():
-            st.info("正在处理文档...")
+            st.info(f"Processing documents... (Cleaning level: {clean_level})")
         
-        # 执行预处理
-        process_documents(
-            paths["raw_dir"],
-            paths["proc_dir"],
-            extract_tables=True,
-            extract_images=True,
-            extract_meta=True,
+        # Determine if deep cleaning is enabled
+        enable_deep_clean = (clean_level == "deep")
+        
+        # Execute preprocessing
+        result = process_documents(
+            input_folder=paths["raw_dir"],
+            output_folder=paths["proc_dir"],
+            extract_tables=extract_tables,
+            extract_images=extract_images,
+            extract_meta=extract_meta,
             chunking_method=method,
             chunk_size=size or 400,
-            chunk_overlap=50,
-            force_reprocess=force
+            chunk_overlap=chunk_overlap,
+            force_reprocess=force,
+            enable_deep_clean=enable_deep_clean,
+            deep_clean_config=deep_clean_config if enable_deep_clean else None
         )
         
-        # 清理缓存以获取最新数据
+        # Clear cache to get latest data
         from rag_utils import clear_cache
         clear_cache()
         
-        status_placeholder.success(text["preprocess_success"])
+        # Show detailed results
+        status_placeholder.success("Processing completed!")
         
-        # 显示处理后的统计信息
-        _show_processing_stats(paths, text)
+        # Show processing statistics
+        st.info(f"📊 Processing Statistics:\\n"
+               f"- Total files: {result.total_files}\\n"
+               f"- Processed: {result.processed_files}\\n"
+               f"- Skipped: {result.skipped_files}\\n"
+               f"- Failed: {result.failed_files}\\n"
+               f"- Total chunks: {result.total_chunks}")
+        
+        # Show post-processing statistics
+        _show_processing_stats(paths)
         
     except Exception as e:
-        st.error(text["preprocess_fail"].format(err=str(e)))
+        st.error(f"Processing failed: {str(e)}")
 
 
-def _show_processing_stats(paths: Dict, text: Dict):
-    """显示处理后的统计信息"""
+def _show_processing_stats(paths: Dict):
+    """Show post-processing statistics"""
     try:
-        # 重新创建管理器实例以获取最新数据
+        # Re-create manager instances to get latest data
         embed_model = get_embedding_model()
         db_manager = ChromaDBManager(paths["db_dir"], embed_model)
         file_manager = FileManager(paths["chunks_dir"], paths["manifest_path"])
@@ -188,21 +261,21 @@ def _show_processing_stats(paths: Dict, text: Dict):
         chunk_count = file_manager.get_chunk_count()
         embed_count = db_manager.get_embedding_count()
         
-        st.info(text["chunk_count"].format(n=chunk_count))
-        st.info(text["embed_count"].format(n=embed_count))
+        st.info(f"Total Chunks: {chunk_count}")
+        st.info(f"Total Embeddings: {embed_count}")
         
         progress = (embed_count / chunk_count) if chunk_count > 0 else 0.0
-        st.progress(progress, text=text["progress_label"])
+        st.progress(progress, text="Embedding Progress")
         
-        # 显示manifest表格
-        _show_manifest_table(file_manager, text)
+        # Show manifest table
+        _show_manifest_table(file_manager)
         
     except Exception as e:
-        st.error(f"显示统计信息失败: {e}")
+        st.error(f"Failed to show statistics: {e}")
 
 
-def _show_manifest_table(file_manager: FileManager, text: Dict):
-    """显示manifest表格"""
+def _show_manifest_table(file_manager: FileManager):
+    """Show manifest table"""
     try:
         manifest = file_manager.get_manifest()
         if not manifest:
@@ -211,10 +284,11 @@ def _show_manifest_table(file_manager: FileManager, text: Dict):
         rows = []
         for filename, meta in manifest.items():
             rows.append({
-                text["manifest_col_file"]: filename,
-                text["manifest_col_nchunks"]: meta.get("n_chunks", "-"),
-                text["manifest_col_chunkmethod"]: meta.get("chunk_method", "-"),
-                text["manifest_col_last"]: meta.get("last_processed", "-")
+                "File": filename,
+                "Chunks": meta.get("n_chunks", "-"),
+                "Chunk Method": meta.get("chunk_method", "-"),
+                "Deep Clean": meta.get("deep_clean_enabled", False),
+                "Last Processed": meta.get("last_processed", "-")
             })
         
         st.dataframe(
@@ -225,6 +299,7 @@ def _show_manifest_table(file_manager: FileManager, text: Dict):
         )
         
     except Exception as e:
+        st.error(f"Failed to show manifest table: {e}")
         st.error(f"显示manifest表格失败: {e}")
 
 
