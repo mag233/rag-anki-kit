@@ -408,31 +408,14 @@ class DocumentChunker:
     def _chunk_by_sentence(self, docs: List[Document], file_stem: str) -> List[Document]:
         """Chunk by sentence"""
         chunks = []
+        global_index = 0  # 使用全局索引避免重复chunk_id
         for doc in docs:
-            for i, sent in enumerate(sent_tokenize(doc.page_content)):
+            for sent in sent_tokenize(doc.page_content):
                 chunks.append(Document(
                     page_content=sent,
-                    metadata={**doc.metadata, "chunk_id": f"{file_stem}_sent{i}"}
+                    metadata={**doc.metadata, "chunk_id": f"{file_stem}_sent{global_index}"}
                 ))
-        return chunks
-    
-    def _chunk_by_paragraph(self, docs: List[Document], file_stem: str, file_extension: str) -> List[Document]:
-        """Chunk by paragraph"""
-        chunks = []
-        for doc in docs:
-            # For Excel files, split by lines
-            if file_extension in {".xls", ".xlsx"}:
-                paras = doc.page_content.split("\n")
-            else:
-                paras = doc.page_content.split("\n\n")
-            
-            for i, para in enumerate(paras):
-                para = para.strip()
-                if para:  # Skip empty paragraphs
-                    chunks.append(Document(
-                        page_content=para,
-                        metadata={**doc.metadata, "chunk_id": f"{file_stem}_para{i}"}
-                    ))
+                global_index += 1
         return chunks
     
     def _chunk_by_size(self, docs: List[Document], chunk_size: int, chunk_overlap: int) -> List[Document]:
@@ -452,6 +435,7 @@ class DocumentChunker:
     def _chunk_by_paragraph(self, docs: List[Document], file_stem: str, file_extension: str) -> List[Document]:
         """Chunk by paragraph"""
         chunks = []
+        global_index = 0  # 使用全局索引避免重复chunk_id
         for doc in docs:
             # For Excel files, split by lines
             if file_extension in {".xls", ".xlsx"}:
@@ -459,13 +443,14 @@ class DocumentChunker:
             else:
                 paras = doc.page_content.split("\n\n")
             
-            for i, para in enumerate(paras):
+            for para in paras:
                 para = para.strip()
                 if para:  # Skip empty paragraphs
                     chunks.append(Document(
                         page_content=para,
-                        metadata={**doc.metadata, "chunk_id": f"{file_stem}_para{i}"}
+                        metadata={**doc.metadata, "chunk_id": f"{file_stem}_para{global_index}"}
                     ))
+                    global_index += 1
         return chunks
     
     def _chunk_by_size(self, docs: List[Document], chunk_size: int, chunk_overlap: int) -> List[Document]:

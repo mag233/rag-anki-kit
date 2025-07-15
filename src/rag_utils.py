@@ -111,7 +111,9 @@ class FileManager:
                 
                 if has_new_chunks:
                     filename = os.path.basename(chunk_file)
-                    files_with_new_chunks.add(os.path.splitext(filename)[0])
+                    # 正确提取文件stem：移除_chunks.json后缀
+                    file_stem = filename.replace("_chunks.json", "")
+                    files_with_new_chunks.add(file_stem)
         
         except Exception as e:
             st.error(f"检查新chunk失败: {e}")

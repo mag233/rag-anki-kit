@@ -147,15 +147,17 @@ def render_preprocessing_section(paths: Dict, text: Dict):
                 step=50
             )
         
-        # Chunk overlap setting
-        chunk_overlap = st.number_input(
-            "Chunk Overlap (tokens)",
-            min_value=0,
-            max_value=200,
-            value=50,
-            step=10,
-            help="Overlap between adjacent chunks helps maintain context continuity"
-        )
+        # Chunk overlap setting (only for fixed_size)
+        chunk_overlap = 0
+        if method == "fixed_size":
+            chunk_overlap = st.number_input(
+                "Chunk Overlap (tokens)",
+                min_value=0,
+                max_value=200,
+                value=50,
+                step=10,
+                help="Overlap between adjacent chunks helps maintain context continuity"
+            )
         
         # Force reprocess option
         force = st.checkbox("Force full reprocessing", value=False)
@@ -183,10 +185,7 @@ def render_preprocessing_section(paths: Dict, text: Dict):
                 'normalize_whitespace': st.checkbox("Normalize Whitespace", value=True)
             }
         
-        # Extraction options
-        st.markdown("**Extraction Options:**")
-        extract_tables = st.checkbox("Extract Tables", value=True)
-        extract_images = st.checkbox("Extract Images", value=True)
+        # Keep only metadata extraction (tables and images are not implemented)
         extract_meta = st.checkbox("Extract Metadata", value=True)
     
     # Process button
@@ -195,13 +194,13 @@ def render_preprocessing_section(paths: Dict, text: Dict):
         _handle_preprocessing(
             paths, method, size, chunk_overlap, force,
             clean_level, deep_clean_config, 
-            extract_tables, extract_images, extract_meta
+            extract_meta
         )
 
 
 def _handle_preprocessing(paths: Dict, method: str, size: Optional[int], chunk_overlap: int, 
                         force: bool, clean_level: str, deep_clean_config: Dict,
-                        extract_tables: bool, extract_images: bool, extract_meta: bool):
+                        extract_meta: bool):
     """Handle preprocessing logic"""
     try:
         # Create progress indicators
@@ -217,8 +216,8 @@ def _handle_preprocessing(paths: Dict, method: str, size: Optional[int], chunk_o
         result = process_documents(
             input_folder=paths["raw_dir"],
             output_folder=paths["proc_dir"],
-            extract_tables=extract_tables,
-            extract_images=extract_images,
+            extract_tables=False,  # Not implemented - set to False
+            extract_images=False,  # Not implemented - set to False
             extract_meta=extract_meta,
             chunking_method=method,
             chunk_size=size or 400,
@@ -346,6 +345,11 @@ def _handle_embedding(db_manager: ChromaDBManager, file_manager: FileManager, mo
                 only_files=only_files
             )
             progress_placeholder.empty()
+            
+            # 清除缓存以获取最新数据
+            from rag_utils import clear_cache
+            clear_cache()
+            
             status_placeholder.success(text["embed_success"])
             
         except Exception as embed_error:
@@ -468,6 +472,7 @@ def render_health_check(db_manager: ChromaDBManager, file_manager: FileManager, 
                 text["manifest_col_file"]: filename,
                 text["manifest_col_chunkmethod"]: meta.get("chunk_method", "-"),
                 text["manifest_col_last"]: meta.get("last_processed", "-"),
+                "Deep Clean": "Yes" if meta.get("deep_clean_enabled", False) else "No",
                 "Error": meta.get("error", "-"),
                 "Has Chunks": n_chunks > 0,
                 "Embedding Status": embed_status

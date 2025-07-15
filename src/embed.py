@@ -24,7 +24,7 @@ def create_or_update_embeddings(chunks_folder, persist_directory, only_files=Non
     # 收集所有 chunk
     chunk_files = [
         fn for fn in os.listdir(chunks_folder)
-        if fn.endswith("_chunks.json") and (only_files is None or os.path.splitext(fn)[0] in only_files)
+        if fn.endswith("_chunks.json") and (only_files is None or fn.replace("_chunks.json", "") in only_files)
     ]
     all_chunks = []
     for fn in chunk_files:
