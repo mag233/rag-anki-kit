@@ -15,75 +15,57 @@
   <img src="assets/intro.png" alt="Project Introduction" width="400" height="400"/>
 </p>
 
-**RAG Anki Kit** is a comprehensive AI-powered research assistant that transforms your academic papers and documents into an intelligent knowledge pipeline. From advanced document ingestion to sophisticated knowledge graph generation, from semantic search to automated flashcard creation, this toolkit streamlines the entire research workflow with cutting-edge AI capabilities.
+**RAG Anki Kit** is a comprehensive AI-powered research assistant that transforms your academic papers and documents into an intelligent knowledge pipeline. From document ingestion to knowledge graph generation, from semantic search to automated flashcard creation, this toolkit streamlines the entire research workflow.
 
-This project represents a journey into the exciting world of AI and natural language processing, featuring advanced entity optimization, incremental processing, and comprehensive analytics. Built with passion for learning and research efficiency, it integrates multiple cutting-edge technologies to create a seamless academic research experience with performance optimizations and modular architecture.
+This project represents my journey from a non-CS background into the exciting world of AI and natural language processing. Built with passion for learning and research efficiency, it integrates multiple cutting-edge technologies to create a seamless academic research experience.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🔍 **Advanced RAG (Retrieval-Augmented Generation)**
-- **Smart Document Processing**: Upload PDFs, Word docs, Excel files, Markdown, and HTML with advanced parsing
+### RAG (Retrieval-Augmented Generation)
+- **Smart Document Processing**: Upload PDFs, Word docs, Excel files, Markdown, and HTML
 - **Flexible Chunking Strategies**: Sentence-based, paragraph-based, page-based, or custom length splitting
-- **Intelligent Vector Database**: ChromaDB-powered semantic search with embedding optimization
+- **Semantic Search**: Vector embeddings powered by ChromaDB for intelligent document retrieval
 - **Interactive Q&A**: Ask research questions and get contextual answers with source citations
-- **Health Check Dashboard**: Real-time monitoring of document processing status and embedding coverage
-- **Modular Architecture**: Optimized performance with component-based design and caching
 
-### 📚 **Enhanced Literature Review Assistant**
-- **AI-Powered Query Optimization**: Automatically improve research questions for better retrieval
+### Literature Review Assistant
 - **Automated Summarization**: Generate comprehensive literature summaries from your document collection
 - **Citation Management**: Automatic extraction and formatting of references
 - **Research Gap Analysis**: Identify knowledge gaps and research opportunities
-- **Relevance Filtering**: Configurable confidence thresholds for result quality
-- **Multi-language Support**: Process documents in multiple languages with bilingual interface
+- **Multi-language Support**: Process documents in multiple languages
 
-### 🧠 **LitMap: Advanced Knowledge Graph Generation**
-- **AI-Powered Entity & Relation Extraction**: GPT-4 powered extraction with 8 entity types and 8 relation types
-- **Two-Phase Entity Optimization**: 
-  - **Phase 1**: Linguistic normalization (always enabled) with abbreviation expansion and singularization
-  - **Phase 2**: Semantic similarity detection using sentence transformers (optional)
-- **Incremental Processing**: Smart chunk-by-chunk processing with progress tracking and state persistence
-- **Advanced Processing Modes**: Full reprocessing, selective reprocessing, and incremental updates
-- **Interactive Visualizations**: Dynamic network graphs with physics simulation and customizable layouts
-- **Comprehensive Analytics Dashboard**: 
-  - Entity influence scoring and centrality analysis
-  - Most connected entities with detailed relationship analysis
-  - Confidence metrics and processing statistics
-- **Export Capabilities**: Save graphs in multiple formats (GEXF, GraphML, JSON, images)
-- **Cost Estimation**: Real-time OpenAI API usage tracking
+### LitMap: Knowledge Graph Generation
+- **Entity & Relation Extraction**: AI-powered extraction of research entities and their relationships
+- **Interactive Visualizations**: Dynamic network graphs with customizable layouts
+- **Research Analytics Dashboard**: Statistical insights into your knowledge base
+- **Export Capabilities**: Save graphs in multiple formats (JSON, GraphML, images)
 
-### 🎯 **Intelligent Anki Integration**
-- **AI-Optimized Query Processing**: Automatic query enhancement for better card generation
+### Anki Integration
 - **Automated Flashcard Generation**: Create Q&A and cloze deletion cards from your research
-- **Configurable Difficulty & Detail Levels**: Tailor card complexity to your learning needs
-- **Advanced Card Preview**: Enhanced table display with text wrapping and scrolling
-- **Batch Export**: Generate hundreds of cards in minutes with CSV download
+- **Customizable Templates**: Tailor card formats to your learning style
+- **Batch Export**: Generate hundreds of cards in minutes
 - **Spaced Repetition Ready**: Seamlessly import into Anki for optimized learning
 
 ---
 
-## 🛠 Tech Stack & Architecture
+## Tech Stack & Architecture
 
-This project integrates modern AI and web technologies with advanced optimization:
+This project integrates modern AI and web technologies:
 
-- **🐍 Python**: Core backend logic with modular component architecture
-- **🌊 Streamlit**: Interactive web application framework with custom styling
-- **🤖 OpenAI API**: GPT-4 powered text analysis, summarization, and advanced entity extraction
-- **📊 ChromaDB**: Vector database for semantic search and embeddings with intelligent caching
-- **🧮 NumPy/Pandas**: Optimized data manipulation and analysis
-- **🕸️ NetworkX**: Advanced graph analysis and knowledge network construction
-- **📈 Plotly + Pyvis**: Interactive data visualizations, network graphs, and analytics dashboards
-- **🔧 Sentence Transformers**: Optional semantic similarity for entity optimization
-- **📄 PyMuPDF/Unstructured**: Advanced document parsing with multi-format support
-- **⚡ Performance Optimizations**: Component caching, batch processing, and state management
-- **🎨 CSS/HTML**: Custom responsive design with modern UI components
-- **🌍 Multi-language**: Full bilingual interface (English/Chinese) with language-aware processing
+- **Python**: Core backend logic and data processing
+- **Streamlit**: Interactive web application framework
+- **OpenAI API**: GPT-powered text analysis, summarization, and extraction
+- **ChromaDB**: Vector database for semantic search and embeddings
+- **NetworkX**: Graph analysis and knowledge network construction
+- **Plotly**: Interactive data visualizations and analytics dashboards
+- **PyMuPDF/Unstructured**: Advanced document parsing and processing
+- **NumPy/Pandas**: Data manipulation and analysis
+- **CSS/HTML**: Custom styling and responsive design
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -117,155 +99,139 @@ This project integrates modern AI and web technologies with advanced optimizatio
 
 ---
 
-## 📖 Usage Guide
+## Usage Guide
 
-### 1. **RAG Tab** - Document Processing & Intelligent Q&A
-- **Project Management**: Create and switch between multiple research projects
-- **File Upload**: Support for PDF, DOCX, Excel, Markdown, and HTML files
-- **Smart Preprocessing**: Configure chunking strategy based on document type and research needs
-- **Health Check Dashboard**: Monitor processing status, embedding coverage, and system health
-- **Vector Database**: Generate embeddings with incremental updates and optimization
-- **Intelligent Search**: Ask questions with AI-powered query optimization and get cited answers
+### 1. RAG Tab - Document Processing & Q&A
+- Upload your research documents (PDF, DOCX, etc.)
+- Configure chunking strategy based on your needs
+- Generate embeddings and build your vector database
+- Ask questions and get AI-powered answers with citations
 
-### 2. **Literature Tab** - Advanced Research Synthesis
-- **Query Enhancement**: AI-powered optimization of research questions for better retrieval
-- **Comprehensive Reviews**: Generate literature reviews from multiple papers simultaneously
-- **Citation Analysis**: Extract key findings, research trends, and bibliographic information
-- **Relevance Control**: Configurable confidence thresholds for result quality
-- **Export Options**: Formatted bibliographies and research summaries
+### 2. Literature Tab - Research Synthesis
+- Generate comprehensive literature reviews
+- Analyze multiple papers simultaneously
+- Extract key findings and research trends
+- Export formatted bibliographies
 
-### 3. **LitMap Tab** - Knowledge Graph Generation & Analytics
-- **Step 1**: Select your processed project with health status indicators
-- **Step 2**: Configure extraction settings with advanced optimization options:
-  - Entity confidence thresholds and deduplication
-  - Two-phase optimization (linguistic + semantic similarity)
-  - Custom entity and relation types
-  - Physics-enabled visualizations
-- **Step 3**: Choose from 8 predefined entity types and 8 relation types, or add custom types
-- **Step 4**: Generate knowledge graphs with multiple processing modes:
-  - **Incremental**: Process only new chunks, preserving existing data
-  - **Selective**: Reprocess selected chunks with merge capabilities
-  - **Full Reprocess**: Complete regeneration from scratch
-- **Step 5**: Explore interactive visualizations and comprehensive analytics:
-  - Network graphs with physics simulation and customizable layouts
-  - Entity influence scoring and centrality analysis
-  - Most connected entities with relationship diversity metrics
-  - Statistical dashboards with processing insights
-- **Step 6**: Export in multiple formats (GEXF, GraphML, JSON, PNG)
+### 3. LitMap Tab - Knowledge Graph Generation
+- **Step 1**: Select your processed project
+- **Step 2**: Configure extraction settings (confidence thresholds, entity types)
+- **Step 3**: Choose entity and relation types to extract
+- **Step 4**: Generate the knowledge graph with real-time progress tracking
+- **Step 5**: Explore interactive visualizations and analytics
+- **Step 6**: Export your knowledge graph in various formats
 
-### 4. **Anki Tab** - Intelligent Flashcard Creation
-- **AI Query Optimization**: Enhance learning queries for better card generation
-- **Configurable Generation**: Adjust difficulty, detail level, and card quantity
-- **Advanced Preview**: Enhanced table display with text wrapping and comprehensive formatting
-- **Multi-format Cards**: Generate Q&A and cloze deletion cards from your knowledge base
-- **Batch Processing**: Create and export hundreds of cards efficiently
-- **Direct Import**: Seamless CSV export for Anki integration
+### 4. Anki Tab - Flashcard Creation
+- Generate study cards from your knowledge base
+- Customize question and answer formats
+- Export directly to Anki for spaced repetition learning
 
 ---
 
-## 🏗 Project Structure
+## Project Structure
 
 ```
 rag-anki-kit/
-├── src/                      # Main source code with modular architecture
-│   ├── app.py               # Main Streamlit application with optimized performance
-│   ├── rag_tab.py           # Refactored RAG functionality with component architecture
-│   ├── rag_components.py    # Modular UI components for better maintainability
-│   ├── rag_utils.py         # Optimized utility classes with caching and connection management
-│   ├── literature_tab.py    # Enhanced literature review with AI query optimization
-│   ├── litmap_tab.py        # Advanced knowledge graph generation with state management
-│   ├── anki_tab.py          # Intelligent flashcard generation with enhanced UI
-│   ├── anki.py              # Core Anki card creation with AI optimization
-│   ├── embed.py             # Optimized vector embedding and database operations
-│   ├── literature.py        # Advanced literature analysis core functions
-│   ├── preprocess.py        # Enhanced document parsing and chunking strategies
-│   ├── retrieve.py          # Intelligent semantic search and retrieval logic
-│   ├── summarize.py         # AI-powered text summarization functions
-│   ├── format_template.py   # Advanced template formatting utilities
-│   ├── lang_utils.py        # Comprehensive multi-language support utilities
-│   ├── knowledge_graph/     # Advanced knowledge graph processing module
+├── src/                      # Main source code
+│   ├── app.py               # Main Streamlit application entry point
+│   ├── rag_tab.py           # Document processing & RAG functionality
+│   ├── rag_components.py    # Modular UI components for RAG features
+│   ├── rag_utils.py         # RAG utility classes and helper functions
+│   ├── literature_tab.py    # Literature review and summarization features
+│   ├── literature.py        # Literature analysis core functions
+│   ├── litmap_tab.py        # Knowledge graph generation UI interface
+│   ├── litmap.py            # Knowledge graph core functionality
+│   ├── anki_tab.py          # Flashcard generation and export
+│   ├── anki.py              # Core Anki card creation logic
+│   ├── document_processing.py # Advanced document processing pipeline
+│   ├── improved_document_processing.py # Enhanced processing with optimizations
+│   ├── preprocess.py        # Document parsing and chunking
+│   ├── processing_config.py # Processing configuration and settings
+│   ├── embed.py             # Vector embedding and database operations
+│   ├── retrieve.py          # Semantic search and retrieval logic
+│   ├── summarize.py         # Text summarization functions
+│   ├── format_template.py   # Template formatting utilities
+│   ├── lang_utils.py        # Multi-language support utilities
+│   ├── ui_config.py         # UI configuration and styling
+│   ├── knowledge_graph/     # Knowledge graph processing module
 │   │   ├── __init__.py      # Module initialization
-│   │   ├── config.yaml      # Comprehensive configuration for entity/relation types
-│   │   ├── extractor.py     # Advanced AI-powered entity & relation extraction
-│   │   ├── entity_optimizer.py # Two-phase entity optimization with semantic similarity
-│   │   ├── graph_builder.py # NetworkX graph construction with advanced analytics
-│   │   ├── visualizer.py    # Interactive visualizations & comprehensive analytics
-│   │   ├── prompts/         # Optimized LLM prompt templates
-│   │   │   ├── entity_extraction_improved.txt    # Enhanced entity extraction prompts
-│   │   │   └── relation_extraction.txt  # Advanced relation extraction prompts
+│   │   ├── config.yaml      # Configuration for entity/relation types
+│   │   ├── extractor.py     # AI-powered entity & relation extraction
+│   │   ├── graph_builder.py # NetworkX graph construction and analysis
+│   │   ├── visualizer.py    # Interactive graph visualizations & analytics
+│   │   ├── entity_optimizer.py # Entity optimization and deduplication
+│   │   ├── prompts/         # LLM prompt templates
+│   │   │   ├── entity_extraction_improved.txt # Enhanced entity extraction
+│   │   │   └── relation_extraction.txt # Relation extraction prompts
 │   │   └── utils/           # Knowledge graph helper utilities
 │   │       ├── __init__.py  # Utils module initialization
 │   │       └── helpers.py   # Graph analysis and data processing helpers
-│   ├── projects/            # User project data storage with organized structure
-│   ├── experimental/        # Experimental features and advanced utilities
-│   │   └── deep_clean.py    # Advanced data cleaning and processing tools
-│   └── lib/                 # Frontend assets and external libraries
+│   ├── experimental/        # Experimental features and utilities
+│   │   └── deep_clean.py    # Advanced data cleaning tools
+│   └── projects/            # User project data storage
+│       ├── [project_name]/  # Individual project directories
+│       │   ├── raw_pdfs/    # Original uploaded documents
+│       │   ├── processed/   # Processed document chunks and metadata
+│       │   │   ├── chunks/  # Document chunk files (.json)
+│       │   │   └── manifest.json # Processing metadata and file tracking
+│       │   ├── vectorstore/ # Vector database storage (ChromaDB)
+│       │   ├── litmap/      # Knowledge graph data (entities, relations)
+│       │   └── anki_cards/  # Generated Anki flashcards (.csv)
 ├── assets/                  # Project assets
 │   ├── logo.png            # Application logo
 │   └── intro.png           # Introduction image
-├── lib/                    # External libraries and assets
+├── lib/                    # External frontend libraries and assets
+│   ├── bindings/           # JavaScript utility bindings
+│   ├── tom-select/         # Multi-select component library
+│   └── vis-9.1.2/          # Network visualization library
 ├── .env                    # Environment variables (not in repo)
 ├── .gitignore             # Git ignore rules
 ├── requirements.txt       # Python dependencies
 ├── README.md             # Project documentation (English)
-├── README.zh.md          # Project documentation (Chinese)
-├── LITMAP_FEATURE_COMPLETE.md      # LitMap feature documentation
-└── LITMAP_IMPLEMENTATION_SUMMARY.md # Implementation details
+└── README.zh.md          # Project documentation (Chinese)
 ```
 
 ---
 
-## ⚡ Performance & Technical Improvements
+## Advanced Features
 
-### Architecture Enhancements
-- **Modular Component Design**: Separated UI components for better maintainability and performance
-- **Intelligent Caching**: Multi-level caching for database connections, file operations, and computation results
-- **State Management**: Persistent processing state with recovery capabilities and session management
-- **Resource Optimization**: Connection pooling, memory management, and cleanup routines
+### Knowledge Graph Analytics
+- **Centrality Analysis**: Identify the most important entities in your research domain
+- **Community Detection**: Discover research clusters and thematic groups
+- **Temporal Analysis**: Track how knowledge evolves across different papers
+- **Gap Analysis**: Find underexplored connections and research opportunities
 
-### Processing Optimizations
-- **Incremental Processing**: Smart chunk-by-chunk processing with state persistence
-- **Batch Operations**: Efficient handling of large document collections
-- **Progress Tracking**: Real-time progress monitoring with detailed processing statistics
-- **Error Recovery**: Robust error handling with automatic retry mechanisms
+### Customization Options
+- **Custom Entity Types**: Define domain-specific entities for extraction
+- **Template System**: Modify AI prompts for different research domains
+- **Export Formats**: Multiple output formats for different use cases
+- **Language Support**: Full bilingual interface (English/Chinese)
 
-### Knowledge Graph Innovations
-- **Two-Phase Entity Optimization**: Linguistic normalization + optional semantic similarity
-- **Advanced Analytics**: Entity influence scoring, centrality analysis, and relationship metrics
-- **Custom Type Support**: User-defined entity and relation types for domain-specific research
-- **Interactive Visualizations**: Physics-enabled network graphs with comprehensive dashboards
-
-### User Experience Improvements
-- **AI Query Enhancement**: Automatic optimization of research queries for better results
-- **Health Monitoring**: Comprehensive system diagnostics and processing status
-- **Enhanced UI Components**: Improved table displays, progress indicators, and responsive design
-- **Cost Transparency**: Real-time API usage tracking and cost estimation
+### Performance Features
+- **Batch Processing**: Handle large document collections efficiently
+- **Progress Tracking**: Real-time updates on processing status
+- **Cost Estimation**: Monitor OpenAI API usage and costs
+- **Error Recovery**: Robust handling of processing failures
 
 ---
 
-## 📊 Project Status
+## Project Status
 
 | Component | Status | Features |
 |-----------|--------|----------|
-| RAG Module | ✅ Complete | Modular architecture, intelligent caching, health monitoring |
-| Literature Review | ✅ Complete | AI query optimization, advanced summarization, citation extraction |
-| Knowledge Graphs | ✅ Complete | Two-phase optimization, incremental processing, advanced analytics |
-| Entity Extraction | ✅ Complete | 8 entity types, improved normalization, semantic similarity |
-| Relation Analysis | ✅ Complete | 8 relation types, confidence scoring, relationship analytics |
-| Anki Integration | ✅ Complete | AI-enhanced generation, configurable difficulty, enhanced UI |
-| Multi-language UI | ✅ Complete | Full bilingual interface with language-aware processing |
-| Performance Optimization | ✅ Complete | Component caching, batch processing, state management |
-| Advanced Analytics | ✅ Complete | Entity influence scoring, centrality analysis, statistical dashboards |
-| Export Capabilities | ✅ Complete | Multiple formats (GEXF, GraphML, JSON, CSV, images) |
-| Visualization Enhancement | 🌟 Wishlist | Advanced interactive dashboards, network layout algorithms |
-| LLM Prompt Optimization | 🌟 Wishlist | Fine-tuned domain-specific prompts, adaptive extraction |
-| OCR Support | 🌟 Wishlist | Optical character recognition for scanned documents and images |
-| Enhanced PDF Processing | 🌟 Wishlist | Advanced table extraction, layout analysis, figure detection |
-| API Integration | 🌟 Wishlist | REST API for external integrations, webhook support |
+| RAG Module | Complete | Document processing, semantic search, Q&A |
+| Literature Review | Complete | Summarization, citation extraction |
+| Knowledge Graphs | Complete | Entity extraction, graph visualization, analytics |
+| Anki Integration | Complete | Automated card generation, batch export |
+| Multi-language UI | Complete | English/Chinese interface |
+| Visualization Optimization | Wishlist | Enhanced charts, interactive dashboards, analytics |
+| LLM Prompt Control | Wishlist | Optimized prompts, configurable templates, fine-tuned extraction |
+| OCR Support | Wishlist | Optical character recognition for scanned documents and images |
+| Enhanced PDF Processing | Wishlist | Advanced PDF parsing, table extraction, layout analysis |
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 I welcome contributions from the community! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
 
@@ -277,36 +243,29 @@ I welcome contributions from the community! Whether you're fixing bugs, adding f
 5. Open a Pull Request
 
 ### Areas for Contribution:
-- 🐛 Bug fixes and performance improvements
-- 🎨 UI/UX enhancements and accessibility improvements
-- 📚 Documentation improvements and tutorial creation
-- 🔧 New features and integrations (OCR, enhanced PDF processing)
-- 🌍 Additional language support and localization
-- 🤖 LLM prompt optimization and domain-specific templates
-- 📊 Advanced analytics and visualization improvements
-- ⚡ Performance optimization and scalability enhancements
-- 🔬 Research-specific feature development
+- Bug fixes and performance improvements
+- UI/UX enhancements
+- Documentation improvements
+- New features and integrations
+- Additional language support
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- OpenAI for their powerful GPT models and advanced language understanding
-- The Streamlit team for their excellent framework and community support
-- ChromaDB for robust vector database capabilities and semantic search
-- NetworkX team for comprehensive graph analysis tools
-- Sentence Transformers project for semantic similarity capabilities  
-- The open-source community for inspiration, tools, and continuous improvement
-- Research community for valuable feedback and feature suggestions
+- OpenAI for their powerful GPT models
+- The Streamlit team for their excellent framework
+- ChromaDB for vector database capabilities
+- The open-source community for inspiration and tools
 
 ---
 
-**Built with ❤️ for researchers, students, and lifelong learners**
+**Built with care for researchers, students, and lifelong learners**
 
 *Questions? Feedback? Feel free to reach out via GitHub Issues or connect with me directly!*

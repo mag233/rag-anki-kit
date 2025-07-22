@@ -160,6 +160,21 @@ class FileManager:
                     f.unlink()
                 except:
                     pass
+    
+    def clear_specific_files_chunks(self, selected_files: List[str]):
+        """清理特定文件的chunks"""
+        if not selected_files:
+            return
+        
+        for filename in selected_files:
+            file_stem = Path(filename).stem
+            chunk_file = self.chunks_folder / f"{file_stem}_chunks.json"
+            if chunk_file.exists():
+                try:
+                    chunk_file.unlink()
+                    print(f"[FileManager] Removed old chunks for: {filename}")
+                except Exception as e:
+                    print(f"[FileManager] Failed to remove chunks for {filename}: {e}")
 
 # ============================================================================
 # 文档提取器
@@ -453,14 +468,6 @@ class DocumentChunker:
                     global_index += 1
         return chunks
     
-    def _chunk_by_size(self, docs: List[Document], chunk_size: int, chunk_overlap: int) -> List[Document]:
-        """Chunk by fixed size"""
-        splitter = CharacterTextSplitter(
-            chunk_size=chunk_size,
-            chunk_overlap=chunk_overlap
-        )
-        return splitter.split_documents(docs)
-    
 # ============================================================================
 # Document Processing Pipeline
 # ============================================================================
@@ -512,7 +519,8 @@ class DocumentProcessingPipeline:
                          deep_clean_config: Optional[Dict] = None,
                          extract_tables: bool = True,
                          extract_images: bool = True,
-                         extract_meta: bool = True) -> ProcessingStats:
+                         extract_meta: bool = True,
+                         selected_files: Optional[List[str]] = None) -> ProcessingStats:
         """处理所有文档的主入口函数"""
         
         # 初始化组件
@@ -520,10 +528,20 @@ class DocumentProcessingPipeline:
         
         # 设置目录和配置
         self.file_manager.setup_directories()
-        self.file_manager.clear_old_chunks_if_needed(force_reprocess)
+        
+        # 智能清理：根据选择的文件和force_reprocess策略清理
+        if force_reprocess:
+            if selected_files:
+                # 只清理选中的文件
+                self.file_manager.clear_specific_files_chunks(selected_files)
+                print(f"[Processing] Cleared old data for {len(selected_files)} selected files")
+            else:
+                # 清理所有文件（原有逻辑）
+                self.file_manager.clear_old_chunks_if_needed(True)
+                print("[Processing] Cleared all old chunks (force reprocess all)")
         
         # 加载manifest
-        manifest = {} if force_reprocess else self.file_manager.load_manifest()
+        manifest = {} if (force_reprocess and not selected_files) else self.file_manager.load_manifest()
         
         # 分块配置
         chunking_config = {
@@ -537,10 +555,24 @@ class DocumentProcessingPipeline:
         total_chunks = 0
         
         # 处理文件
-        file_list = list(self.file_manager.input_folder.iterdir())
+        if selected_files:
+            # 使用选定的文件
+            file_list = [
+                self.file_manager.input_folder / filename 
+                for filename in selected_files
+                if (self.file_manager.input_folder / filename).exists()
+            ]
+            # 过滤掉不存在的文件
+            missing_files = set(selected_files) - {f.name for f in file_list}
+            if missing_files:
+                print(f"[Processing] Warning: The following selected files were not found: {missing_files}")
+        else:
+            # 处理所有文件（原有逻辑）
+            file_list = list(self.file_manager.input_folder.iterdir())
+        
         stats = stats._replace(total_files=len(file_list))
         
-        print(f"[Processing] Found {len(file_list)} files in {self.file_manager.input_folder}")
+        print(f"[Processing] Found {len(file_list)} files to process in {self.file_manager.input_folder}")
         
         for idx, file_path in enumerate(file_list, 1):
             if not self.extractor.is_supported(file_path):
@@ -612,6 +644,7 @@ def process_documents(
     force_reprocess: bool = False,
     enable_deep_clean: bool = False,
     deep_clean_config: Optional[Dict] = None,
+    selected_files: Optional[List[str]] = None,
 ) -> ProcessingStats:
     """
     Backward compatible document processing function
@@ -642,5 +675,6 @@ def process_documents(
         deep_clean_config=deep_clean_config,
         extract_tables=extract_tables,
         extract_images=extract_images,
-        extract_meta=extract_meta
+        extract_meta=extract_meta,
+        selected_files=selected_files
     )

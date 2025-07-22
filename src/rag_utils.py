@@ -70,6 +70,55 @@ class ChromaDBManager:
         if self._db_instance:
             self._db_instance = None
         self._embedding_function = None
+    
+    def delete_embeddings_for_files(self, filenames: List[str]) -> int:
+        """删除特定文件的embeddings"""
+        if not filenames or not self.db:
+            return 0
+        
+        deleted_count = 0
+        try:
+            # 获取所有现有的IDs
+            all_ids = self.db._collection.get()["ids"]
+            
+            # 找出需要删除的IDs（以文件stem开头的）
+            ids_to_delete = []
+            for filename in filenames:
+                file_stem = filename.replace('.pdf', '').replace('.docx', '').replace('.txt', '')
+                matching_ids = [id for id in all_ids if id.startswith(file_stem)]
+                ids_to_delete.extend(matching_ids)
+            
+            # 删除找到的IDs
+            if ids_to_delete:
+                self.db._collection.delete(ids=ids_to_delete)
+                deleted_count = len(ids_to_delete)
+                print(f"[ChromaDBManager] Deleted {deleted_count} embeddings for files: {filenames}")
+            
+        except Exception as e:
+            print(f"[ChromaDBManager] Failed to delete embeddings: {e}")
+            
+        return deleted_count
+    
+    def clear_all_embeddings(self) -> int:
+        """清空所有embeddings"""
+        if not self.db:
+            return 0
+        
+        deleted_count = 0
+        try:
+            # 获取所有现有的IDs
+            all_ids = self.db._collection.get()["ids"]
+            
+            if all_ids:
+                # 删除所有IDs
+                self.db._collection.delete(ids=all_ids)
+                deleted_count = len(all_ids)
+                print(f"[ChromaDBManager] Cleared all {deleted_count} embeddings")
+            
+        except Exception as e:
+            print(f"[ChromaDBManager] Failed to clear all embeddings: {e}")
+            
+        return deleted_count
 
 
 class FileManager:
@@ -111,9 +160,7 @@ class FileManager:
                 
                 if has_new_chunks:
                     filename = os.path.basename(chunk_file)
-                    # 正确提取文件stem：移除_chunks.json后缀
-                    file_stem = filename.replace("_chunks.json", "")
-                    files_with_new_chunks.add(file_stem)
+                    files_with_new_chunks.add(os.path.splitext(filename)[0])
         
         except Exception as e:
             st.error(f"检查新chunk失败: {e}")

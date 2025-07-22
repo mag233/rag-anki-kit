@@ -2,7 +2,7 @@
 import os
 import json
 import streamlit as st
-from document_processing import process_documents
+from preprocess import process_documents
 from embed import create_or_update_embeddings
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
